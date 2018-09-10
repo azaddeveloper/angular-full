@@ -1,0 +1,275 @@
+<div class="wrapper row1">
+  <div class="header-top">
+    <div class="navbar login_header navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="http://www.schedullo.com">
+            <img src="assets/images/logo.png" alt="logo" /> </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Login page html here -->
+<div class="login-block" *ngIf="login_window">
+  <div class="horizontal-form">
+    <div class="logoimage">
+      <img src="assets/images/logo.png" />
+    </div>
+    <div *ngIf="iserror" class="error_msg">{{error}}</div>
+    <form (submit)="login(login_form)" [formGroup]="login_form">
+      <div class="form-group">
+        <div class="controls">
+          <input type="text" placeholder="Enter your email here" class="m-wrap fullwd cblk form-control login_input" formControlName="email"
+            (blur)="getcompany_list($event.target.value);" />
+          <p *ngIf="login_form.get('email').hasError('required') && login_form.get('email').touched" class="help-inline">
+            This field is required.
+          </p>
+          <p *ngIf="login_form.get('email').hasError('pattern') && login_form.get('email').touched" class="help-inline">
+            Please enter a valid email address.
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="controls">
+          <input type="password" placeholder="Password" class="m-wrap fullwd cblk from-control login_input" formControlName="password"
+          />
+          <p *ngIf="login_form.get('password').hasError('required') && login_form.get('password').touched " class="help-inline">
+            This field is required.
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="controls">
+          <select name="companylist" formControlName="company_id" class="col-md-12 m-wrap fullwd cblk login_input " style="margin-bottom:15px;padding-left: 0px;"
+            *ngIf="company_count > 1">
+            <option value="{{c.company_id}}" *ngFor="let c of company_list">{{c.company_name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="controls">
+          <div class="checkboxes">
+            <label class="login_checkbox" for="remember_me">
+              <input type="checkbox" name="remember_me" id="remember_me" value="1" /> Remember me </label>
+            <a href="javscript:void(0)" class="login_checkbox pull-right" (click)="forgetpassword_window = true;login_window=false">
+            Forgot Password ? </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group " style="margin-top:20px;">
+        <div class="controls text-center margin-bottom-20">
+          <input type="submit" [disabled]="!login_form.valid" class="btn blue large text-upper " id="login-btn" value="LOGIN" />
+        </div>
+        <p class="txt-normal2 text-center"> Not a user yet?
+          <a href="javascript:void(0)" class="bluelink" (click)="sign_up()">Sign Up Now</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Forget password code here -->
+<div class="wrapper row2" *ngIf="forgetpassword_window">
+  <div>
+    <div class="page-container scyheight">
+      <div class="container">
+
+        <div class="login-block">
+          <div class="horizontal-form">
+            <div class="title-block margin-bottom-40">
+              <h4 class="title-heading">
+                <span style="font-weight: 600;font-size: 20px !important;"> Forget Password </span>
+              </h4>
+            </div>
+
+            <!-- BEGIN FORM-->
+            <form [formGroup]="forget_password" (submit)="password_forget(forget_password.value)">
+              <div class="form-group">
+                <div class="controls">
+                  <input type="text" formControlName="forget_email" placeholder="Enter your email here" name="email" class="col-md-12 m-wrap fullwd login_input"
+                  />
+                  <p *ngIf="forget_password.get('forget_email').hasError('required') && forget_password.get('forget_email').touched" class="help-inline">
+                    This field is required.
+                  </p>
+                  <p *ngIf="forget_password.get('forget_email').hasError('pattern') && forget_password.get('forget_email').touched" class="help-inline">
+                    Please enter a valid email address.
+                  </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="controls text-center margin-bottom-20">
+                  <button style="margin-top:20px;" type="submit" [disabled]="!forget_password.valid" class="btn blue text-upper "> Retrieve Password </button>
+                  <button style="margin-top:20px;" type="button" class="btn blue text-upper" (click)="forgetpassword_window = false;login_window=true;">
+                  Cancel </button>
+                </div>
+                <p class="txt-normal2 text-center"> Not a user yet?
+                  <a href="javascript:void(0)" (click)="sign_up()" class="bluelink">Sign Up </a>
+                </p>
+              </div>
+            </form>
+            <!-- END FORM-->
+          </div>
+        </div>
+
+      </div>
+      <!-- /container -->
+    </div>
+  </div>
+</div>
+
+<!-- resetPassword code here -->
+
+<div class="wrapper row2" *ngIf="reset_password_window">
+  <div>
+    <div class="page-container scyheight">
+      <div class="container">
+        <div class="login-block">
+          <div class="horizontal-form">
+            <div class="title-block margin-bottom-40">
+              <h4 class="title-heading">
+                <span style="font-weight: 600;font-size: 20px !important;"> Please reset your password </span>
+              </h4>
+            </div>
+
+            <!-- BEGIN FORM-->
+            <form [formGroup]="changePassword" (submit)="update_password(changePassword.value)">
+              <div class="form-group">
+                <div class="controls">
+                  <input type="password" formControlName="new_password" placeholder="Enter new password" name="password" class="m-wrap fullwd login_input"
+                  />
+                  <p *ngIf="changePassword.get('new_password').hasError('required') && changePassword.get('new_password').touched" class="help-inline">This field is required. </p>
+                  <p *ngIf="changePassword.get('new_password').hasError('pattern') && changePassword.get('new_password').touched" class="help-inline">Provide atleast 1 Number, 1 Alphabet and between 8 to 16 characters. </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="controls">
+                  <input type="password" formControlName="confirm_password" placeholder="Confirm new password" name="confirm_password" class="m-wrap fullwd login_input"
+                  />
+                  <p *ngIf="changePassword.get('confirm_password').hasError('required') && changePassword.get('confirm_password').touched"
+                    class="help-inline">This field is required. </p>
+                  <p *ngIf="changePassword.get('confirm_password').errors && changePassword.get('confirm_password').errors.MatchPassword" class="help-inline">Please enter the same value again. </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="controls text-center margin-bottom-20">
+                  <button type="submit" class="btn blue text-upper" [disabled]="!changePassword.valid"> Confirm </button>
+                  <button type="button" class="btn blue text-upper" (click)="back_login()"> Cancel </button>
+                </div>
+              </div>
+            </form>
+            <!-- END FORM-->
+          </div>
+        </div>
+
+      </div>
+      <!-- /container -->
+    </div>
+  </div>
+</div>
+
+<!-- Signup process code here -->
+
+<script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 956698216;
+    var google_conversion_language = "en";
+    var google_conversion_format = "3";
+    var google_conversion_color = "ffffff";
+    var google_conversion_label = "vqRbCIPyxGcQ6JyYyAM";
+    var google_remarketing_only = false;
+    /* ]]> */
+    </script>
+    <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js?Ver=<?php echo VERSION;?>">
+    </script>
+    <noscript>
+    <div style="display:inline;">
+    <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/956698216/?label=vqRbCIPyxGcQ6JyYyAM&guid=ON&script=0"/>
+    </div>
+</noscript>
+
+<div class="container" style="margin-top: 90px;" [hidden]="!singup_window">
+  <div class="title-block margin-bottom-40" style="margin-bottom :40px;">
+    <h3>
+      <b>Discover the power of Schedullo.</b>
+    </h3>
+    <h4 style="font-weight: 300 !important">It's totally free for one user without time limit !</h4>
+  </div>
+  <div class="register-block signup_register">
+    <div class="horizontal-form">
+      <h2 class="title-heading margin-bottom-30" style="margin-top: 10px;text-align: center;margin-bottom: 20px;"> Start
+        <b> saving time</b> Today </h2>
+
+      <!-- BEGIN FORM-->
+      <form class="form-vertical login-form" id="signup" [formGroup]="sign_up_form" (submit)="create_new_company(sign_up_form.value)" >
+        <div class="form-group margin-bottom-10" style="width: 50%;float: left; padding-right: 10px">
+          <div class="controls">
+            <label>First Name</label>
+            <p *ngIf="sign_up_form.get('first_name').hasError('pattern') && sign_up_form.get('first_name').touched" class="help-inline display_inline_data"> have only letters.</p>
+            <p *ngIf="sign_up_form.get('first_name').hasError('required') && sign_up_form.get('first_name').touched" class="help-inline display_inline_data">* </p>
+            <input name="first_name" formControlName="first_name" class="m-wrap fullwd m-hightcblk input_field_css" type="text" value="">
+          </div>
+        </div>
+        <div class="form-group margin-bottom-10" style="width: 50%;float: left;">
+          <div class="controls">
+            <label>Last Name</label>
+            <p *ngIf="sign_up_form.get('last_name').hasError('pattern') && sign_up_form.get('last_name').touched" class="help-inline display_inline_data"> have only letters.</p>
+            <p *ngIf="sign_up_form.get('last_name').hasError('required') && sign_up_form.get('last_name').touched" class="help-inline display_inline_data">* </p>
+            <input name="last_name" formControlName="last_name" class="m-wrap fullwd m-hightcblk input_field_css" type="text" value="">
+          </div>
+        </div>
+        <div class="form-group margin-bottom-10" style="border-radius: 3px;">
+          <div class="controls">
+            <label>Email</label>
+            <p *ngIf="sign_up_form.get('email').hasError('email') && sign_up_form.get('email').touched" class="help-inline display_inline_data">must be valid.</p>
+            <p *ngIf="sign_up_form.get('email').errors && sign_up_form.get('email').errors.exist" class="help-inline display_inline_data">There is an existing account associated with this email address.</p>
+            <p *ngIf="sign_up_form.get('email').hasError('required') && sign_up_form.get('email').touched" class="help-inline display_inline_data">* </p>
+            <input name="email" formControlName="email" class="m-wrap fullwd m-hightcblk email_pass_css" type="email" value="">
+          </div>
+        </div>
+        <div class="form-group margin-bottom-20">
+          <div class="controls">
+            <label>Company Name</label>
+            <input name="company_name" formControlName="company_name" class="m-wrap fullwd m-hightcblk email_pass_css" type="text" value="">
+          </div>
+        </div>
+        <div class="form-group margin-bottom-20" style="position: relative">
+          <div class="controls">
+            <label>Password</label>
+            <p *ngIf="sign_up_form.get('new_password').hasError('pattern') && sign_up_form.get('new_password').touched" class="help-inline display_inline_data">Provide atleast 1 Number, 1 Alphabet and between 8 to 16 characters. </p>
+            <p *ngIf="sign_up_form.get('new_password').hasError('required') && sign_up_form.get('new_password').touched" class="help-inline display_inline_data" >* </p>
+            <input name="password" formControlName="new_password" maxlength="16" class="m-wrap fullwd m-hightcblk email_pass_css" type="password" value="">
+            <span class="show_password">
+              <img src="" />
+            </span>
+          </div>
+        </div>
+        <div class="form-group margin-bottom-20">
+          <div class="controls">
+            <label>Confirm Password</label>
+            <p *ngIf="sign_up_form.get('confirm_password').errors && sign_up_form.get('confirm_password').errors.MatchPassword" class="help-inline display_inline_data">Please enter the same value again. </p>
+            <p *ngIf="sign_up_form.get('confirm_password').hasError('required') && sign_up_form.get('confirm_password').touched" class="help-inline display_inline_data">* </p>
+            <input name="confirm_password" formControlName="confirm_password" maxlength="16" class="m-wrap fullwd m-hightcblk email_pass_css" type="password" value="">
+          </div>
+        </div>
+        <div id="recaptcha" class="g-recaptcha" data-sitekey="6LcFJycUAAAAACR7Ah9aXf1r74TEOTGw-AiCjEJO"  data-size="invisible"></div>			
+        <div class="form-group">
+          <div class="controls text-center margin-top-20">
+            <button type="submit" [disabled]="!sign_up_form.valid" class="btn blue large text-upper " > Get Started </button>
+          </div>
+        </div>
+      </form>
+      <!-- END FORM -->
+    </div>
+  </div>
+  <div class="title-block margin-bottom-40" style="margin-top: 40px;margin-bottom: 40px;">
+    <p>By clicking this button, you agree to our
+      <a target="_blank" href="https://www.schedullo.com/terms-of-service/">Terms of Use </a>and
+      <a target="_blank" href="https://www.schedullo.com/privacy-policy/">Privacy Policy.</a>
+    </p>
+    <p>Already have a Schedullo account?
+      <a href="javascript:void(0);" (click)="back_login();">Sign in</a>
+    </p>
+  </div>
+</div>

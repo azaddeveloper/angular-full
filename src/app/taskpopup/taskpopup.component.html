@@ -1,0 +1,1275 @@
+<div class="modal-header taskpopup1" style="display:block;position: relative;z-index: 9999;">
+    <button *ngIf="this.task_detail.task_title != '' "  type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;" (click)="close(taskform);"></button>
+    <button *ngIf="this.task_detail.task_title == '' "   type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;" (click)="cloce_insert_task();"></button>
+    <div dropdown class="dropdown t1" style="list-style: none !important;color: #000;">
+        
+        <a href="javascript:void(0)" class="dropdown-toggle tooltips" dropdownToggle tooltipPlacement="bottom" tooltip="Display Settings" style="float: right;" ><i class="fa fa-ellipsis-h task_popup_setting_icon" aria-hidden="true"></i></a>
+        
+        <ul class="dropdown-menu menu_css_new" *dropdownMenu role="menu" >
+            <li> Configure Company Fields Visibility</li>
+            <li class="divider padding0"></li>
+            <li><input type="checkbox" name="category" class="change_visibility" [checked]="company_fields_status.category ==1" (click)="change_task_popup_fileds('category',$event.target.checked)" /> Category</li>
+            <li><input type="checkbox" name="subcategory" value="" class="change_visibility" [checked]="company_fields_status.subcategory ==1" (click)="change_task_popup_fileds('subcategory',$event.target.checked)" /> SubCategory</li>
+            <li><input type="checkbox" name="division" value="" class="change_visibility" [checked]="company_fields_status.division ==1" (click)="change_task_popup_fileds('division',$event.target.checked)" /> Division</li>
+            <li><input type="checkbox" name="department" value="" class="change_visibility" [checked]="company_fields_status.department ==1" (click)="change_task_popup_fileds('department',$event.target.checked)" /> Department</li>
+            <li><input type="checkbox" name="skills" value="" class="change_visibility" [checked]="company_fields_status.skills ==1" (click)="change_task_popup_fileds('skills',$event.target.checked)" /> Skills</li>
+            <li><input type="checkbox" name="staff_levels" value="" class="change_visibility" [checked]="company_fields_status.staff_levels ==1" (click)="change_task_popup_fileds('staff_levels',$event.target.checked)" /> Staff Levels</li>
+            <li class="divider padding0"></li>
+            <li><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Note that only company administrators <br> can hide & show these fields.</li>
+        </ul>
+        <span style="float: right;margin-top: 10px;">
+            <ul class="list-unstyled top_icon_list" >
+                <li class="list_horizontal"><a class="tooltips" tooltipPlacement="bottom" tooltip="Add Steps" href="javascript:void(0);" (click)="steps = !steps"><i class="fa fa-step-forward top_icon"  ></i></a></li>
+                <li class="list_horizontal"><a class="tooltips" tooltipPlacement="bottom" tooltip="Add Dependencies"  href="javascript:void(0);" (click)="dependencies = !dependencies"><i class="fa fa-link top_icon" ></i></a></li>
+                <li class="list_horizontal"><a class="tooltips" tooltipPlacement="bottom" tooltip="Add Attachements" href="javascript:void(0);" (click)="files = !files"><i class="fa fa-paperclip top_icon" ></i></a></li>
+            </ul>
+        </span>
+        <span  id="allocated_users_image"  *ngIf="task_detail.task_id != ''" style="margin-right: 0px !important">
+            <div class="userimg" style="margin-right: 0px !important">
+                <img src="{{Image_url+task_detail.profile_image}}" alt="img" class="capacity_images" *ngIf="task_detail.profile_image !='';else allocatedimage"/>
+                <ng-template #allocatedimage><span class="login_logo">{{task_detail.first_name | Initialletters}}{{task_detail.last_name |Initialletters}}</span></ng-template>
+            </div>
+        </span>
+        
+    </div>
+    
+    <div class="new_task_title"> 
+            <inline-editor class="txt-style default_color "  type="text" [(ngModel)]="task_detail.task_title" name="editor" size="40" placeholder="Enter task title" ></inline-editor>
+        <!-- <a href="javascript:void(0)" id="add_task_title" name="add_task_title" data-type="text" data-pk="1" data-original-title="" >{{task_detail.task_title}} &nbsp;&nbsp;<i class="fa fa-pencil" ></i></a> -->
+    </div>
+   
+</div>
+
+    <div class="modal-body modalpopup_body" style="height:75vh;">
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="taskmain-container">
+            <div class="user-block">
+                <div class="row" id="task_modal_row" style="display: flex;">
+                    <div class="col-md-8 " style="background-color:rgba(255,255,255,1.0) !important;padding-right: 0;min-height:82.9vh;">
+                        <div class="usertabs">
+                            <div class="tabbable tabbable-custom">
+                                <div class="tab-pane task-tab-pane">
+                                    <div class="portlet">
+                                        <div class="portlet-body form">
+                                            <div class="horizontal-form">
+                                                <div class="newpopup_container_pdding">
+                                                    <input type="hidden" name="task_title" id="task_title" [(ngModel)]="task_detail.task_title"/>
+                                                        <!-- Task description section -->
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group paddding-5">
+                                                                    <label class="control-label" for="firstName">Task Description</label>
+                                                                    <div class="controls relative-position editor">
+                                                                        <textarea rows="3" name="task_description" id="task_description" class="m-wrap col-md-12 task-input ui-resizable desc_editor"
+                                                                           placeholder="Enter a description here" [(ngModel)]="task_detail.task_description" ></textarea>
+    
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Task description section end here -->
+                                                        <!-- Project & Customer section start here -->
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group paddding-5">
+                                                                    <label class="control-label" for="task_project_id">Project</label>
+                                                                    <div class="controls relative-position modify_btn" id="task_project_div">
+                                                                        <select class="col-md-11 m-wrap no-margin selectpicker_proj radius-b padding3" name="task_project_id" id="task_project_id"
+                                                                             [(ngModel)]="task_detail.task_project_id" (change)="setSectionOnChange($event.target.value)" [disabled]="access == 'project'" >
+                                                                            <option value="0">Please Select</option>
+                                                                            <option *ngFor="let pro of task_other_info.projects" value="{{pro.project_id}}">{{pro.project_title}}</option>
+                                                                        </select>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group paddding-5">
+                                                                    <label class="control-label">Customer</label>
+                                                                    <div class="controls relative-position modify_btn">
+                                                                        <select class="m-wrap no-margin selectpicker_cus col-md-11 radius-b padding3" name="customer_id"
+                                                                            id="customer_id" [(ngModel)]="task_detail.customer_id" [disabled]="task_detail.task_project_id !='0'">
+                                                                            <option value="0">Please Select</option>
+                                                                            <option *ngFor="let cus of task_other_info.customers" value="{{cus.customer_id}}">{{cus.customer_name}}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <!-- Project & Customer section end here -->
+                                                        <!-- Project section & color start here -->
+                                                        <div class="row" style="margin-top: 7px;">
+                                                            <div class="col-md-6 ">
+                                                                <div class="form-group">
+                                                                    <div class="controls relative-position" id="section_div">
+                                                                        <select class="col-md-11 m-wrap no-margin radius-b padding3" name="section_id" *ngIf="access =='project'" [(ngModel)]="task_detail.subsection_id" [disabled]="task_detail.task_project_id =='0' || access == 'project'">
+                                                                            <option  value="0">Please Select</option>
+                                                                            <option *ngFor="let sec of task_other_info.sections" value="{{sec.section_id}}">{{sec.section_name}}</option>
+                                                                        </select>
+                                                                        <select class="col-md-11 m-wrap no-margin radius-b padding3" name="section_id" *ngIf="access !='project' && task_detail.section_id =='0'" [(ngModel)]="task_detail.subsection_id" [disabled]="task_detail.task_project_id =='0'">
+                                                                            <option  value="0">Please Select</option>
+                                                                            <option *ngFor="let sec of task_other_info.sections" value="{{sec.section_id}}">{{sec.section_name}}</option>
+                                                                        </select>
+                                                                        <select class="col-md-11 m-wrap no-margin radius-b padding3" name="section_id" *ngIf="access !='project' && task_detail.section_id !='0'" [(ngModel)]="task_detail.section_id" [disabled]="task_detail.task_project_id =='0'">
+                                                                                <option  value="0">Please Select</option>
+                                                                                <option *ngFor="let sec of task_other_info.sections" value="{{sec.section_id}}">{{sec.section_name}}</option>
+                                                                            </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='col-md-6'>
+                                                                <div class="form-group paddding-5">
+                                                                    <div class="controls relative-position">
+                                                                        <ul class="list-unstyled top_icon_list" >
+                                                                            <li class="list_horizontal" *ngFor="let color of task_other_info.color_codes">
+                                                                                <a type="button"  (click)="change_color(color.user_color_id,color.color_code);" tooltipPlacement="top" tooltip="{{color.name}}" class="btn tooltips color_buttons" [ngClass]="color.color_name | lowercase" [ngStyle]="{'width':color.user_color_id == task_detail.color_id?'35px':''}" ><span style="display: table-cell;" *ngIf="color.user_color_id == task_detail.color_id"><i class="icon-ok task_color_select" ></i></span></a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+    
+                                                    
+                                                    <!-- Project section & color end here -->
+    
+                                                    <!-- Task steps section start here  -->
+                                                    <div class="row" style="margin-left: 3px;margin-right: 2px;" [hidden]="steps">
+                                                        <div class="portlet-body">
+                                                            <div class="row" id="steps_section">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group paddding-5 border_bottom">
+                                                                        <label class="control-label" for="Steps">
+                                                                            <i class="fa fa-step-forward"></i> Steps</label>
+                                                                    </div>
+                                                                    <div class="normal_div">
+                                                                        <div class="customtable">
+                                                                            <table class="table table-striped table-hover table-condensed flip-content" id="steps_table">
+                                                                                <tbody>
+                                                                                    <tr  class="step_sortable" style="cursor:pointer" *ngFor="let step of task_other_info.steps">
+                                                                                        <td class="step_td">
+                                                                                            <label class="checkbox" style="margin-top:2px !important;">
+                                                                                                <i class="stripicon steps_header"></i>
+                                                                                                <input type="checkbox" class="step_checkbox" (click)="completed_step(task_detail,step.step_title,$event.target.checked)" [checked]="step.is_completed == '1'"/>
+                                                                                            </label>
+                                                                                        </td>
+                                                                                        <td style="cursor:pointer">
+                                                                                                <inline-editor type="text" name="step_{{step.task_step_id}}" [(ngModel)]="step.step_title" (onSave)="updateStepName($event,step.task_step_id)" size="10"></inline-editor>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                <a href="javascript:void(0)" style="float:right" mwlConfirmationPopover
+                                                                                                placement="left"
+                                                                                                (confirm)="confirmClicked = delete_step(step.task_step_id);"
+                                                                                                (cancel)="cancelClicked = true" >
+                                                                                                <i class="icon-trash taskppstp"></i>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr *ngIf="task_other_info.steps == ''">
+                                                                                            <td colspan="3" style="text-align: center;border: none;">No Steps added yet</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div class="row" style="margin-top: -40px;">
+                                                                            <div class="col-md-12 ">
+                                                                                <div class="form-group">
+                                                                                    <a class="btn font_weight0 blue_button" id="show_new_step_div" *ngIf="!add_step" (click)="add_step = !add_step" >
+                                                                                        <i class="fa fa-plus"></i> Add step </a>
+                                                                                    <div class="controls font_weight0 relative-position" [hidden]='!add_step' id="new_step_div">
+                                                                                        <form #stepForm>
+                                                                                        <input type="text" name="add_step_title" id="add_step_title" class="m-wrap col-md-9" placeholder="" value="">
+                                                                                        </form>
+                                                                                        <a href="javascript:void(0);" (click)="addStep(stepForm);" class="yellow_button margin-left-5"> Add</a>
+                                                                                        <a href="javascript:void(0);" class="margin-left-5" (click)="add_step = !add_step">
+                                                                                            <i class="icon-trash taskppstp"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+    
+                                                    <!-- Task steps section end here -->
+                                                    <!--  time section start here -->
+                                                    
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group paddding-5 border_bottom">
+                                                                    <label class="control-label" for="Time">
+                                                                        <i class="fa fa-clock-o"></i> Time</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+    
+                                                                <div class="form-group">
+    
+                                                                    <div class="col-md-6">
+                                                                        <label class="control-label task_popup schedule_label">Time Estimate </label>
+                                                                        <div class="controls relative-position input-append">
+                                                                            <span class="add-on datepicker_addon">
+                                                                                <i class="fa fa-clock-o tasknppicn"></i>
+                                                                            </span>
+                                                                            <input type="hidden" name="hidden_estimate_time" [(ngModel)] ="task_detail.task_time_estimate"/>
+                                                                            <input class="m-wrap m-ctrl-small small_input noleft_radius" name="task_time_estimate" placeholder="0h" [(ngModel)]="estimate_time" (blur)="convettime($event.target.value,'task_time_estimate')" value="" type="text" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="control-label task_popup schedule_label">Time Spent </label>
+                                                                        <div class="controls relative-position input-append">
+                                                                            <span class="add-on datepicker_addon">
+                                                                                <i class="fa fa-clock-o tasknppicn"></i>
+                                                                            </span>
+                                                                            <input type="hidden" name="hidden_spent_time" [(ngModel)] ="task_detail.task_time_spent"/>
+                                                                            <input class="m-wrap m-ctrl-small small_input orgst noleft_radius" name="task_time_spent" placeholder="0h" [(ngModel)]="spent_time" (blur)="convettime($event.target.value,'task_time_spent');" value="" type="text"  />
+                                                                        </div>
+                                                                    </div>
+    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+    
+                                                        <!-- Due date & time section end here -->
+    
+                                                    <!-- Task frequency section start here -->
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group border_bottom">
+                                                                    <label class="control-label pull-left margin-right-20" style="line-height: 33px;margin-right: 73px;"><i class="icon-calendar"></i> Schedule</label>
+                                                                    <div class="controls relative-position">                                                
+                                                                        <label class="radio task_popup" style="margin-right: 26px !important;">
+                                                                            <input class="onsub task-chk-input" type="radio" name="frequency_type" (click)="frequency_type('one_off')" value="one_off"  style="margin-top: 2px !important;" [checked]="task_detail.frequency_type == 'one_off'" />
+                                                                            One Off
+                                                                        </label>
+                                                                        <label class="radio task_popup">
+                                                                            <input class="onsub task-chk-input" type="radio" name="frequency_type" (click)="frequency_type('recurrence')" value="recurrence" style="margin-top: 2px !important;" [checked]="task_detail.frequency_type == 'recurrence'" [disabled]="type_rec == 'occurrence' || task_detail.master_task_id !='0' "/>
+                                                                            Recurrence
+                                                                        </label>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div id="recurrence_div" [hidden]="recurrStatus" style="border-bottom: 1px solid #f0f0f0;">				
+                                                                        <div class="lightgrey-box margin-bottom-20" style="padding-top: 7px !important;border: none !important;margin-bottom:0px !important;padding-bottom:0px !important; " >
+                                                                            <div class="row">
+                                                                                <div class="col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <div class="controls relative-position">
+                                                                                            <label class="radio line task_popup">
+                                                                                                <input class="onsub task-chk-input" type="radio" name="recurrence_type"  (click)="recurrence_type('daily')" value="1" [checked]="task_detail.recurrence_type == '1'" />
+                                                                                                Daily
+                                                                                            </label>
+                                                                                            <label class="radio line task_popup">
+                                                                                                <input class="onsub task-chk-input" type="radio" name="recurrence_type"  (click)="recurrence_type('weekly')" value="2" [checked]="task_detail.recurrence_type == '2'" />
+                                                                                                Weekly
+                                                                                            </label>  
+                                                                                            <label class="radio line task_popup">
+                                                                                                <input class="onsub task-chk-input" type="radio" name="recurrence_type"  (click)="recurrence_type('monthly')" value="3" [checked]="task_detail.recurrence_type == '3'"/>
+                                                                                                Monthly
+                                                                                            </label>  
+                                                                                            <label class="radio line task_popup">
+                                                                                                <input class="onsub task-chk-input" type="radio" name="recurrence_type"  (click)="recurrence_type('yearly')" value="4" [checked]="task_detail.recurrence_type == '4'" />
+                                                                                                Yearly
+                                                                                            </label> 
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-9" id="daily_div" [ngStyle]="{'display':task_detail.recurrence_type == '1'?'block':'none'}">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12">
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix relative-position">
+                                                                                                    <div class="set-box1">
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="Daily_every_weekday" (click)="set_daily_recuuring('1');" [checked]="task_detail.Daily_every_day >0"  />
+                                                                                                            Every
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2">
+                                                                                                        <input class="onsub task-input" type="text" name="Daily_every_day" [(ngModel)]="task_detail.Daily_every_day" (change)="chk_value_exist($event.target.value,'Daily_every_day')" class="m-wrap adj-recm-wrap " style="border-radius: 4px;padding: 5px;" [disabled]="task_detail.Daily_every_day =='0'"/> <span class="txtlabl"> day(s)   </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix relative-position">
+                                                                                                    <div class="set-box1">
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="Daily_every_weekday" (click)="set_daily_recuuring('2');" [checked]="task_detail.Daily_every_weekday=='1'"/>
+                                                                                                            Every weekday(s)
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2" style="display: none;">
+                                                                                                        <input type="text" name="Daily_every_week_day" id="Daily_every_week_day" value="" class="m-wrap adj-recm-wrap task-input" /> <span class="txtlabl"> weekday(s)   </span>
+                                                                                                    </div>
+                                                                                                   
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-9" id="weekly_div" [ngStyle]="{'display':task_detail.recurrence_type == '2'?'block':'none'}">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12">
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix relative-position">
+                                                                                                    <div class="set-box1">
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            Recur every
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2">
+                                                                                                        <input  type="text" placeholder="1" name="Weekly_every_week_no" [(ngModel)]="task_detail.Weekly_every_week_no" (change)="chk_value_exist($event.target.value,'Weekly_every_week_no')" class="m-wrap adj-recm-wrap task-input" /> <span class="txtlabl"> week(s) on :    </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <form #weeklyRecurr>
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div  class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="checkbox" id="weekly_week_day_1" name="Weekly_week_day[]" value="1"  [checked]="weekly_recurring(task_detail.Weekly_week_day,1)" (click)="set_weekly_recurr($event.target.checked,1)"/>
+                                                                                                            Monday
+                                                                                                        </label>
+                                                                                                    </div>
+
+                                                                                                    <div  class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="checkbox" id="weekly_week_day_2" name="Weekly_week_day[]"  value="2" [checked]="weekly_recurring(task_detail.Weekly_week_day,2)" (click)="set_weekly_recurr($event.target.checked,2)"/>
+                                                                                                            Tuesday
+                                                                                                        </label>
+                                                                                                    </div>
+
+                                                                                                    <div  class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="checkbox" id="weekly_week_day_3" name="Weekly_week_day[]"  value="3" [checked]="weekly_recurring(task_detail.Weekly_week_day,3)" (click)="set_weekly_recurr($event.target.checked,3)"/>
+                                                                                                            Wednesday
+                                                                                                        </label>
+                                                                                                    </div>
+
+                                                                                                    <div  class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="checkbox" id="weekly_week_day_4" name="Weekly_week_day[]"  value="4" [checked]="weekly_recurring(task_detail.Weekly_week_day,4)" (click)="set_weekly_recurr($event.target.checked,4)"/>
+                                                                                                            Thursday
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                     <div  class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="checkbox" id="weekly_week_day_5" name="Weekly_week_day[]"  value="5" [checked]="weekly_recurring(task_detail.Weekly_week_day,5)" (click)="set_weekly_recurr($event.target.checked,5)"/>
+                                                                                                            Friday
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div  class="set-box1" >
+                                                                                                            <label class="radio line task_popup">
+                                                                                                                <input class="onsub task-chk-input" type="checkbox" id="weekly_week_day_6" name="Weekly_week_day[]"  value="6" [checked]="weekly_recurring(task_detail.Weekly_week_day,6)" (click)="set_weekly_recurr($event.target.checked,6)"/>
+                                                                                                                Saturday
+                                                                                                            </label>
+                                                                                                        </div>
+    
+                                                                                                        <div  class="set-box1" >
+                                                                                                            <label class="radio line task_popup">
+                                                                                                                <input class="onsub task-chk-input" type="checkbox" name="Weekly_week_day[]" id="weekly_week_day_7"  value="7" [checked]="weekly_recurring(task_detail.Weekly_week_day,7)" (click)="set_weekly_recurr($event.target.checked,7)"/>
+                                                                                                                Sunday
+                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                            </div> 	 
+                                                                                            </form>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-9" id="monthly_div" [ngStyle]="{'display':task_detail.recurrence_type == '3'?'block':'none'}">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12">
+                                                                                            <div class="form-group" >
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div class="set-box1">
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="monthly_radios"  value="1" [checked]="task_detail.monthly_radios == '1'" (click)="set_monthly_recurring('1');"/>
+                                                                                                            Day
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div id="monthly_op1">
+                                                                                                        <div class="set-box2">
+                                                                                                            <input type="text" placeholder="" name="Monthly_op1_1" [disabled]="task_detail.monthly_radios !='1'" [(ngModel)]="task_detail.Monthly_op1_1" (change)="chk_value_exist($event.target.value,'Monthly_op1_1')" class="m-wrap adj-recm-wrap task-input" /> <span class="txtlabl" style="padding-right: 10px;"> of every </span>
+                                                                                                        </div>
+                                                                                                        <div class="set-box2">
+                                                                                                            <input type="text" placeholder=" " name="Monthly_op1_2" [disabled]="task_detail.monthly_radios !='1'" [(ngModel)]="task_detail.Monthly_op1_2" (change)="chk_value_exist($event.target.value,'Monthly_op1_2')" class="m-wrap adj-recm-wrap task-input" /> <span class="txtlabl"> month(s) </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="form-group" >
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div  class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="monthly_radios" id="monthly_radios2" value="2" [checked]="task_detail.monthly_radios == '2'" (click)="set_monthly_recurring('2');"/>
+                                                                                                            The
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2" id="monthly_op2">
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Monthly_op2_1" [disabled]="task_detail.monthly_radios !='2'" style="width: 90px !important;" [(ngModel)]="task_detail.Monthly_op2_1">
+                                                                                                            <option value="first" >First</option>
+                                                                                                            <option value="second" >Second</option>
+                                                                                                            <option value="third" >Third</option>
+                                                                                                            <option value="fourth" >Fourth</option>
+                                                                                                            <option value="last" >Last</option>
+                                                                                                        </select>
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" [disabled]="task_detail.monthly_radios !='2'" name="Monthly_op2_2" style="width: 90px !important;" [(ngModel)]="task_detail.Monthly_op2_2">
+                                                                                                            <option value="Monday">Monday</option>
+                                                                                                            <option value="Tuesday">Tuesday</option>
+                                                                                                            <option value="Wednesday">Wednesday</option>
+                                                                                                            <option value="Thursday">Thursday</option>
+                                                                                                            <option value="Friday">Friday</option>
+                                                                                                            <option value="Saturday">Saturday</option>
+                                                                                                            <option value="Sunday">Sunday</option>
+                                                                                                        </select>
+                                                                                                        <input type="text" placeholder="1"[disabled]="task_detail.monthly_radios !='2'" name="Monthly_op2_3" [(ngModel)]="task_detail.Monthly_op2_3" (change)="chk_value_exist($event.target.value,'Monthly_op2_3')" class="m-wrap adj-recm-wrap task-input"  style="height: 26px;margin-top: 4px;"/>  <span class="txtlabl"> month(s)    </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div> 	 
+
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="monthly_radios" value="3" [checked]="task_detail.monthly_radios =='3'" (click)="set_monthly_recurring('3');"/>
+                                                                                                            Working day
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2">
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Monthly_op3_1" id="Monthly_op3_1" [disabled]="task_detail.monthly_radios !='3'" [(ngModel)]="task_detail.Monthly_op3_1" >
+                                                                                                            <option *ngFor="let no of working_days" value="{{no}}">{{no}}</option>
+                                                                                                        </select>
+                                                                                                        <span class="txtlabl">of every </span>
+                                                                                                    </div>	
+                                                                                                    <div class="set-box2">		
+                                                                                                        <input type="text" placeholder="1" name="Monthly_op3_2" id="Monthly_op3_2" [(ngModel)]="task_detail.Monthly_op3_2" (change)="chk_value_exist($event.target.value,'Monthly_op3_2')" class="m-wrap adj-recm-wrap task-input" [disabled]="task_detail.monthly_radios !='3'"/>  <span class="txtlabl"> month(s)    </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-9" id="yearly_div" [ngStyle]="{'display':task_detail.recurrence_type == '4'?'block':'none'}">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12">
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div class="set-box1">
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="yearly_radios"  value="1" [checked]="task_detail.yearly_radios == '1'" (click)="set_yearly_recurring('1')"/>
+                                                                                                            Recur every
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2">
+                                                                                                        <input type="text" placeholder=" " name="Yearly_op1"  [(ngModel)]="task_detail.Yearly_op1" (change)="chk_value_exist($event.target.value,'Yearly_op1')" class="m-wrap adj-recm-wrap task-input" [disabled]="task_detail.yearly_radios !='1'" /> <span class="txtlabl"> year(s)   </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div  class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="yearly_radios" value="2" [checked]="task_detail.yearly_radios == '2'" (click)="set_yearly_recurring('2')"/>
+                                                                                                            on 
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2">
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Yearly_op2_1" [(ngModel)]="task_detail.Yearly_op2_1" [disabled]="task_detail.yearly_radios !='2'">
+                                                                                                            <option value="1">January</option>
+                                                                                                            <option value="2">February</option>
+                                                                                                            <option value="3">March</option>
+                                                                                                            <option value="4">April</option>
+                                                                                                            <option value="5">May</option>
+                                                                                                            <option value="6">June</option>
+                                                                                                            <option value="7">July</option>
+                                                                                                            <option value="8">August</option>
+                                                                                                            <option value="9">September</option>
+                                                                                                            <option value="10">October</option>
+                                                                                                            <option value="11">November</option>
+                                                                                                            <option value="12">December</option>
+                                                                                                        </select>
+                                                                                                        <input type="text" placeholder="1" name="Yearly_op2_2" [(ngModel)]="task_detail.Yearly_op2_2" (change)="chk_value_exist($event.target.value,'Yearly_op2_2')" class="m-wrap adj-recm-wrap task-input" [disabled]="task_detail.yearly_radios !='2'"/>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div> 	 
+
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="yearly_radios"  value="3" [checked]="task_detail.yearly_radios == '3'" (click)="set_yearly_recurring('3')"/>
+                                                                                                            The
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2">
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Yearly_op3_1" [(ngModel)]="task_detail.Yearly_op3_1" [disabled]="task_detail.yearly_radios !='3'">
+                                                                                                            <option value="first" >First</option>
+                                                                                                            <option value="second">Second</option>
+                                                                                                            <option value="third">Third</option>
+                                                                                                            <option value="fourth">Fourth</option>
+                                                                                                            <option value="last">Last</option>
+                                                                                                        </select>
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Yearly_op3_2" [(ngModel)]="task_detail.Yearly_op3_2" [disabled]="task_detail.yearly_radios !='3'">
+                                                                                                            <option value="Monday">Monday</option>
+                                                                                                            <option value="Tuesday">Tuesday</option>
+                                                                                                            <option value="Wednesday">Wednesday</option>
+                                                                                                            <option value="Thursday">Thursday</option>
+                                                                                                            <option value="Friday" >Friday</option>
+                                                                                                            <option value="Saturday">Saturday</option>
+                                                                                                            <option value="Sunday">Sunday</option>
+
+                                                                                                        </select>
+                                                                                                        <span class="txtlabl">of </span>
+                                                                                                    </div>	
+                                                                                                    <div class="set-box2">		
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Yearly_op3_3"  [(ngModel)]="task_detail.Yearly_op3_3" [disabled]="task_detail.yearly_radios !='3'">
+                                                                                                            <option value="January">January</option>
+                                                                                                            <option value="February">February</option>
+                                                                                                            <option value="March">March</option>
+                                                                                                            <option value="April">April</option>
+                                                                                                            <option value="May" >May</option>
+                                                                                                            <option value="June">June</option>
+                                                                                                            <option value="July">July</option>
+                                                                                                            <option value="August">August</option>
+                                                                                                            <option value="September">September</option>
+                                                                                                            <option value="October">October</option>
+                                                                                                            <option value="November">November</option>
+                                                                                                            <option value="December">December</option>
+                                                                                                        </select>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="form-group">
+                                                                                                <div class="controls clearfix">
+                                                                                                    <div class="set-box1" >
+                                                                                                        <label class="radio line task_popup">
+                                                                                                            <input class="onsub task-chk-input" type="radio" name="yearly_radios" value="4" [checked]="task_detail.yearly_radios == '4'" (click)="set_yearly_recurring('4')"/>
+                                                                                                            The working day
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="set-box2">
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Yearly_op4_1" [(ngModel)]="task_detail.Yearly_op4_1" [disabled]="task_detail.yearly_radios !='4'">
+                                                                                                            <option *ngFor="let n of working_days" value="{{n}}">{{n}}</option>
+                                                                                                        </select>
+                                                                                                        <span class="txtlabl">of </span>
+                                                                                                        <select class="m-wrap adj-recm-wrap2 no-margin task-input" name="Yearly_op4_2" [(ngModel)]="task_detail.Yearly_op4_2" [disabled]="task_detail.yearly_radios !='4'">
+                                                                                                            <option value="January" >January</option>
+                                                                                                            <option value="February">February</option>
+                                                                                                            <option value="March">March</option>
+                                                                                                            <option value="April">April</option>
+                                                                                                            <option value="May">May</option>
+                                                                                                            <option value="June">June</option>
+                                                                                                            <option value="July" >July</option>
+                                                                                                            <option value="August">August</option>
+                                                                                                            <option value="September">September</option>
+                                                                                                            <option value="October">October</option>
+                                                                                                            <option value="November">November</option>
+                                                                                                            <option value="December">December</option>
+                                                                                                        </select>
+
+                                                                                                    </div>	
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <h6 class="no-padding" style="font-weight: 600;">  Range of Recurrence   </h6>
+                                                                            <div class="row">
+                                                                                <div class="col-md-6 ">
+                                                                                    <div class="form-group no-margin">
+                                                                                        <div class="controls" style="padding-left: 0px !important; ">
+                                                                                            <label class="control-label task_popup font_weight0" style="margin-top: 5px !important;margin-left:0px !important">Starts on<span class="required">*</span></label> 
+                                                                                            <mat-form-field>
+                                                                                                <input matInput [matDatepicker]="picker3"  [value]="task_start_on_date.value" name="task_start_on_date" (dateChange)="recurring_dates('start',$event)">
+                                                                                                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                                                                                <mat-datepicker #picker3></mat-datepicker>
+                                                                                            </mat-form-field>
+                                                                                            
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div> 
+                                                                            <!--</div>-->
+
+                                                                            <!--<div class="row">-->
+                                                                            <div class="col-md-6 " style="padding:0px !important;">
+                                                                                <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <label class="control-label task_popup" style="margin-top: 5px !important">End Date</label> 
+                                                                                    <div class="form-group">
+                                                                                        <div class="controls">
+                                                                                            <label class="radio line task_popup">
+                                                                                                <input class="onsub task-chk-input" type="radio" name="no_end_date_val" value="1" [checked]="task_detail.no_end_date == '1'" (click)="set_frequency_date_range('1');"/>
+                                                                                                No End Date
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                </div>
+                                                                            <!--</div>-->
+
+                                                                            <div class="row margin-top-5">
+                                                                                <div class="col-md-4">
+                                                                                    <div class="form-group">
+                                                                                        <div class="controls">
+                                                                                            <label class="radio line task_popup">
+                                                                                                <input class="onsub task-chk-input" type="radio" name="no_end_date_val" value="2" [checked]="task_detail.no_end_date == '2'" (click)="set_frequency_date_range('2');"/>
+                                                                                                End After
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>	 
+                                                                                </div>
+                                                                                <div class="col-md-8" id="end_after_recurr" [ngStyle] = "{'display':task_detail.no_end_date == '2'?'block':'none'}">
+                                                                                    <input type="text" placeholder="1" name="end_after_recurrence" [(ngModel)]="task_detail.end_after_recurrence" (change)="chk_value_exist($event.target.value,'end_after_recurrence')" class="m-wrap adj-recm-wrap" style="width: 60px;"  /> <span class="txtlabl"> Recurrence    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                            
+                                                                            <div class="row margin-top-5">
+                                                                                <div class="col-md-2">
+                                                                                    <div class="form-group">
+                                                                                        <div class="controls">
+                                                                                            <label class="radio line task_popup">
+                                                                                                <input class="onsub task-chk-input" type="radio" name="no_end_date_val" value="3" [checked]="task_detail.no_end_date == '3'"  (click)="set_frequency_date_range('3');" />
+                                                                                                End By
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>	 
+                                                                                </div>
+
+                                                                                <div class="col-md-8" id="end_by_date" [ngStyle] = "{'display':task_detail.no_end_date == '3'?'block':'none'}">
+                                                                                        <mat-form-field >
+                                                                                            <input  matInput [matDatepicker]="picker4" [value]="task_end_by_date.value" name="task_end_by_date" (dateChange)="recurring_dates('end',$event)">
+                                                                                            <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                                                                                            <mat-datepicker #picker4></mat-datepicker>
+                                                                                        </mat-form-field>
+                                                                                </div>
+                                                                                
+                                                                            </div>
+                                                                            </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <div class="col-md-8" >
+                                                                        <label class="control-label task_popup schedule_label" style="font-weight: bolder !important;margin-right: 10px;">Due Date :</label> 
+                                                                        <mat-form-field>
+                                                                            <input matInput [matDatepicker]="picker1"  [value]="task_due_date.value" (dateChange)="change_due_date($event)">
+                                                                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                                            <mat-datepicker #picker1></mat-datepicker>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="top: 17px;">
+                                                                        <div class="controls relative-position">
+                                                                            <label class="task_popup" style="font-weight: bolder !important;">
+                                                                                <input class="task-chk-input pull-left newcheckbox_task" type="checkbox" name="locked_due_date" id="locked_due_date" [checked]="task_detail.locked_due_date == '1'" (click)="lockeddueDate($event.target.checked);" /><span> Locked Due date</span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+    
+                                                    <!-- Task frequency section end here -->
+    
+                                                </div>
+    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Dependencies -->
+                                <div class="tab-pane task-tab-pane paddingleftright10" [hidden]="!dependencies">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group paddding-5 border_bottom">
+                                                <label class="control-label"><i class="fa fa-link" ></i> Dependencies</label> 
+                                                <!-- <label class="control-label schedule_label pull-right"><a href="javascript:void(0);" id="toggle_dependency"><i class="icon-external-link" ></i> Link an existing task</a></label> -->
+                                            </div>
+                                        </div>
+                                     </div>
+                                     <div class="normal_div" id="depent_normal">
+                                        <div class="customtable table-scrollable">
+                                            <table class="table table-striped table-hover table-condensed flip-content">
+                                                <thead class="flip-content">
+                                                    <tr>
+                                                        <th>Task</th>
+                                                        <th>Due Date</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="updated_dependencies">
+                                                        <tr *ngFor="let dep of task_other_info.dependencies" style="word-break: break-all;">
+                                                            <td >
+                                                                <!-- <div class="userimg"> -->
+                                                                    <img src="{{Image_url+dep.profile_image}}" alt="img" class="capacity_images" *ngIf="dep.profile_image !='';else imgelse1"/>
+                                                                    <ng-template #imgelse1><span class="login_logo">{{dep.first_name | Initialletters}}{{dep.last_name |Initialletters}}</span></ng-template>{{dep.task_title}}
+                                                                <!-- </div> -->
+                                                            <td >{{dep.task_due_date}}</td>
+                                                            <td>
+                                                                <span class="label label-{{replace_space(dep.task_status_name)}}">{{dep.task_status_name}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="javascript:void(0)" class="tooltips" tooltipPlacement="top" tooltip="Click to Un-link the task" mwlConfirmationPopover
+                                                                    placement="left"
+                                                                    (confirm)="confirmClicked = remove_dependency(dep.task_id);"
+                                                                    (cancel)="cancelClicked = true" >
+                                                                    <i class="icon-unlink"></i>
+                                                                </a>
+                                                                <a href="javascript:void(0)" class="tooltips" tooltipPlacement="top" tooltip="Click to Delete the dependency task" mwlConfirmationPopover
+                                                                    placement="left"
+                                                                    (confirm)="confirmClicked = delete_dependency(dep.task_id);"
+                                                                    (cancel)="cancelClicked = true">
+                                                                    <i class="icon-trash stngicn"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr *ngIf="task_other_info.dependencies ==''" class="empty_table"><td colspan="4">No record available.</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 ">
+                                                <div class="form-group">
+                                                    <a href="javascript:void(0)" class="btn blue_button font_weight0" (click)="dependency = !dependency;show_link_existing=false;" *ngIf="!dependency">
+                                                        <i class="fa fa-plus"></i> Add dependency </a>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <button type="button" id="toggle_dependency" (click)="show_link_existing = !show_link_existing;dependency=false;" class="btn blue_button font_weight0"
+                                                        style="margin-left: 0px!important;">
+                                                        <i class="icon-external-link"></i> Link an existing task </button>
+                                                </div>
+                                            </div>
+                                        
+                                        </div>
+                                        <div class="row" id="row_frm_search_dependency" [hidden]="!show_link_existing">
+                                            <form #dependencytasksearch>
+                                        
+                                                <div class="col-md-12">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Task Name</label>
+                                                            <div class="controls">
+                                                                <input type="text" [matAutocomplete]="auto" [disabled]="type_rec == 'occurrence' || task_detail.master_task_id != '0'" (keyup)="get_Task_Value(dependencytasksearch,task_detail.task_id)"
+                                                                    id="task_name" name="task_name" class="m-wrap col-md-12 radius-b ui-autocomplete-input" placeholder="Search Tasks by entering Name"
+                                                                    autocomplete="off">
+                                                                <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group no-margin">
+                                                            <div class="controls">
+                                                                <div class="datLT">
+                                                                    <mat-form-field>
+                                                                        <input [disabled]="type_rec == 'occurrence' || task_detail.master_task_id != '0'" name="taskDate" matInput [matDatepicker]="existing_task_datepicker"
+                                                                            placeholder="Choose a date" style="width:175px; margin-top: 14px;">
+                                                                        <mat-datepicker-toggle matSuffix [for]="existing_task_datepicker"></mat-datepicker-toggle>
+                                                                        <mat-datepicker #existing_task_datepicker></mat-datepicker>
+                                                                    </mat-form-field>
+                                                                </div>
+                                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                        
+                                                </div>
+                                                <mat-autocomplete #auto="matAutocomplete">
+                                                    <mat-option *ngFor="let item of task_list_result" [value]="item.value">
+                                                        <a href="javascript:void(0);" (click)="add_search_dependancy(item.id,task_detail.task_id,dependencytasksearch);show_link_existing = !show_link_existing;">{{ item.label }}</a>
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                        
+                                            </form>
+                                        </div>
+                                        <form #adddependency [hidden]="!dependency" >
+                                            <div class="row" >
+                                                <div class="col-md-12 ">
+                                                    <div class="form-group col-md-6">
+                                                        <label class="control-label">Task Name<span class="required">*</span></label>
+                                                        <div class="controls">
+                                                            <input type="text" name="dependent_task_title" class="m-wrap col-md-12" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 ">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Allocated </label>
+                                                            <div class="controls" >
+                                                                <select class="m-wrap no-margin col-md-12 radius-b padding3" name="task_allocated_user_id">
+                                                                    <option *ngFor="let u of task_other_info.team" value="{{u.user_id}}" [selected]="u.user_id == login_user_id">{{u.first_name}} {{u.last_name}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="col-md-6 ">
+                                                       <div class="form-group">
+                                                           <label class="control-label">Status</label>
+                                                           <div class="controls">
+                                                               <select class=" m-wrap no-margin col-md-12 radius-b padding3" name="dependent_task_status" >
+                                                                <option *ngFor="let st of task_other_info.status" value="{{st.task_status_id}}" [selected]="st.task_status_id == default_task_status">{{st.task_status_name}}</option>
+                                                               </select>
+                                                           </div>
+                                                           
+                                                       </div>
+                                                   </div>
+                                                    <div class="col-md-6 ">
+                                                       <div class="form-group">
+                                                           <label class="control-label" style="margin-bottom:0px !important;">Due Date </label>
+                                                           <div class="controls">
+                                                            <mat-form-field>
+                                                                <input matInput [matDatepicker]="picker2"  [value]="dependent_task_due_date.value" name="depedent_task_due_date">
+                                                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                                                <mat-datepicker #picker2></mat-datepicker>
+                                                            </mat-form-field> 
+                                                              <!-- <input name="dependent_task_due_date" [(ngModel)]="dependent_task_due_date" type="hidden"/> -->
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12" style="text-align:center;">
+                                                    <div class="col-md-12 padding_0" >
+                                                        <button type="submit" class="yellow_button" (click)="add_dependency(adddependency);"> Add </button>
+                                                        <a class="margin-left-5" (click)="dependency = !dependency"><i class="icon-trash stngicn" ></i></a>
+                                                       </div>
+                                                </div>
+                                            </div>
+                                       </form>
+
+                                     </div>
+                                </div>
+                                <!-- File section -->
+                                <div class="tab-pane task-tab-pane" [hidden]="!files">
+                                        <div class="portlet">
+                                            <div class="portlet-body  form flip-scroll">
+                                                <div class="form-horizontal newpopup_container_pdding">
+                                                    <div class="normal_div" >
+                                                        <div class="row" style="padding-left: 15px;">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group border_bottom">
+                                                                    <label class="control-label">
+                                                                        <i class="fa fa-paperclip"></i> Files & Links</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="add_file_row" style="padding-left: 15px;">
+                                                            <div class="form-group col-md-6" >
+                                                                <div class="input-append" >
+                                                                    <span class="btn-file browse-btn">
+                                                                        <label class="control-label" [dropzone]="config" (success)="onUploadSuccess($event)" style="text-align: center !important;margin-left:0px !important;">
+                                                                            Drop files here or click to upload
+                                                                            <span class="schedule_label font_weight0" align="center" style="text-align: center;">(Files not larger than 5MB)</span>
+                                                                        </label>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-1" style="margin-right: 0px !important;">
+                                                                <label class="control-label font_weight1" style="margin-top: 35px !important;margin-left: 10px;">OR</label>
+                                                            </div>
+                                                            <div class="col-md-5" style="padding-right:0;margin-left: 6px;">
+                                                                <div class="col-md-12">
+                                                                    <form #taskfileadd>
+                                                                    <div class="row margin-top-5 input-append">
+                                                                        <span class="add-on datepicker_addon">
+                                                                            <i class="fa fa-link tasknppicn"></i>
+                                                                        </span>
+                                                                        <input type="text" name="file_link" value="" class="m-wrap col-md-9 noleft_radius" placeholder="Paste a link" >
+                                                                    </div>
+                                                                    <div class="row margin-top-5">
+                                                                        <input type="text" name="file_name" value="" class="m-wrap col-md-8" placeholder="File Name">
+                                                                        <button type="button" class="yellow_button margin-left-5" (click)="insert_link(taskfileadd)">Add</button>
+                                                                    </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="updated_files">
+                                                            <div class="row files_row">
+                                                            <div class="col-md-4" *ngFor="let file of task_other_info.files">
+                                                                <div class="hasfiles" style="padding: 6px 0px 10px 4px !important;" *ngIf="file.file_link !='';else elsefile">
+                                                                    <div class="left_colum">
+                                                                        <a href="{{file.file_link}}" target="_blank">
+                                                                            <img src="./assets/images/link.png" />
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="right_colum">
+                                                                        <div class="txt-normal">
+                                                                            <strong>
+                                                                                <a href="{{file.file_link}}" target="_blank" style="font-weight: 800;">{{file.task_file_name}}</a>
+                                                                            </strong>
+                                                                        </div>
+                                                                        <div> </div>
+                                                                    </div>
+                                                                    <div class="files_hover">
+                                                                        <div class="" style="margin-left: 25%;padding-top: 5px;">
+                                                                            <a href="{{file.file_link}}" target="_blank" class="white_link">
+                                                                                <i class="fa fa-download"></i>
+                                                                            </a>
+                                                                            <a href="javascript:void(0);" disabled="disabled" class="white_link" (click)="delete_file(file.task_file_id)">
+                                                                                <i class="icon-trash"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <ng-template #elsefile>
+                                                                    <div class="hasfiles" style="padding: 3px 0px 5px 4px !important;">
+                                                                        <div class="left_colum">
+                                                                            <a href="https://s3-ap-southeast-2.amazonaws.com/static.schedullo.com/upload/task_project_files/{{file.task_file_name}}" target="_blank">
+                                                                                <img src="./assets/images/images.png" />
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="right_colum">
+                                                                            <div class="txt-normal">
+                                                                                <strong>
+                                                                                    <a href="https://s3-ap-southeast-2.amazonaws.com/static.schedullo.com/upload/task_project_files/{{file.task_file_name}}" target="_blank" style="font-weight: 800;">{{file.file_title | CompressWord}}</a>
+                                                                                </strong>
+                                                                            </div>
+                                                                            <div> </div>
+                                                                        </div>
+                                                                        <div class="files_hover">
+                                                                            <div class="" style="margin-left: 25%;padding-top: 5px;">
+                                                                                <a href="https://s3-ap-southeast-2.amazonaws.com/static.schedullo.com/upload/task_project_files/{{file.task_file_name}}" target="_blank" class="white_link">
+                                                                                    <i class="fa fa-download"></i>
+                                                                                </a>
+                                                                                <a href="javascript:void(0);" disabled="disabled" class="white_link" (click)="delete_file(file.task_file_id)">
+                                                                                    <i class="icon-trash"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                </div>
+                                            </div>  
+                                </div>
+                                <!-- comments -->
+                                <div class="tab-pane task-tab-pane paddingleftright10">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group paddding-5 border_bottom">
+                                                <label class="control-label">
+                                                    <i class="fa fa-comment"></i> Comments</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="normal_div">
+                                        <div id="scroll_comments">
+                                            <ul class="list-unstyled" id="updated_task_comments">
+                                                <li class="light" *ngFor="let com of task_other_info.comments">
+                                                    <div class="userimg">
+                                                            <img src="{{Image_url+com.profile_image}}" alt="img" class="capacity_images" *ngIf="com.profile_image !='';else imgelse"/>
+                                                            <ng-template #imgelse><span class="login_logo">{{com.first_name | Initialletters}}{{com.last_name |Initialletters}}</span></ng-template>
+                                                    </div>
+                                                    <div class="userdetail">
+                                                        <div>
+                                                            <span class="usertxt">{{com.first_name}} {{com.last_name}} </span>
+                                                            <!-- <span> at {{com.comment_added_date}}</span> -->
+                                                            <span class="float_r">
+                                                                <a href="javascript:void(0);" (click)="update_task_comment=com.task_comment;addcomment=true;hiden_comment_id=com.task_comment_id;updatecomment=true;" >
+                                                                    <i class="icon-pencil tmsticn" style="color: #000 !important;"></i>
+                                                                </a>
+                                                                <a href="javascript:void(0);" mwlConfirmationPopover
+                                                                    placement="left"
+                                                                    (confirm)="confirmClicked = delete_comment(com.task_comment_id);"
+                                                                    (cancel)="cancelClicked = true">
+                                                                    <i class="icon-trash taskppstp" style="color:#000 !important;"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                        <p class="wrap">{{com.task_comment | titleDecode}}</p>
+                                                    </div>
+                                                    <div class="clearfix"> </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="clearfix"> </div>
+                                    </div>
+                                    <div class="form-group" style="margin-top: 10px;">
+                                        <form [hidden]="!addcomment" #insertcomment>
+                                            <div style="padding: 10px 5px;border-top: 1px solid #d7d9dd;">
+                                                <div class="row">
+                                                    <div class="col-md-12 ">
+                                                        <div class="form-group">
+                                                            <div class="controls relative-position">
+                                                                <textarea rows="3" *ngIf="updatecomment" name="task_comment" class="col-md-12 m-wrap" value="{{update_task_comment}}" ></textarea>
+                                                                <input type="hidden" name="task_comment_id" value="{{hiden_comment_id}}" />
+                                                                <textarea rows="3" *ngIf="!updatecomment" name="task_comment" class="col-md-12 m-wrap" ></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pull-right" style="margin-top: 5px;">
+                                                            <button type="button" class="btn blue" *ngIf="updatecomment" (click)="insert_comment(insertcomment,'update')"> Update Comments </button>
+                                                            <button type="button" class="btn blue" *ngIf="!updatecomment" (click)="insert_comment(insertcomment,'add')"> Add Comments </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <a  class="btn blue pull-right" (click)="addcomment = !addcomment;updatecomment=false;hiden_comment_id='';"  *ngIf="!addcomment" >Click here to add a comment</a>
+                                    </div>
+                                </div>
+                                <!-- History -->
+                                <div class="tab-pane task-tab-pane paddingleftright10">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group paddding-5 border_bottom">
+                                                <label class="control-label">
+                                                    <i class="fa fa-history"></i> History</label>
+                                                <a class="float_r show_history" (click)="history= !history" *ngIf="!history">Show History
+                                                    <i class="icon-angle-down"></i>
+                                                </a>
+                                                <a class="float_r show_history" (click)="history= !history" *ngIf="history">Hide History
+                                                    <i class="icon-angle-up"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="normal_div" [hidden]="!history">
+                                        <div id="scroll_history">
+                                            <ul class="list-unstyled" id="updated_history">
+                                                <li class="light" *ngFor="let his of task_other_info.history">
+                                                    <div class="userimg">
+                                                        <img src="{{Image_url+his.profile_image}}" alt="img" class="capacity_images" *ngIf="his.profile_image !='';else imgelse"/>
+                                                        <ng-template #imgelse><span class="login_logo">{{his.first_name | Initialletters}}{{his.last_name |Initialletters}}</span></ng-template>
+                                                    </div>
+                                                    <div class="userdetail">
+                                                        <div>
+                                                            <span class="usertxt">
+                                                                {{his.first_name}} {{his.last_name}}
+                                                            </span>
+                                                            <p>{{his.histrory_title}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"> </div>
+                                                </li>
+                                                <li *ngIf="task_other_info.history == ''">No Record Available.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="background-color: #f7f7f7;height: auto;padding-bottom: 10px;">
+                        
+                        <!-- Start private task & watch list code here -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6 padddingleft0">	
+                                    <div class="form-group paddding-5">
+                                        <div class="controls relative-position">
+                                            <input class="task-chk-input pull-left newcheckbox_task" type="checkbox" name="personal" value="" (click)="changepersonal($event.target.checked)" [checked]="task_detail.is_personal == '1'"/><label class="control-label"> Private Task</label>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="col-md-6 padddingleft0">
+                                    <div class="form-group paddding-5">
+                                        <div class="controls relative-position" id="watch_list-chk">
+                                            <a href="javascript:void(0);" *ngIf="task_detail.watch =='0'" style="color:#000 !important;" (click)="watch();"><i class="fa fa-star-o " style="font-size:16px" aria-hidden="true"></i> <label class="control-label"> Watch List</label></a>
+                                            <a href="javascript:void(0);" *ngIf="task_detail.watch =='1'" style="color:#000 !important;" (click)="watch();"><i class="fa fa-star" style="font-size:16px;" aria-hidden="true"></i> <label class="control-label" > Watch List</label></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End private task & watch list code here -->
+                        
+                        <!-- Task status section -->
+                        <div class="row" >
+                            <div class="col-md-12">
+                                <div class="form-group paddding-5">
+                                    <label class="control-label">Status</label> 
+                                    <div class="controls relative-position">
+                                        <select class="col-md-11 m-wrap no-margin radius-b padding3" name="task_status_id" id="task_status_id" [(ngModel)]="task_detail.task_status_id" (change)="chk_task_status()" [disabled]="task_detail.completed_depencencies !='0'" >
+                                            <option *ngFor ="let status of task_other_info.status" value="{{status.task_status_id}}">{{status.task_status_name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End task status -->
+                        <!-- Task priority -->
+                        <div class='row' >
+                            <div class="col-md-12">
+                                <div class="form-group paddding-5">
+                                    <label class="control-label">Priority</label> 
+                                    <input type="hidden" name="task_priority" id="hdn_task_priority" value="" />
+                                    <div class="controls relative-position">
+                                        <select class="col-md-11 m-wrap no-margin radius-b padding3" [(ngModel)]="task_detail.task_priority" name="task_priority" id="task_priority" >
+                                            <option value="None"> None</option>
+                                            <option value="Low" > Low</option>
+                                            <option value="Medium" > Medium</option>
+                                            <option value="High" > High</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End here -->
+                        <!-- Task category -->
+                        <div class="row hide_category" [ngStyle]="{'display':company_fields_status.category ==1?'block':'none'}">
+                            <div class="col-md-12">
+                                <div class="form-group paddding-5">
+                                    <label class="control-label">Task Category</label> 
+                                    <div class="controls relative-position">
+                                        <select class="col-md-11 m-wrap no-margin radius-b padding3" name="task_category_id" id="task_category_id" [(ngModel)]="task_detail.task_category_id" (change)="setSubCategory($event.target.value);">
+                                            <option value="0">Please Select</option>
+                                            <option *ngFor="let cat of task_other_info.category" value="{{cat.category_id}}">{{cat.category_name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End here task category -->
+                        <!-- Start task sub-category here -->
+                        <div class="row hide_subcategory" [ngStyle]="{'display':company_fields_status.subcategory ==1?'block':'none'}" >
+                            <div class="col-md-12">
+                                <div class="form-group paddding-5">
+                                    <label class="control-label">Sub Category</label> 
+                                    <div class="controls relative-position" id="updated_subCategory">
+                                       <select class="col-md-11 m-wrap no-margin radius-b padding3" name="task_sub_category_id" [(ngModel)]="task_detail.task_sub_category_id" >
+                                        <option value="0">Please Select</option>
+                                        <option *ngFor="let sub of task_other_info.sub_category" value="{{sub.category_id}}">{{sub.category_name}}</option>            
+                                       </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end task sub-category here -->
+                        <form #taskform="ngForm">
+                        <!-- Start task division here -->
+                        <div class="row hide_division" [ngStyle]="{'display':company_fields_status.division ==1?'block':'none'}">
+                                <div class="col-md-12">
+                                    <div class="form-group paddding-5">
+                                        <div class="controls relative-position modify_btn">
+                                            <label class="control-label" for="task_division_id">Division</label>
+                                                <mat-select name="division_name" [(ngModel)]="task_division" class="col-md-11 m-wrap no-margin  radius-b padding0 task_popup_select"
+                                                    placeholder="Division" multiple>
+                                                    <mat-option *ngFor="let div of task_other_info.division" value="{{div.division_id}}" (click)="getdepartment()">{{div.devision_title}}</mat-option>
+                                                </mat-select>
+                                        </div>
+                            
+                                    </div>
+                            
+                                </div>
+                            </div>
+                            <!-- End task division here -->
+                            <!-- Start task department here -->
+                            <div class="row hide_department" [ngStyle]="{'display':company_fields_status.department ==1?'block':'none'}" >
+                                <div  class="col-md-12">
+                                     <div class="form-group">
+                                        <label class="control-label" for="">Department</label>
+                                        <mat-select   name="department_name" [(ngModel)]="task_department"  class="col-md-11 m-wrap no-margin radius-b padding0 task_popup_select" placeholder="Department"   multiple>
+                                           <mat-option *ngFor="let dep of task_other_info.department" value="{{dep.department_id}}">{{dep.department_title}}</mat-option>
+                                          </mat-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End task department here -->
+                            <!-- Start task Skill here -->
+                            <div class="row hide_skills" [ngStyle]="{'display':company_fields_status.skills ==1?'block':'none'}" >
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label" for="task_skill_id">Skill</label>
+                                        <mat-select name="skill_name" [(ngModel)]="task_skill" class="col-md-11 m-wrap no-margin radius-b padding0 task_popup_select" placeholder="Skill"   multiple>
+                                            <mat-option *ngFor="let skil of task_other_info.skills" value="{{skil.skill_id}}">{{skil.skill_title}}</mat-option>
+                                          </mat-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End task skill here -->
+                        <!-- Start task staff-levels here -->
+                        <div class="row hide_staff_levels" [ngStyle]="{'display':company_fields_status.staff_levels ==1?'block':'none'}" >
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="task_staff_level_id">Staff Level</label>
+                                    <div class="controls relative-position">
+                                            <select class="col-md-11 m-wrap no-margin radius-b padding3" name="task_staff_level_id" id="task_staff_level_id" [(ngModel)]="task_detail.task_staff_level_id">
+                                                <option value="0">Please Select</option>
+                                                <option *ngFor="let staff of task_other_info.staff_levels" value="{{staff.staff_level_id}}">{{staff.staff_level_title}}</option>
+                                            </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End task staff-levels here -->
+                         <!-- Start task allocation here -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="task_allocated_user_id">Task Allocated to </label>
+                                    <mat-select name="allocated_user_name" [(ngModel)]="task_allocated_users" class="task_popup_select col-md-11 m-wrap no-margin radius-b padding0 "
+                                        placeholder="Task Allocated to" multiple>
+                                        <mat-option *ngFor="let user of task_other_info.team" value="{{user.user_id}}">{{user.first_name}} {{user.last_name}}</mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        <!-- End task allocation here -->
+                        <!-- Start task owner here -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group paddding-5">
+                                    <label class="control-label">Task Owner</label> 
+                                    <div class="controls">
+                                        <div class="input-icon right">
+                                            <input class="m-wrap col-md-11" disabled="disabled" name="task_owner_id_val" id="task_owner_id_val" value="{{task_detail.owner_name}}" type="text" placeholder="Task Owner"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end task owner here -->
+                                                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                
+<div class="modal-footer" *ngIf="task_detail.task_id !='' ">
+    <button type="button" (click)="close(taskform);"  class="btn btn-common-blue save_close"><i class="fa fa-check" aria-hidden="true"></i> Save & Close</button>
+    <button type="button"  mwlConfirmationPopover
+    placement="right"
+    (confirm)="confirmClicked = popup_single_delete();"
+    (cancel)="cancelClicked = true" *ngIf="task_detail.frequency_type == 'one_off' || access =='project'  || access == 'customer'; else deleteoption;" class="btn btn-common-red delete_task_btn"><i class="fa fa-trash" aria-hidden="true"></i> Delete </button>
+    <ng-template #deleteoption>
+        <button type="button"(click)="open_taskpopup_delete();" class="btn btn-common-red delete_task_btn"><i class="fa fa-trash" aria-hidden="true"></i> Delete </button>
+    </ng-template>
+</div>
+<div class="modal-footer" *ngIf="task_detail.task_id =='' ">
+    <button type="button" (click)="insertTask(taskform);"  class="btn btn-common-blue save_close"><i class="fa fa-check" aria-hidden="true"></i> Save & Close</button>
+ </div>
+
+

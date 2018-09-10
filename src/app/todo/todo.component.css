@@ -1,0 +1,455 @@
+
+.mycalendar_table{
+    position: relative;
+    height: 40px;
+    width: 100%;
+    display: block;
+    color: #fff;
+    background-color: #17a3e9;
+    line-height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.left_arrow{
+    text-shadow: none !important;
+    float: left;
+    color: #fff;
+    background-color: #26b6ff;
+}
+.right_arrow{
+    text-shadow: none !important;
+    float: right;
+    color: #fff;
+    background-color: #26b6ff;
+}
+.table{
+    table-layout: fixed;
+}
+#sample_1 td{
+    
+    max-width: 100px;
+    padding: 8px 4px !important;
+}
+.table th{
+    padding: 8px 4px !important;
+    text-align: center;
+    background-color: #fff
+}
+.table thead tr th {
+    font-size: 11px !important;
+    font-weight: 900 !important;
+}
+.hide{
+    display: none;
+}
+
+.menuList{
+    margin-right: 10px;
+    
+}
+.menuul{
+    list-style: none;
+    padding-left: 10px !important;
+    margin-bottom:0px !important;
+}
+
+.menuList a{
+    color: #000000 !important;
+    text-decoration: none !important;
+    
+}
+.menuList a:hover{
+    color: #fff !important;
+}
+
+.modal-header{
+    background-color: #F58F1F!important;
+    color: #fff !important;
+    padding: 5px !important;
+}
+
+.task_tabs{
+    padding: 5px 15px !important;
+}
+.required{
+    color: red;
+}
+.modal_label{
+    font-weight: bold;
+    font-size: 13px;
+    color: #333;
+    margin-top: 0px !important;
+}
+.popup_height{
+    padding: 0px 10px 0px 10px;
+}
+
+.model-input{
+    padding: 5px !important;
+    border-radius: 5px;
+    line-height: 20px;
+    border: 1px solid #d7d9dd;
+    font-size: 12px;
+}
+
+.btn-common-red{
+    color: white;
+    text-shadow: none;
+    background-color: #f34235 !important;
+    border: 1px solid #ef2d1f !important;
+}
+.btn-common-blue{
+    color: white;
+    text-shadow: none;
+    background-color: #0088cc !important;
+}
+
+.modal-footer{
+    padding: 10px !important;
+    text-align: left !important;
+}
+.label-Greylight {
+    background-color: #908C8C !important;
+}
+
+.popup_close{
+    float: right;
+    color: #f58f1f;
+    width: 17px;
+    margin: 0 auto;
+    height: 19px;
+    background-color: #fff;
+    border-radius: 14px;
+}
+
+.progress{
+    height: 15px !important;
+}
+#sample_1 th, #sample_1 td {
+    width: 249px;
+}
+
+.filter_button{
+    padding: 3px 10px !important;
+}
+
+.filter-header{
+    padding-left: 10px !important;
+    margin-right: 2px !important;
+    background-color: #bbbb;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+
+.calendar_filter1{
+    left: -200px !important;
+    /* position: relative !important; */
+    color: black;
+    min-width: 300px !important;
+    overflow: scroll;
+    max-height: calc(91vh - 120px);
+    height: auto;
+}
+a{
+    text-decoration: none !important;
+}
+.close{
+    opacity: 1 !important;
+}
+
+
+.modal-content {
+width:800px !Important;
+}
+.modal-open .modal{
+    overflow: hidden !important;
+}
+.padding3{
+    padding: 3px !important;
+}
+.modal-body{
+    padding: 0px !important
+}
+.add-on{
+    padding: 4px !important;
+}
+.font_weight0{
+    margin-top: 35px !important;
+    margin-right: 10px;
+}
+
+.title_edit{
+    text-decoration: none !important;
+    color: #fff !important;
+    cursor: pointer;
+  }
+
+  .paddingleftright10{
+    padding: 0 10px 0 10px !important;
+  }
+  .controls > .radio.line, .controls > .checkbox.line{
+    font-weight: normal !important;
+}
+label.task_popup{
+    font-weight: normal !important;
+}
+span.txtlabl{
+    padding-left: 0px !important;
+}
+.task_color_select{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+.step_td{
+    padding-top: 2px !important;
+    width: 50px;
+    padding-bottom: 3px !important;
+}
+
+.modal.fade.in {
+    top: 1% !important;
+}
+.weekdaytext{
+    left: 5px;
+    float: left;
+    top: 5px;
+    color: #17a3e9;
+    font-size: 11px;
+    font-weight: bold;
+}
+.modal .portlet{
+    border: none !important;
+    margin-bottom: 0px !important; 
+}
+
+.border_other_task{
+    border-top: 2px dotted red;
+    padding-top: 5px !important;
+}
+.task_logo{
+    display: inline-block;
+    font-size: 1em;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+    border-radius: 50%;
+    background: #17a3e9;
+    vertical-align: middle;
+    color: white;
+    font-weight: bold;
+}
+#calendar{
+	font-family: Arial, Verdana;
+	font-size: 12px;
+}
+
+
+#calendar_header  				{ width:99%; }
+#calendar_header .caption_left 	{ width:33%; text-align:left; }
+#calendar_header .caption 		{ width:34%; font-size: 16px; font-weight:bold; text-align:center; }
+#calendar_header .types_changer { width:33%; font-size: 12px; font-weight:normal; text-align:right; }
+
+.clearfix { clear:both;}
+/* MONTLY CALENDAR */
+/** ------------------------------------------------------------------------ **/
+#calendar .td,
+#calendar .td_empty,
+#calendar .td_actday,
+#calendar .td_selday{
+	width:14%;
+	text-align: left;
+	vertical-align: top;
+	padding:3px;
+	padding-left:5px;
+	padding-top:5px;
+}
+
+#calendar .month  			{ width:100%; align:left; border:1px solid #ccc; border-collapse:collapse; }
+#calendar .tr_days   		{ height:32px; background-color:#e5e9ec; /*background-image: url(images/header_bg.gif); */background-repeat: repeat-x; }
+#calendar .tr				{ }
+#calendar .td 				{ border:1px solid #ddd; color:#555; background-color:#ffffff; }
+#calendar .td_empty 		{ border:1px solid #ddd; color:#555; background-color:#f1f2f3; }
+#calendar .td_actday 		{ background-color:#0466ba; color:#fff; font-weight:bold; }
+#calendar .td_selday 		{ background-color:#ffffcc; border:1px; color:#555; font-weight:bold; }
+#calendar .th 				{ height:26px; text-align:center; align:left; font-weight:600; padding-top:3px; font-size:14px; padding-bottom:3px; padding:5px; color:#5b564d; }
+
+#calendar .td .td-date { text-align:center; color:#5b564d; line-height:20px; font-size:13px; font-weight:bold; position:relative; display:block; margin-bottom:4px; }
+
+
+
+/* SMALL MONTLY CALENDAR */
+/** ------------------------------------------------------------------------ **/
+#calendar .td_small,
+#calendar .td_small_empty,
+#calendar .td_small_actday,
+#calendar .td_small_selday{
+	width:14%;
+	text-align: right;
+	vertical-align: top;
+	padding:1px;
+	padding-right:3px;
+}
+
+#calendar .year_container   { width:100%; align:center; margin-top:8px; border:1px solid #ccc; border-collapse:collapse; }
+#calendar .month_small	    { width:96%; align:center; border:1px solid #ccc; margin-top:5px; border-collapse:collapse; }
+#calendar .tr_small_days    { background-color:#f1f1f1; background-repeat: repeat-x; }
+#calendar .tr_small         { }
+#calendar .td_small         { border:1px solid #ddd; color:#555; background-color:#ffffff; }
+#calendar .td_small_empty 	{ border:1px solid #ddd; color:#555; background-color:#f1f2f3; }
+#calendar .td_small_actday  { background-color:#0466ba; color:#fff; font-weight:bold; }
+#calendar .td_small_selday  { background-color:#ffffcc; border:1px; color:#555; font-weight:bold; }
+#calendar .th_small         { text-align:center; align:center; font-weight:bold; padding-top:1px; padding-bottom:1px; padding:2px; color:#fff; }
+
+
+/* NAVIGATION BAR */
+#calendar .table_navbar   	{ border:0px; width:100%; height: 40px; background-color:#17a3e9; }
+#calendar .tr_navbar   		{ width:34%; background-color:#17a3e9; height:30px; position:relative; color:#fff; font-size:16px; }
+#calendar .tr_navbar_left 	{ width:33%; background-color:#ffffff; height:30px; padding-left:7px; text-align:left; }
+#calendar .tr_navbar_right 	{ width:33%; background-color:#ffffff; height:30px; padding-right:7px; text-align:right; }
+
+#calendar .class_form       { padding:0px; margin:0px; }
+#calendar .form_select      { font-size:12px; }
+#calendar .form_button      { font-size:12px; }
+
+/* DAILY CALENDAR */
+/** ------------------------------------------------------------------------ **/
+#calendar .day  			{ border:1px solid #ccc; padding:0px; border-collapse:collapse; }
+#calendar .day_navigation  	{ border:1px solid #ccc; padding:0px; margin-top:3px;  margin-bottom:8px; border-collapse:collapse; }
+#calendar .td_acthour_d_h   { background-color:#ffffcc; border:1px solid #ccc; padding:1px; text-align:center; }
+#calendar .td_acthour_d     { background-color:#ffffcc; border:1px solid #ccc; padding:1px; padding-left:5px; text-align:left; }
+#calendar .td_d_h           { background-color:#f1f2f3; border:1px solid #ccc; padding:1px; text-align:center; }
+#calendar .td_d             { background-color:#ffffff; border:1px solid #ccc; padding:1px; padding-left:5px; text-align:left; }
+
+
+.calenderstrip {background:url(../../assets/images/calenderstrip.png);  background-position:0px 0px; background-repeat:no-repeat; display:inline-block; }
+.calenderstrip.caladdicon { background-position:0px 0px; display:block; width:22px; height:22px; position:absolute; right:0px; top:0px; opacity:0.7; }
+.calenderstrip.caladdicon:hover {opacity:1;}
+
+.calenderstrip.caliconnone { background-position:0px -22px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+.calenderstrip.caliconlow { background-position:-44px 0px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+.calenderstrip.caliconmedium { background-position:-66px 0px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+.calenderstrip.caliconhigh{ background-position:-22px 0px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+.calenderstrip.calprev { background-position:1px -46px; background-repeat:no-repeat; display:block; width:26px; height:40px; position:absolute; left:-2px; top:1px; }
+.calenderstrip.calprev:hover {background-position:-26px -46px;}
+.calenderstrip.calnext { background-position:-52px -46px; background-repeat:no-repeat; display:block; width:26px; height:40px; position:absolute; right:-2px; top:1px; }
+.calenderstrip.calnext:hover {background-position:-78px -46px;}
+
+.task-list { border-bottom:1px solid #e5e9ec; padding-bottom:4px; margin-bottom:4px;}
+.task-list ul{ margin:0; padding:0; list-style:none;}
+.task-list ul li { display:block; margin-bottom:1px; }
+.task-list ul ul li  { display:inline-block;}
+
+
+.task-info { border-bottom:1px solid #e5e9ec; padding-bottom:4px; margin-bottom:4px;}
+.task-info ul{ margin:0; padding:0; list-style:none;}
+.task-info li { overflow: hidden; padding:0px 0;}
+.task-info li .tasklab-info{ color: #5b564d; float: left; font-size: 11px; font-weight:bold; }
+.task-info li .task-num { float:right; font-size:11px; color:#5b564d; font-weight:bold;}
+.task-info li .task-num.txtred { color:#f35958;}
+
+
+.task-desc { color: #5b564d; float: left; font-size: 11px; font-weight:bold; line-height:24px; }
+/*.task-desc {
+color: #5b564d;
+float: left;
+font-size: 11px;
+font-weight: bold;
+line-height: 24px;
+
+}*/
+/*.task-desc.settaskdes{width: 70%;overflow: hidden;height: 25px;word-break: break-all;}*/
+.task-hrs {float:right; font-size:11px; color:#5b564d; font-weight:bold;  line-height:24px; margin-bottom:0;}
+
+.taskbox { -webkit-border-radius: 3px !important; -moz-border-radius:3px !important;  border-radius: 3px !important; padding:2px 3px; margin-bottom:2px; }
+.taskbox.tasknone { background-color:#d8d5d5;}
+.taskbox.tasklow { background-color:#b2edb2;}
+.taskbox.taskmedium { background-color:#f4d4a1;}
+.taskbox.taskhigh { background-color:#e5c6c6;}
+
+.commonlabel{ color:#000; font-size:11px; -webkit-border-radius: 10px !important; -moz-border-radius: 10px !important;  border-radius: 10px !important; padding:3px 12px 3px 0px; line-height:13px; font-weight:700;}
+.commonlabel.greenlabel { background-color:#08a698;}
+.commonlabel.redlabel { color:#f35958; }
+.commonlabel.perrotlabel { background-color:#82b30c; }
+
+.btnview { margin:8px auto; text-align:center; }
+.viewmore {-webkit-border-radius: 3px !important; -moz-border-radius:3px !important;  border-radius: 3px !important; padding:5px; background-color:#17a3e9; color:#fff; font-size:11px; font-weight:bold; text-align:center; text-decoration:none; }
+.viewmore:hover { background-color:#0088cc;}
+.weekday-txt { color: rgb(23, 163, 233);font-size: 12px; font-weight: bold; left: 5px; line-height: 19px; position: absolute;  top: 0px;}
+
+.calenderstrip.caliconNone { background-position:0px -21px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+.calenderstrip.caliconLow { background-position:-44px 1px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+.calenderstrip.caliconMedium { background-position:-66px 1px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+.calenderstrip.caliconHigh{ background-position:-22px 1px; display:block; float:left; margin-right:3px; width:22px; height:22px; position:relative; right:0px; top:0px;  }
+
+.taskbox.taskNone { background-color:#d8d5d5;}
+.taskbox.taskLow { background-color:#b2edb2;}
+.taskbox.taskMedium { background-color:#f4d4a1;}
+.taskbox.taskHigh { background-color:#e5c6c6;}
+/**** ajax loader css ***/
+ /*#dvLoading
+{
+   background:url(images/black_bg.png) repeat ;
+   position: fixed;
+   z-index: 1000000;
+   height: 100%;
+   width: 100%;
+   display: none;
+
+}
+.dvLoading{
+
+	  background:url(images/page_loader2.gif) no-repeat center center
+	 height: 55px;
+  	 width: 54px;;
+   margin: 25% 50%;
+}*/
+/** end of AJX loader CSS**/
+
+
+/**** added by upeksha***/
+#calendar .td_empty .td-date { text-align:center; color:#5b564d; line-height:20px; font-size:13px; font-weight:bold; position:relative; display:block; margin-bottom:4px; }
+
+
+
+
+@media (max-width:1280px) {
+	.task-desc.settaskdes{width:40%;}
+
+}
+
+@media (max-width:1024px) {
+	.task-desc.settaskdes{width:auto;}
+
+}
+
+.working_day_align{
+    margin-left: 50%;
+    font-size: 13px;
+    font-weight: bold;
+}
+.td-date{
+    min-height: 25px;
+    background: #fff;
+}
+.task_background{
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(229, 233, 236);
+}
+
+a {
+    text-decoration: none;
+}
+.footer .footer-inner{
+    padding: 9px 0px !important;
+}
+
+.position_relative{
+    position: relative !important;
+}
+.divider_weeks{
+    border-left: 2px solid #ced5da;
+}

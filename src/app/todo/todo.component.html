@@ -1,0 +1,1050 @@
+<header></header>
+<sidebar></sidebar>
+<div class="container-fluid page-background" style="padding-left:20px;padding-right:20px;" >
+  <div class="mainpage-container" style="padding-left: 33px;min-height: 600px !important;">
+    <div class="user-block">
+        <input type="hidden" id="from" value="weekView" />
+      <div id="sjcalendar" style="margin-top: 5%;" *ngIf="calender_view == 'weekly'">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mycalendar_table">
+              <a href="javascript:void(0)" class="left_arrow" (click)="change_view('pre')">
+                <i class="fa fa-chevron-left" aria-hidden="true" style="width: 26px;"></i>
+              </a>
+              
+              <a class="cstm_week_view_sp css_schedule_task" data-placement="top" tooltip="Tasks To Schedule" href="javascript:void(0);" (click)="showbacklogtaskpopup()" style="margin-left: 8px !important;">
+                <i class="icon-briefcase"> </i>
+                <!-- <span style="line-height: 0px;">Tasks To Schedule </span> -->
+                <span *ngIf="!nonSchedulleTask " class="schedule_task_pill">0 </span>
+                <span *ngIf="nonSchedulleTask " class="schedule_task_pill">{{ nonSchedulleTask.length }} </span>
+              </a>
+              <a href="javascript:void(0);" data-placement="top" tooltip="Show Delegated Tasks"  class="css_schedule_task" style="margin-left: 5px !important;" *ngIf="login_user_id == filter_user">
+                <input type="checkbox" name="other_user_task" [checked]="other_user_task_status == true" (click)="hidden_other_user_task($event.target.checked);">
+                <!-- <span style="line-height: 1px!important;"> Show Delegated Tasks</span> -->
+              </a>
+              <mat-form-field style="width:1px;visibility:hidden;">
+                <input matInput [matDatepicker]="picker5" (dateChange)="change_weekly_calendar_view_by_date($event)">
+                <mat-datepicker #picker5></mat-datepicker>
+              </mat-form-field>
+              <div class="calendar-filter" style="right: 40%;">
+                <ul class="list-unstyled">
+                  <li class="datetimepicker123" (click)="picker5.open()">
+                    <span class="cstm_week_view_sp pull-left">{{week.first | date : "MMMM dd" }} - {{week.last | date:"MMMM dd, y"}}</span>
+                    <span class="cstm_week_view_sp pull-left" style="margin-left: 10px;">
+                      <i class="fa fa-calendar-o"></i>
+                      <i class="fa fa-sort-desc"></i>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <div style="position: absolute;right: 10%;top: -1px;">
+                <div class="btn-group" dropdown>
+
+                  <button class="btn btn-new unsorttd dropdown-toggle filter_button" type="button" dropdownToggle style="font-weight: 600;">
+                    {{user_filter_calendar_name}}
+                  </button>
+                  <ul class="dropdown-menu calendar_filter1 filter_css" *dropdownMenu role="menu">
+                    <div>
+                      <li class="filter-header">
+                        <a href="javascript:void(0);">
+                          <label class="control-label bold filter_label personal-calendar">Personal Calendar</label>
+                        </a>
+                      </li>
+                      <li style="padding-left: 20px;">
+                        <a href="javascript:void(0);" (click)="filter_calendar('me');">My Calendar
+                          <span class="pull-right" style="padding-right: 20px;" *ngIf="login_user_id == filter_user && filter_project == 'all'">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                          </span>
+                        </a>
+                      </li>
+                    </div>
+
+                    <div class="" *ngIf="team">
+                      <li class="filter-header">
+                        <a href="javascript:void(0);" class="dropdown-item">
+                          <label class="control-label bold filter_label people_calendar">People Calendars</label>
+                        </a>
+                      </li>
+                      <li style="padding-left: 20px;" *ngFor="let u of team">
+                        <a href="javascript:void(0);" class="dropdown-item" (click)="filter_calendar(u.user_id);">{{u.first_name}} {{u.last_name}}
+                          <span class="pull-right" style="padding-right: 20px;" *ngIf="filter_user == u.user_id && filter_project == 'all'">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                          </span>
+                        </a>
+                      </li>
+                    </div>
+
+                    <div class="" *ngIf="projects">
+                      <li class="filter-header">
+                        <a href="javascript:void(0);">
+                          <label class="control-label bold filter_label project-calendar">Projects Calendars</label>
+                        </a>
+                      </li>
+                      <li style="padding-left: 20px;">
+                        <a href="javascript:void(0);" (click)="render_project_filter('all');">All projects
+                          <span class="pull-right" style="padding-right:20px" *ngIf="filter_project =='all' && filter_user == login_user_id">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                          </span>
+                        </a>
+                      </li>
+                      <li *ngFor="let p of projects" style="padding-left: 20px;">
+                        <a href="javascript:void(0);" (click)="render_project_filter(p.project_id);">{{p.project_title}}
+                          <span class="pull-right" style="padding-right:20px" *ngIf="filter_project == p.project_id">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                          </span>
+                        </a>
+                      </li>
+
+                    </div>
+
+                  </ul>
+                </div>
+              </div>
+              <div class="calendar-filter">
+                <ul class="list-unstyled">
+                  <li [ngClass]="{'active':calender_view == 'weekly'}">
+                    <a class="tooltips" (click)="change_calendar_view('weekly')" data-placement="bottom" tooltip="Weekly View" href="javascript:void(0);">
+                      <i class="stripicon weekicon"> </i>
+                    </a>
+                  </li>
+                  <li [ngClass]="{'active':calender_view == 'monthly'}">
+                    <a class="tooltips" (click)="change_calendar_view('monthly')" data-placement="bottom" tooltip="Monthly View" href="javascript:void(0);">
+                      <i class="stripicon monthicon"> </i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <a href="javascript:void(0)" class="right_arrow" (click)="change_view('next')">
+                <i class="fa fa-chevron-right" aria-hidden="true" style="width: 26px;"></i>
+              </a>
+
+            </div>
+            <div id="calendar_move" style="height:calc(95vh - 120px);overflow-x:scroll;overflow-y:scroll;">
+              <table class="table" id="sample_1" style="margin-bottom: 0px !important">
+                <thead>
+                  <tr>
+                    <th *ngFor="let task of tasks; let i = index" [ngStyle]="{'background-color': task.date == today_date? 'wheat':''} " [ngClass]="{'divider_weeks': check_wek_day(task.date)}" >
+                      <span class="weekdaytext" *ngIf="task.working_day !=''"> WD{{task.working_day}}</span>{{task.date | date : "EEEE - dd" }}</th>
+
+                  </tr>
+                  <tr>
+                    <th *ngFor="let cap of capacity; let i = index" [ngClass]="{'divider_weeks': cap.dayname == 'Mon'}">
+                      <div class="text-center hrmintitle progress_new unsorttd">
+                        <div *ngIf="cap.capacity > cap.estimate_time; else capelse" id="capacity" data-html="true" class="progress tooltips" style="margin-bottom:0px;background-color: #ebeaea;"
+                          tooltipPlacement="top" tooltip="Capacity: {{ cap.capacity |timeConvert}}  Time Estimate: {{cap.estimate_time | timeConvert}}  Time Spent: {{cap.spent_time | timeConvert}}">
+                          <div *ngIf="cap.estimate_time !=0;else elseBlock" id="estimate_time" class="progress-bar" role="progressbar" [ngStyle]="{'width':cap.estcolor+'%'}"
+                            aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar" id="spent_time" role="progressbar" style="background-color:#5cb85c !important;" [ngStyle]="{'width':cap.spentcolor+'%'}"
+                              aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <ng-template #elseBlock>
+                            <div id="estimate_time" class="progress-bar" role="progressbar" [ngStyle]="{'width':cap.estcolor+'%'}" aria-valuenow="15"
+                              aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar" id="spent_time" role="progressbar" style="background-color:#5cb85c !important;" [ngStyle]="{'width':cap.spentcolor+'%'}"
+                              aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                          </ng-template>
+
+                        </div>
+                        <ng-template #capelse>
+                          <div data-html="true" id="estimate_time" class="progress tooltips" tooltipPlacement="top" tooltip="Capacity:{{cap.capacity | timeConvert}}   Estimate Time:{{cap.estimate_time | timeConvert}}  Spent Time:{{cap.spent_time |timeConvert}}"
+                            style="background-color: red!important; margin-bottom:0px;">
+                            <div class="progress-bar" id="capacity" role="progressbar" [ngStyle]="{'width':cap.capColor+'%'}" aria-valuenow="15" aria-valuemin="0"
+                              aria-valuemax="100">
+                              <div class="progress-bar" role="progressbar" id="spent_time" style="background-color:#5cb85c !important" [ngStyle]="{'width':cap.spentcolor+'%'}"
+                                aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+                              </div>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td *ngFor="let task of tasks; let i = index" id="date_{{task.date | date : 'y-MM-dd' }}">
+                      <div class="full_task">
+                        <div [dragula]='"bag-task1"' [dragulaOptions]="options">
+                          <div [contextMenu]="contextmenu" [contextMenuSubject]="task_" *ngFor="let task_ of task.task_list; let j = index" class="dragbox "
+                            id="task_{{task_.task_id}}" [ngStyle]="{'border':filter_project == 'all'?'1px solid '+task_.outside_color_code:''}" style="padding-bottom: 0px !important;"
+                            [ngClass]="{green1:task_.task_priority == 'Low',yellow1:task_.task_priority == 'Medium',red1:task_.task_priority == 'High'}"
+                            (click)="save_task_for_timer(task_.task_id,task_.task_title,task_.task_time_spent,chk_task_recurrence(task_.task_id),task_.completed_depencencies);">
+                            <div class="comm-box whitebox disabled_sort " [ngStyle]="{'background-color': filter_project == 'all'?task_.color_code:''}">
+                              <a href="javascript:void(0)" (click)="open(task_)" *ngIf="task_.frequency_type == 'one_off';else secondmodal">
+                                <div class="comm-title clearfix ">
+                                  <div class="comtitle-LFD ">
+                                    <img class="tooltips profile-image_task" *ngIf="filter_project !='all' && task_.profile_image !='';else anotherimage" tooltipPlacement="left"
+                                      tooltip="{{task_.allocated_user_name}}" alt="" src="{{Image_url+task_.profile_image}}"
+                                    />
+                                    <ng-template #anotherimage>
+                                      <span *ngIf="filter_project !='all'" class="task_logo pull-right" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}">{{task_.first_name | Initialletters|uppercase}}{{task_.last_name |Initialletters|uppercase}}</span>
+                                    </ng-template>
+                                    <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                    <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent =='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                    <div class="comttime " *ngIf="task_.task_time_estimate =='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                    <span *ngIf="task_.task_project_id !='0'; else elseBlock">{{task_.project_title}} - {{task_.task_title | titleDecode}}</span>
+                                    <ng-template #elseBlock>{{task_.task_title | titleDecode}}</ng-template>
+                                    <span class="tooltips" tooltipPlacement="right" tooltip="Watchlist" *ngIf="task_.watch == '1'">
+                                      <i class="stripicon startyellowicon"> </i>
+                                    </span>
+                                  </div>
+                                </div>
+                              </a>
+                              <ng-template #secondmodal>
+                                <a href="javascript:void(0)" (click)="recurrence_open(task_);">
+                                  <div class="comm-title clearfix ">
+                                    <div class="comtitle-LFD ">
+                                      <img class="tooltips profile-image_task" *ngIf="filter_project !='all' && task_.profile_image !='';else anotherimage" tooltipPlacement="left"
+                                        tooltip="{{task_.allocated_user_name}}" alt="" src="{{Image_url+task_.profile_image}}"
+                                      />
+                                      <ng-template #anotherimage>
+                                        <span *ngIf="filter_project !='all'" class="task_logo pull-right" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}">{{task_.first_name | Initialletters|uppercase}}{{task_.last_name |Initialletters|uppercase}}</span>
+                                      </ng-template>
+                                      <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                      <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent =='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                      <div class="comttime " *ngIf="task_.task_time_estimate =='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                      <span *ngIf="task_.task_project_id !='0'; else elseBlock">{{task_.project_title}} - {{task_.task_title | titleDecode}}</span>
+                                      <ng-template #elseBlock>{{task_.task_title | titleDecode}}</ng-template>
+                                      <span class="tooltips" tooltipPlacement="right" tooltip="Watchlist" *ngIf="task_.watch == '1'">
+                                        <i class="stripicon startyellowicon"> </i>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </a>
+                              </ng-template>
+                              <div id="hide_show_{{task_.task_id}}" [ngStyle]="{'display':task_.task_ex_pos == '1'?'block':'none'}">
+                                <div class="comm-desc" *ngIf="task_.task_description !=''">
+                                  <p>{{task_.task_description}}</p>
+                                </div>
+                                <div class="duedate com-brdbtm " *ngIf="task_.task_due_date !='0000-00-00'">
+                                  <div *ngIf="task_.task_status_name == 'Completed'"> Due : {{task_.task_due_date | date:'dd/MM/y' }}</div>
+                                  <div *ngIf="task_.task_due_date < today_date && task_.task_status_name != 'Completed'" class="red"> Overdue : {{task_.task_due_date | date : 'dd/MM/y' }}</div>
+                                  <div *ngIf="task_.task_due_date >= today_date && task_.task_status_name != 'Completed'"> Due : {{task_.task_due_date | date : 'dd/MM/y' }}</div>
+                                </div>
+                                <div class="comm-step" style="border-bottom: 1px dashed #e5e9ec;" *ngIf="task_.ts !='0'">
+                                  <div class="form-group" style="margin-bottom:0px !important" *ngFor="let step of task_.step">
+                                    <label class="marginTop checkbox" [ngClass]="{'step-complete-class':step.is_completed=='1'}" style="margin-bottom:6px !important;font-weight: 500 !important;">
+                                      <input type="checkbox" name="step_chk" class="newcheckbox_task" style="position:inherit !important;" (click)="completed_step(task_,step.step_title,$event.target.checked);"
+                                        value="" [checked]="step.is_completed == '1'"> {{step.step_title}}
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="commicon-list clearfix" *ngIf="task_.is_personal == '1' || task_.is_prerequisite_task == '1' || task_.master_task_id != 0 || task_.com !='0' || task_.files !='0' || task_.ts !='0' || task_.tpp !='0'">
+                                <ul class="list-unstyled">
+                                  <li class="no-bottom-space" *ngIf="task_.is_prerequisite_task == '1'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="One or more tasks are blocked by this task" href="javascript:void(0);">
+                                      <i class="icon-chain wvicn gray"> </i>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.tpp != '0' && task_.completed_depencencies != '0'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Dependencies" href="javascript:void(0);">
+                                      <i class="icon-chain wvicn red"> </i>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.tpp != '0' && task_.completed_depencencies == '0'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Dependencies" href="javascript:void(0);">
+                                      <i class="icon-chain wvicn green"> </i>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.frequency_type == 'recurrence'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Recurring task" href="javascript:void(0);">
+                                      <i class="icon-refresh wvicn"> </i>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.frequency_type == 'one_off' && task_.master_task_id != 0">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Task disconnected from series" href="javascript:void(0);">
+                                      <i class="icon-refresh wvicn " style="text-decoration: line-through"></i>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.com !='0'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Comments" href="javascript:void(0)">
+                                      <i class="icon-comment-alt wvicn"> </i>
+                                      <sup>{{task_.com}}</sup>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.is_personal == '1'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Private task">
+                                      <i class="icon-eye-slash wvicn"></i>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.files !='0'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Task Files" href="javascript:void(0)">
+                                      <i class="icon-paperclip wvicn"></i>
+                                      <sup>{{task_.files}}</sup>
+                                    </a>
+                                  </li>
+                                  <li class="no-bottom-space" *ngIf="task_.ts !='0'">
+                                    <a class="tooltips" tooltipPlacement="right" tooltip="Task Steps" href="javascript:void(0)">
+                                      <i class="icon-list-ul wvicn"></i>
+                                      <sup>{{task_.step_com}}/{{task_.ts}}</sup>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="commicon-list clearfix custom-height ">
+                                <ul class="list-unstyled">
+                                  <li class="no-bottom-space">
+                                    <span class="label-status label-{{replace_space(task_.task_status_name)}}">{{task_.task_status_name}}</span>
+                                  </li>
+                                  <li class="no-bottom-space">
+                                    <span class="label-status label-Greylight" *ngIf="task_.customer_id !='0' && task_.customer_id !=''">{{task_.customer_name}}</span>
+                                  </li>
+                                  <li class="chkbox new no-bottom-space marginTop">
+                                    <a href="javascript:vid(0);" (click)="save_task_pos(task_.task_id);" id="chnage_icon_{{task_.task_id}}" *ngIf="task_.task_ex_pos == '1'; else collspediv">
+                                      <i class="fa fa-compress" aria-hidden="true"></i>
+                                    </a>
+                                    <ng-template #collspediv>
+                                      <a href="javascript:vid(0);" (click)="save_task_pos(task_.task_id);" id="chnage_icon_{{task_.task_id}}">
+                                        <i class="fa fa-expand" aria-hidden="true"></i>
+                                      </a>
+                                    </ng-template>
+                                  </li>
+                                  <li class="chkbox new margin-bottom-3" style="right: 15px;">
+                                    <label class="checkbox marginTop2">
+                                      <input type="checkbox" name="is_completed" id="is_completed_{{task_.task_id}}" *ngIf="actual_time_status == '0' || task_.task_time_spent != 0 || task_.task_status_name == 'Completed'; else timepoup"
+                                        (click)="is_completed(task_);" [checked]="task_.task_status_name =='Completed'" [disabled]="task_.completed_depencencies !='0'">
+                                      <ng-template #timepoup>
+                                        <input type="checkbox" name="is_completed" id="is_completed_{{task_.task_id}}" (click)="open_actual_time_popup(task_);" [disabled]="task_.completed_depencencies !='0'">
+                                      </ng-template>
+                                    </label>
+                                  </li>
+                                </ul>
+                              </div>
+
+                            </div>
+
+                          </div>
+                          <div *ngIf="task.task_list == ''" style="min-height:2px;"></div>
+                        </div>
+                        <!-- SHowing other user task code Here -->
+
+                        <div *ngFor="let t of other_team_member_tasks; let k = index" [hidden]='!other_user_task_status || login_user_id != filter_user'>
+                          <div *ngIf="task.date==t.date" [ngClass]="{border_other_task:t.task_list!=''}">
+                            <div [contextMenu]="contextmenu" [contextMenuSubject]="task_" *ngFor="let task_ of t.task_list; let j = index" class="dragbox "
+                              id="task_{{task_.task_id}}" [ngStyle]="{'border':'1px solid '+task_.outside_color_code}" style="padding-bottom: 0px !important;"
+                              [ngClass]="{green1:task_.task_priority == 'Low',yellow1:task_.task_priority == 'Medium',red1:task_.task_priority == 'High'}">
+
+                              <div class="comm-box whitebox disabled_sort " [ngStyle]="{'background-color': task_.color_code}">
+                                <div (click)="open(task_,'other_user')" *ngIf="task_.frequency_type == 'one_off';else secondmodal">
+                                  <div class="comm-title clearfix ">
+                                    <div class="comtitle-LFD ">
+                                      <img class="tooltips profile-image_task" *ngIf="task_.profile_image !='';else anotherimage1" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}"
+                                        alt="" src="{{Image_url+task_.profile_image}}" />
+                                      <ng-template #anotherimage1>
+                                        <span class="task_logo pull-right" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}">{{task_.first_name | Initialletters|uppercase}}{{task_.last_name |Initialletters|uppercase}}</span>
+                                      </ng-template>
+                                      <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                      <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent =='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                      <div class="comttime " *ngIf="task_.task_time_estimate =='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                      <span *ngIf="task_.task_project_id !='0'; else elseBlock">{{task_.project_title}} - {{task_.task_title | titleDecode}}</span>
+                                      <ng-template #elseBlock>{{task_.task_title | titleDecode}}</ng-template>
+                                      <span class="tooltips" tooltipPlacement="right" tooltip="Watchlist" *ngIf="task_.watch == '1'">
+                                        <i class="stripicon startyellowicon"> </i>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <ng-template #secondmodal>
+                                  <div (click)="recurrence_open(task_,'other_user');">
+                                    <div class="comm-title clearfix ">
+                                      <div class="comtitle-LFD ">
+                                        <img class="tooltips profile-image_task" *ngIf="task_.profile_image !='';else anotherimage1" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}"
+                                          alt="" src="{{Image_url+task_.profile_image}}" />
+                                        <ng-template #anotherimage1>
+                                          <span class="task_logo pull-right" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}">{{task_.first_name | Initialletters|uppercase}}{{task_.last_name |Initialletters|uppercase}}</span>
+                                        </ng-template>
+                                        <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                        <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent =='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                        <div class="comttime " *ngIf="task_.task_time_estimate =='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                        <span *ngIf="task_.task_project_id !='0'; else elseBlock">{{task_.project_title}} - {{task_.task_title | titleDecode}}</span>
+                                        <ng-template #elseBlock>{{task_.task_title | titleDecode}}</ng-template>
+                                        <span class="tooltips" tooltipPlacement="right" tooltip="Watchlist" *ngIf="task_.watch == '1'">
+                                          <i class="stripicon startyellowicon"> </i>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </ng-template>
+                                <div id="hide_show_{{task_.task_id}}" [ngStyle]="{'display':task_.task_ex_pos == '1'?'block':'none'}">
+                                  <div class="comm-desc" *ngIf="task_.task_description !=''">
+                                    <p>{{task_.task_description}}</p>
+                                  </div>
+                                  <div class="duedate com-brdbtm " *ngIf="task_.task_due_date !='0000-00-00'">
+                                    <div *ngIf="task_.task_status_name == 'Completed'"> Due : {{task_.task_due_date | date:'dd/MM/y' }}</div>
+                                    <div *ngIf="task_.task_due_date < today_date && task_.task_status_name != 'Completed'" class="red"> Overdue : {{task_.task_due_date | date : 'dd/MM/y' }}</div>
+                                    <div *ngIf="task_.task_due_date >= today_date && task_.task_status_name != 'Completed'"> Due : {{task_.task_due_date | date : 'dd/MM/y' }}</div>
+                                  </div>
+                                  <div class="comm-step" style="border-bottom: 1px dashed #e5e9ec;" *ngIf="task_.ts !='0'">
+                                    <div class="form-group" style="margin-bottom:0px !important" *ngFor="let step of task_.step">
+                                      <label class="marginTop checkbox" [ngClass]="{'step-complete-class':step.is_completed=='1'}" style="margin-bottom:6px !important;font-weight: 500 !important;">
+                                        <input type="checkbox" name="step_chk" class="newcheckbox_task" style="position:inherit !important;" (click)="completed_step(task_,step.step_title,$event.target.checked);"
+                                          value="" [checked]="step.is_completed == '1'"> {{step.step_title}}
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="commicon-list clearfix" *ngIf="task_.is_personal == '1' || task_.is_prerequisite_task == '1' || task_.master_task_id != 0 || task_.com !='0' || task_.files !='0' || task_.ts !='0' || task_.tpp !='0'">
+                                  <ul class="list-unstyled">
+                                    <li class="no-bottom-space" *ngIf="task_.is_prerequisite_task == '1'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="One or more tasks are blocked by this task" href="javascript:void(0);">
+                                        <i class="icon-chain wvicn gray"> </i>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.tpp != '0' && task_.completed_depencencies != '0'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Dependencies" href="javascript:void(0);">
+                                        <i class="icon-chain wvicn red"> </i>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.tpp != '0' && task_.completed_depencencies == '0'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Dependencies" href="javascript:void(0);">
+                                        <i class="icon-chain wvicn green"> </i>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.frequency_type == 'recurrence'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Recurring task" href="javascript:void(0);">
+                                        <i class="icon-refresh wvicn"> </i>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.frequency_type == 'one_off' && task_.master_task_id != 0">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Task disconnected from series" href="javascript:void(0);">
+                                        <i class="icon-refresh wvicn " style="text-decoration: line-through"></i>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.com !='0'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Comments" href="javascript:void(0)">
+                                        <i class="icon-comment-alt wvicn"> </i>
+                                        <sup>{{task_.com}}</sup>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.is_personal == '1'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Private task">
+                                        <i class="icon-eye-slash wvicn"></i>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.files !='0'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Task Files" href="javascript:void(0)">
+                                        <i class="icon-paperclip wvicn"></i>
+                                        <sup>{{task_.files}}</sup>
+                                      </a>
+                                    </li>
+                                    <li class="no-bottom-space" *ngIf="task_.ts !='0'">
+                                      <a class="tooltips" tooltipPlacement="right" tooltip="Task Steps" href="javascript:void(0)">
+                                        <i class="icon-list-ul wvicn"></i>
+                                        <sup>{{task_.step_com}}/{{task_.ts}}</sup>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div class="commicon-list clearfix custom-height ">
+                                  <ul class="list-unstyled">
+                                    <li class="no-bottom-space">
+                                      <span class="label-status label-{{replace_space(task_.task_status_name)}}">{{task_.task_status_name}}</span>
+                                    </li>
+                                    <li class="no-bottom-space">
+                                      <span class="label-status label-Greylight" *ngIf="task_.customer_id !='0' && task_.customer_id !=''">{{task_.customer_name}}</span>
+                                    </li>
+                                    <li class="chkbox new no-bottom-space marginTop">
+                                      <a href="javascript:vid(0);" (click)="save_task_pos(task_.task_id);" id="chnage_icon_{{task_.task_id}}" *ngIf="task_.task_ex_pos == '1'; else collspediv">
+                                        <i class="fa fa-compress" aria-hidden="true"></i>
+                                      </a>
+                                      <ng-template #collspediv>
+                                        <a href="javascript:vid(0);" (click)="save_task_pos(task_.task_id);" id="chnage_icon_{{task_.task_id}}">
+                                          <i class="fa fa-expand" aria-hidden="true"></i>
+                                        </a>
+                                      </ng-template>
+                                    </li>
+                                    <li class="chkbox new margin-bottom-3" style="right: 15px;">
+                                      <label class="checkbox marginTop2">
+                                        <input type="checkbox" name="is_completed" id="is_completed_{{task_.task_id}}" *ngIf="actual_time_status == '0' || task_.task_time_spent != 0 || task_.task_status_name == 'Completed'; else timepoup"
+                                          (click)="is_completed(task_);" [checked]="task_.task_status_name =='Completed'" [disabled]="task_.completed_depencencies !='0'">
+                                        <ng-template #timepoup>
+                                          <input type="checkbox" name="is_completed" id="is_completed_{{task_.task_id}}" (click)="open_actual_time_popup(task_);" [disabled]="task_.completed_depencencies !='0'">
+                                        </ng-template>
+                                      </label>
+                                    </li>
+                                  </ul>
+                                </div>
+
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="">
+                          <div style="border : solid 1px #e5e9ec;">
+                            <div class="white-box">
+                              <div class="">
+                                <div class=" ">
+                                  <div class="add_task_div" (click)="change_add_icon(i)" id="task{{i}}">
+                                    <i class="fa fa-plus add_task_icon" aria-hidden="true"></i>
+                                  </div>
+                                  <div id="inputtag{{i}}" style="display:none">
+                                    <input type="text" class="m-wrap add_new_task" id="tasktag{{i}}" [(ngModel)]="taskclear" name="task_title" (keydown.tab)="create_task($event.target.value,task.date,i,'tab')"
+                                      (keydown.enter)="create_task($event.target.value,task.date,i,'enter')" (focusout)="changetag(i)"
+                                    />';
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="sjcalendar" style="margin-top: 5%;" *ngIf="calender_view == 'monthly'">
+          <div class="calendartop clearfix form-horizontal" *ngIf="calender_view == 'monthly'">
+              <form>
+                <div class="form-group no-margin">
+                  <div class="row">
+                    <div class="col-md-6" >
+                      <div class="controls">
+                        <label class="checkbox">
+                          <input type="checkbox" (click)="hide_show_calendar_data('capacity',$event.target.checked)" style="position: relative" [checked]="calendar_capacity" class="newcheckbox_task" name="show_cal_view[]" value="1"> Show Capacity
+                        </label>
+                        <label class="checkbox">
+                          <input type="checkbox" (click)="hide_show_calendar_data('summary',$event.target.checked)" style="position: relative" [checked]="calendar_summary" class="newcheckbox_task" name="show_cal_view[]" value="2"> Show Summary
+                        </label>
+                        <label class="checkbox">
+                          <input type="checkbox" (click)="hide_show_calendar_data('task',$event.target.checked)"style="position: relative" [checked]="calendar_task" class="newcheckbox_task" name="show_cal_view[]" value="3"> Show Task
+                        </label>
+                      </div>
+                    </div>
+      
+                  </div>
+                </div>
+              </form>
+            </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mycalendar_table">
+              <a href="javascript:void(0)" class="left_arrow" (click)="change_monthly_view('pre')">
+                <i class="fa fa-chevron-left" aria-hidden="true" style="width: 26px;"></i>
+              </a>
+              <mat-form-field style="width:1px;visibility:hidden;">
+                <input matInput [matDatepicker]="monthly_picker" (dateChange)="change_monthly_calendar_view_by_date($event)">
+                <mat-datepicker #monthly_picker></mat-datepicker>
+              </mat-form-field>
+              <div class="calendar-filter" style="right: 40%;">
+                <ul class="list-unstyled">
+                  <li class="datetimepicker123" (click)="monthly_picker.open()">
+                   <span class="cstm_week_view_sp pull-left" *ngIf="calender_view == 'monthly'">{{month_start_date | date:"MMMM - y"}}</span>
+                    <span class="cstm_week_view_sp pull-left" style="margin-left: 10px;">
+                      <i class="fa fa-calendar-o"></i>
+                      <i class="fa fa-sort-desc"></i>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+              <div class="calendar-filter">
+                <ul class="list-unstyled">
+                  <li [ngClass]="{'active':calender_view == 'weekly'}">
+                    <a class="tooltips" (click)="change_calendar_view('weekly')" data-placement="bottom" tooltip="Weekly View" href="javascript:void(0);">
+                      <i class="stripicon weekicon"> </i>
+                    </a>
+                  </li>
+                  <li [ngClass]="{'active':calender_view == 'monthly'}">
+                    <a class="tooltips" (click)="change_calendar_view('monthly')" data-placement="bottom" tooltip="Monthly View" href="javascript:void(0);">
+                      <i class="stripicon monthicon"> </i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <a href="javascript:void(0)" class="right_arrow" (click)="change_monthly_view('next')">
+                <i class="fa fa-chevron-right" aria-hidden="true" style="width: 26px;"></i>
+              </a>
+
+            </div>
+            <div style="height:calc(87vh - 120px);overflow:scroll;background: #fff;">
+              <mwl-calendar-month-view [viewDate]="viewDate" 
+                [weekStartsOn]="1" [events]="events" [cellTemplate]="customCellTemplate">
+              </mwl-calendar-month-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- calendar footer -->
+<div class="footer " style="padding: 0px;">
+    <div class="footer-inner " style="padding-left: 42px !important;">
+      &copy; {{ today | date: 'yyyy' }}. Schedullo. All rights reserved.
+      </div>
+      <div class="footer-filter" style="right: 0px !important;">
+      <div class="filter-group" >
+        <ul class="list-unstyled">
+            <li id="week_last_remeber" *ngIf="calender_view == 'monthly'">
+                <a href="javascript:void(0)" (click)="projectshow = !projectshow;colorshow=false;statusshow=false;userteam=false;" [ngClass]="{filter_selected:filter_project!='all'}" >
+                  <i class="stripicon" [ngClass]="{'filtericon-red':filter_project!='all',filtericon:filter_project == 'all'}" > </i> Project </a>
+                <div class="profilterbx " id="common-sortbybox " [hidden]="!projectshow">
+                  <div class="filter-listing ">
+                    <select (change)="footerfilter();" [(ngModel)]="filter_project" id="filter_project " name="filter_project "
+                      class="col-md-10 m-wrap no-margin">
+                      <option value="all">All</option>
+                      <option *ngFor="let p of projects" value="{{p.project_id}}">{{p.project_title}}</option>
+                    </select>
+                  </div>
+                </div>
+              </li>
+            <li id="week_last_remeber" *ngIf="calender_view == 'weekly'">
+              <a href="javascript:void(0)" (click)="sortshow = !sortshow;colorshow=false;statusshow=false;" [ngClass]="{filter_selected:filter_sorting!='1'}" >
+                <i class="stripicon" [ngClass]="{'sortingicon-red':filter_sorting!='1',sortingicon:filter_sorting == '1'}" > </i> Sort By </a>
+              <div class="profilterbx " id="common-sortbybox " [hidden]="!sortshow">
+                <div class="filter-listing ">
+                  <select (change)="footerfilter();" [(ngModel)]="filter_sorting" id="filter_sorting " name="filter_sorting "
+                    class="col-md-10 m-wrap no-margin">
+                    <option value="1">Manual Sorting</option>
+                    <option value="2">By Priority</option>
+                    <option value="3">By Due Date</option>
+                    <option value="4">By Expected Time</option>
+                  </select>
+                </div>
+              </div>
+            </li>
+            <li>
+              <a href="javascript:void(0) " (click)="colorshow = !colorshow;sortshow=false;statusshow=false;projectshow=false;userteam=false;" [ngClass]="{filter_selected:filter_color!='0'}" >
+                <i class="stripicon" [ngClass]="{'filtericon-red':filter_color!='0',filtericon:filter_color == '0'}" > </i> Colour </a>
+              <div class="profilterbx" id="common-colorbox" [hidden]="!colorshow">
+                <div class="filter-listing">
+                  <select (change)="footerfilter();" [(ngModel)]="filter_color" class="col-md-10 m-wrap no-margin" name="filter_color"
+                    id="filter_color">
+                    <option value="0">All</option>
+                    <option *ngFor="let c of colors" [ngValue]="c.user_color_id"> {{c.name}} </option>
+                  </select>
+                </div>
+              </div>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="statusshow = !statusshow;colorshow=false;sortshow=false;projectshow=false;userteam=false" [ngClass]="{filter_selected: status_all == 1}" >
+                <i class="stripicon filtericon" *ngIf="status_all == 0; else redicon" > </i>
+                <ng-template #redicon><i class="stripicon filtericon-red"> </i></ng-template> Status </a>
+              <div class="profilterbx " id="common-statusbox " [hidden]="!statusshow">
+                <div class="filter-listing ">
+                  <ul class="filter-content list-unstyled ">
+                    <li>
+                      <label class="checkbox">
+                        <input type="checkbox" value="all" (click)="allchecked($event.target.checked);" [checked]="checkstatus('all')" class="newcheckbox_task2 position_relative"/> All
+                      </label>
+                    </li>
+                    <li *ngFor="let s of status">
+                      <label class="checkbox">
+                        <input type="checkbox" value="{{s.task_status_id}}" (click)="checkedOtherStatus(s.task_status_id,$event.target.checked);" [checked]="checkstatus(s.task_status_id)" class=" position_relative newcheckbox_task1" /> {{ s.task_status_name}}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li *ngIf="calender_view == 'monthly'">
+                <a href="javascript:void(0)" (click)="userteam = !userteam;colorshow=false;statusshow=false;" [ngClass]="{filter_selected:filter_user!= login_user_id}" >
+                  <i class="stripicon" [ngClass]="{'filtericon-red':filter_user!= login_user_id,filtericon:filter_user == login_user_id}" > </i> My Team </a>
+                <div class="profilterbx " id="common-sortbybox " [hidden]="!userteam">
+                  <div class="filter-listing ">
+                    <select (change)="footerfilter();" [(ngModel)]="filter_user" id="filter_user " name="filter_user "
+                      class="col-md-10 m-wrap no-margin">
+                      <option value="{{login_user_id}}">My Task</option>
+                      <option value="0" *ngIf="filter_project !='all'">Project Team</option>
+                      <option *ngFor="let t of team" [hidden]="t.user_id == login_user_id" value="{{t.user_id}}">{{t.first_name}} {{t.last_name}}</option>
+                    </select>
+                  </div>
+                </div>
+            </li>
+            <li class="timerbtn">
+                <a href="javascript:void(0);">&nbsp;</a>
+              <div class="profilterbx " id="common-statusbox " style="display: none;">
+                <div class="filter-listing ">
+                  
+                </div>
+              </div>
+            </li>
+          </ul>
+        
+      </div>
+    </div>
+  
+  </div>
+
+<context-menu #contextmenu>
+  <ng-template contextMenuItem class="menuList" [subMenu]="color">
+    <span>
+      <i class="stripicon set-color" style="margin-left: -3px !important;top:0px !important;margin-right:0px !important;height: 17px !important;"></i>Set a colour</span>
+  </ng-template>
+  <context-menu #color>
+    <ng-template *ngFor="let c of colors" contextMenuItem let-item (execute)="change_task_color($event.item.task_id,c.user_color_id,$event.item)">{{c.name}}</ng-template>
+  </context-menu>
+  <ng-template contextMenuItem class="menuList" [subMenu]="priority">
+    <span>
+      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Set Priority</span>
+  </ng-template>
+  <context-menu #priority>
+    <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'None',$event.item)">None</ng-template>
+    <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'Low',$event.item)">Low</ng-template>
+    <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'Medium',$event.item)">Medium</ng-template>
+    <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'High',$event.item)">High</ng-template>
+  </context-menu>
+  <ng-template class="menuList" contextMenuItem let-item>
+    <span *ngIf="item.watch == '0'; else otheroption" (click)="add_watch_list(item.task_id,item);">
+      <i class="fa fa-star-o" aria-hidden="true"></i> Add to Watch list</span>
+    <ng-template #otheroption>
+      <span (click)="remove_watch_list(item.task_id,item);">
+        <i class="fa fa-star-o" aria-hidden="true"></i> Remove to Watch list</span>
+    </ng-template>
+  </ng-template>
+  <ng-template class="menuList" contextMenuItem [subMenu]='taskduedate'>
+    <span>
+      <i class="fa fa-calendar" aria-hidden="true"></i> Set due date</span>
+  </ng-template>
+  <context-menu #taskduedate>
+    <ng-template contextMenuItem let-item passive="true">
+      <div style="margin: -6px -14px !important;" class="due_date_picker">
+        <mat-calendar [selected]="item.task_due_date" (selectedChange)="update_due_date($event,item)"></mat-calendar>
+      </div>
+    </ng-template>
+  </context-menu>
+  <ng-template class="menuList" contextMenuItem [subMenu]="status1">
+    <span>
+      <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Change status</span>
+  </ng-template>
+  <context-menu #status1>
+    <ng-template *ngFor="let s of status" contextMenuItem let-item (execute)="right_click_change_status($event.item.task_id,s.task_status_id,$event.item)">{{s.task_status_name}}</ng-template>
+  </context-menu>
+  <ng-template class="menuList" contextMenuItem let-item>
+    <span (click)="copy_task(item.task_id,item);">
+      <i class="fa fa-files-o" aria-hidden="true"></i> Copy task</span>
+  </ng-template>
+  <ng-template class="menuList" contextMenuItem [subMenu]="taskscheduleddate">
+    <span>
+      <i class="fa fa-random" aria-hidden="true"></i> Move task</span>
+  </ng-template>
+  <context-menu #taskscheduleddate>
+    <ng-template contextMenuItem let-item passive="true">
+      <div style="margin: -6px -14px !important;" class="due_date_picker">
+        <mat-calendar [selected]="item.task_scheduled_date" (selectedChange)="update_scheduled_date($event,item)"></mat-calendar>
+      </div>
+    </ng-template>
+  </context-menu>
+  <ng-template class="menuList" let-item contextMenuItem>
+    <span (click)="rightclick_comment(item.task_id,item)">
+      <i class="fa fa-comment-o" aria-hidden="true"></i> Add comment</span>
+
+  </ng-template>
+  <ng-template class="menuList" contextMenuItem let-item>
+    <span *ngIf="item.frequency_type == 'one_off' else anotherdelete" (click)="delete_task(item,'single');"
+      >
+      <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+    <ng-template #anotherdelete>
+      <span (click)="right_click_delete(item);">
+        <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+    </ng-template>
+  </ng-template>
+
+</context-menu>
+
+<ng-template #customCellTemplate let-day="day" let-locale="locale">
+  <div id="calendar"  style="position: relative;margin-top: 5px;" [ngStyle]="{'background-color': (working_day(day.events) =='')?'#CED2D8':'#fff'}">
+    <div class="td-date" [ngStyle]="{'background-color': working_day(day.events) ==''?'#CED2D8':'#fff'}">
+      <span class="weekday-txt" *ngIf="working_day(day.events) !=''">WD {{working_day(day.events)}} </span>
+      <span class="working_day_align">{{ day.date | calendarDate:'monthViewDayNumber' }}</span>
+      <a href="javascript:void(0);" (click)="new_task(day.date)" >
+        <i class="calenderstrip caladdicon"> </i>
+      </a>
+    </div>
+    <div class="task-list unsorttd" [hidden]="!calendar_capacity" style="margin: 0px 4px 4px 4px;">
+      <ul>
+        <li>
+          <ul>
+            <li>
+              <div class="commonlabel">Capacity&nbsp;</div>
+            </li>
+            <li>
+              <div class="commonlabel">{{return_monthly_calendar_capacity(day.date) | timeConvert}}</div>
+            </li>
+          </ul>
+
+        </li>
+        <li>
+          <ul>
+            <li>
+              <div class="commonlabel">Allocated</div>
+            </li>
+            <li>
+              <div class="commonlabel" [ngClass]="{'redlabel':return_total_allocateion(day.date) > return_monthly_calendar_capacity(day.date) }">{{return_total_allocateion(day.date) | timeConvert}}</div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="task-info unsorttd" [hidden]="!calendar_summary" style="margin: 0px 4px 4px 4px;">
+      <ul>
+        <li>
+          <span class="tasklab-info">Overdue : </span>
+          <a class="task-num  overduehover" [ngClass]="{'txtred':return_total_due_task_count(day.date,'overdue') > 0 }" href="javascript:void(0)"
+            data-hasqtip="1"> {{return_total_due_task_count(day.date,'overdue')}} </a>
+        </li>
+        <li>
+          <span class="tasklab-info">Due : </span>
+          <span class="task-num duehover" data-hasqtip="36"> {{return_total_due_task_count(day.date,'due')}} </span>
+        </li>
+        <li>
+          <span class="tasklab-info">Completed : </span>
+          <span class="task-num completedhover" data-hasqtip="71"> {{return_total_completed_task_count(day.date)}} </span>
+        </li>
+        <li>
+          <span class="tasklab-info">Scheduled :</span>
+          <span class="task-num scheduledhover" data-hasqtip="106"> {{return_total_schuduled_task_count(day.date)}} </span>
+        </li>
+      </ul>
+    </div>
+    <div *ngFor="let d of day.events" id="date_{{day.date | date : 'y-MM-dd' }}" [hidden]="!calendar_task" [dragula]='"bag-task2"' [dragulaOptions]="options" style="min-height: 20px">
+      <div class="taskbox caliconNone" id="task_{{d.task_id}}" *ngIf="d.title !=''" [ngStyle]="{'background-color': filter_project == 'all'?d.color_code:'','border':filter_project == 'all'?'1px solid '+d.outside_color_code:''}"
+        [ngClass]="{task_background:(d.color_code == null || filter_project !='all'),green1:d.task_priority == 'Low',yellow1:d.task_priority == 'Medium',red1:d.task_priority == 'High'}"
+        style="margin: 0 4px 4px 3px;">
+        <div class="tooltips" tooltipPlacement="top" [contextMenu]="contextmenu" [contextMenuSubject]="d.info" (click)="open(d.info,'')" *ngIf="d.frequency_type == 'one_off';else recur_task" tooltip="{{d.title}}">
+          <a href="javascript:void(0)">
+            <span class="task-desc settaskdes">{{string_length(d.project_title,d.title)}}</span>
+            <p class="task-hrs">
+              <i *ngIf="d.private == 1" class="stripicon lockicon" style="top:3px !important"></i>
+              <span class="task-hrs" *ngIf="d.task_allocated_time != 0"> {{d.task_allocated_time | timeConvert}} </span>
+            </p>
+            <div class="clearfix"> </div>
+          </a>
+        </div>
+        <ng-template #recur_task>
+            <div class="tooltips" tooltipPlacement="top" [contextMenu]="contextmenu" [contextMenuSubject]="d.info" (click)="recurrence_open(d.info,'')" tooltip="{{d.title}}">
+                <a href="javascript:void(0)">
+                  <span class="task-desc settaskdes">{{string_length(d.project_title,d.title)}}</span>
+                  <p class="task-hrs">
+                    <i *ngIf="d.private == 1" class="stripicon lockicon" style="top:3px !important"></i>
+                    <span class="task-hrs" *ngIf="d.task_allocated_time != 0"> {{d.task_allocated_time | timeConvert}} </span>
+                  </p>
+                  <div class="clearfix"> </div>
+                </a>
+              </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<bs-modal #recurrencewindow>
+  <div class="modal-header">
+    <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+      (click)="recurrence_close();"></button>
+    <h3 style="margin-top: 10px;"> Occurence </h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet" style="margin-bottom:0px !important;">
+      <div class="portlet-body  form flip-scroll">
+        <div class="form-group" style="padding: 10px;">
+          <label class="control-label">Do you want to update Task series or Task occurrence?</label>
+          <div class="controls paddTop10">
+            <label class="radio1 edit_recurr_button btn blue">
+              <a id="series_task" href="javascript:void(0);" (click)="recurrence('series',task_detail.master_task_id)" style="color: #fff !important;">Task Series</a>
+            </label>
+            <label class="radio1 edit_recurr_button btn blue">
+              <a id="ocuurence_task" href="javascript:void(0);" (click)="recurrence('single',task_detail.task_id)" style="color: #fff !important;">Task Occurrence</a>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</bs-modal>
+
+<bs-modal #rightclickcomment [keyboard]="false" [backdrop]="'static'">
+  <div class="modal-header">
+    <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+      (click)="close_rightclick_comment();"></button>
+    <h3 style="margin-top: 9px !important; "> Comments </h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet" style="margin-bottom:0px !important;">
+      <div class="portlet-body  form flip-scroll">
+        <form #rightcmt>
+          <div style="padding: 15px;">
+            <div class="row">
+              <div class="col-md-12 ">
+                <div class="form-group">
+                  <label class="control-label">
+                    <strong> Add Comment :
+                      <span class="required">*</span>
+                    </strong>
+                  </label>
+                  <div class="controls">
+                    <textarea rows="3" name="right_task_comment" class="col-md-12 m-wrap"></textarea>
+                  </div>
+                  <div class="pull-right" style="margin-top: 10px;">
+                    <input type="hidden" name="info" value="{{comment_data}}" />
+                    <button type="button" (click)="save_comment(rightcmt);" class="btn blue txtbold"> Add Comments </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</bs-modal>
+
+<bs-modal #rightclickdelete>
+  <div class="modal-header">
+    <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+      (click)="close_right_click_delete();"></button>
+    <h3 style="margin-top: 9px !important; "> Delete Task </h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet">
+      <div class="portlet-body  form flip-scroll">
+
+        <div class="form-group" style="padding:10px;">
+          <label class="control-label col-md-12" style="padding-left:0px;padding-bottom: 10px">Do you want to delete the series, this occurrence or only future tasks?</label>
+
+          <div class="controls">
+            <label class="radio1 radio_to_button btn blue">
+              <a href="javascript:void(0);" (click)="delete_task('','series')" style="color:#fff !important;">
+                Task Series
+              </a>
+            </label>
+            <label class="radio1 radio_to_button btn blue">
+              <a href="javascript:void(0);" (click)="delete_task('','occurrence')" style="color:#fff !important;">
+                Task Occurrence
+              </a>
+            </label>
+            <label class="radio1 radio_to_button btn blue">
+              <a href="javascript:void(0);" (click)="delete_task('','future');" style="color:#fff !important;">
+                Task Future
+              </a>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</bs-modal>
+<bs-modal #popupdeleteoption>
+  <div class="modal-header">
+    <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+      (click)="close_taskpopup_option();"></button>
+    <h3 style="margin-top: 9px !important; "> Delete Task </h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet">
+      <div class="portlet-body  form flip-scroll">
+
+        <div class="form-group" style="padding:10px;">
+          <label class="control-label col-md-12" style="padding-left:0px;padding-bottom: 10px">Do you want to delete the series or only future tasks?</label>
+          <div class="controls">
+            <label class="radio1 radio_to_button btn blue">
+              <a href="javascript:void(0);" (click)="delete_task('','series')" style="color:#fff !important;">
+                Task Series
+              </a>
+            </label>
+            <label class="radio1 radio_to_button btn blue">
+              <a href="javascript:void(0);" (click)="delete_task('','future');" style="color:#fff !important;">
+                Task Future
+              </a>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</bs-modal>
+
+<bs-modal #showbacklogtask style="width: 100%;">
+  <div class="modal-header taskpopup2">
+    <button type="button" class="close save_close_cross_modify" (click)="closebacklogpopup()" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"></button>
+    <h3 style="margin-top: 9px !important; ">Task List To Schedule</h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet-body  form flip-scroll">
+      <div class="comment-block margin-bottom-20 ">
+        <div class="comment-title backLog_title">Select the tasks that are in your back log and schedule them on a select date</div>
+        <div class="customtable table-scrollable form-horizontal" style="height: 400px; overflow-x: scroll;">
+          <div class="back_log_slimScroll">
+            <table class="table table-striped table-hover table-condensed flip-content " id="schedule_task_table" style="margin-bottom:0px !important">
+              <tbody>
+                <tr *ngFor="let nonSchedulleTask of nonSchedulleTask">
+                  <td>
+                    <i class="fa fa-circle" style="font-size: 10px;"></i>
+                  </td>
+                  <td width="45%">
+                    {{ nonSchedulleTask.task_title}}
+                  </td>
+                  <td width="12%">
+                    <span class="label-status label-{{replace_space(nonSchedulleTask.task_status_name)}}" style="padding:8px !important;">{{nonSchedulleTask.task_status_name }} </span>
+                  </td>
+                  <td width="40%">
+                    <div class="right_log back_log1">
+                      <div class="controls">
+                        <div class="datLT">
+                          <mat-form-field>
+                            <input matInput [matDatepicker]="backlogpicker" (focus)="backlogpicker.open()" (dateChange)="schedulledtaskdata($event.target.value,nonSchedulleTask.task_id)"
+                              placeholder="Choose a date" style="width:175px;">
+                            <mat-datepicker-toggle matSuffix [for]="backlogpicker"></mat-datepicker-toggle>
+                            <mat-datepicker #backlogpicker></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="border: none !important;">
+      <div class="col-md-12">
+        <div class="col-md-12">
+          <button type="button" (click)="submitnonscheduletask();" class="btn btn-common-blue" id="add_to_calender" style="    margin: -15px 0px 2px -20px;">
+            Add to Calendar </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</bs-modal>
+
+<bs-modal #taskactualtime [backdrop]="'static'">
+  <div class="modal-header">
+    <button type="button" class="close close_actual_time_task" (click)="close_actual_time_popup()" style="margin-right: 0px;margin-top: 10px;"></button>
+    <h3 style="margin-top: 9px !important; "> Actual time of task </h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet">
+      <div class="portlet-body  form flip-scroll" style="padding:10px;">
+        <form #actualtime>
+          <div class="form-group">
+            <label class="control-label">Enter Actual Time : </label>
+            <div class="controls">
+              <input class="onsub m-wrap m-ctrl-small small_input" name="task_actual_time" (blur)="change_actual_time(actualtime)" placeholder="0h"
+                value="" type="text" />
+              <span class="word_set">time (ex. 130 for 1h30)</span>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" [disabled]="on_complete_actual_time == 0" (click)="save_actual_time(actualtime);" class="btn blue txtbold">
+              Save </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</bs-modal>

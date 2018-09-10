@@ -1,0 +1,33 @@
+
+.filter_kan{
+    font-weight: 600; margin-top: 4px;float: right;padding: 2px 16px !important;margin-right: 10px;
+}
+#sample_1 th, #sample_1 td {
+    min-width: 249px;
+}
+.kanbanscroll{
+    height:calc(95vh - 120px);
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: scroll;
+}
+
+.kanban-cell{
+    width: 10px !important;
+    min-width: 40px !important;
+}
+.calendar_filter1{
+    color: black;
+    min-width: 300px !important;
+    overflow: scroll;
+    max-height: calc(91vh - 120px);
+    height: auto;
+    right: 0 !important;
+    left: auto;
+}
+
+    
+
+.mainpage-container{
+    min-height: 600px !important;
+}

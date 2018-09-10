@@ -1,0 +1,273 @@
+<header></header>
+<sidebar></sidebar>
+
+    <!-- BEGIN PAGE CONTAINER-->
+    <div class="container-fluid" style="padding-left:20px;padding-right:20px;">
+      <div class="mainpage-container2">
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <input type="hidden" name="from" id="from" value=""/>
+          <div class="col-md-12" style="padding-right: 0px;">
+            <!-- BEGIN BORDERED TABLE PORTLET-->
+            <div class="portlet box blue">
+              <div class="portlet-title">
+                <div class="caption">Reports </div>
+              </div>
+              <div class="portlet-body flip-scroll">
+                <div class="table-toolbar no-margin clearfix">
+                  <div id="exportdata" class="btn-group no-margin pull-right">
+                  </div>
+                </div>
+                <div class="form-horizontal form">
+                  <form [formGroup]="reportfilterform" id="frm_submit_report">
+                    <div class="row">
+                      <div class="col-xs-offset-1 col-md-11">
+                        <div class="form-group m-b-sm">
+                          <label class="control-label " style="width: 116px!important;">
+                            <span>Select Report
+                              <span class="required">*</span>
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <select formControlName="report_title" style="color: black;" class="large m-wrap large_select radius-b" name="report_title"
+                              id="report_title" tabindex="1">
+                              <option value="">--- Select Report --- </option>
+                              <option value="Time allocation by category">Time allocation by category</option>
+                              <option value="Last login per user">Last login per user</option>
+                              <option value="Login history by user">Login history by user</option>
+                              <option value="List of overdue tasks">List of overdue tasks</option>
+                              <option value="Activity by Category">Activity by Category</option>
+                              <option value="Actual time by category over a period of time">Actual time by category over a period of time</option>
+                              <option value="Time allocated by project">Time allocated by project</option>
+                              <option value="Tasks due this week by user">Tasks due by user</option>
+                              <option value="Interruptions by type and by user">Interruptions by type and by user</option>
+                              <option value="Daily time allocation by user"> Daily time allocation by user</option>
+                              <option value="Daily Time allocation per category and sub category">Daily Time allocation per category and sub category</option>
+                              <option value="List of tasks">List of tasks</option>
+                              <option value="My tasks allocated to other users">My tasks allocated to other users</option>
+                              <option value="Timer work log">Timer work log</option>
+                            </select>
+                            <p style="margin-left: 136px;" *ngIf="reportfilterform.get('report_title').hasError('required') && reportfilterform.get('report_title').touched" class="help-inline"> This field is required.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <h6 class="heading6">
+                        <strong> Filter </strong>
+                      </h6>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-offset-1 col-md-11">
+                        <div class="form-group m-b-sm">
+                          <label class="control-label ">
+                            <span>Date From :</span>
+                          </label>
+                          <div class="controls">
+                            <div class="datLT">
+                              <div class="input-append date date-picker" data-date="sd" data-date-format="a" data-date-viewmode="years">
+                                <mat-form-field style="color: black;">
+                                  <input formControlName="from_date" (dateChange)="checkfrom_date()" matInput [matDatepicker]="picker" placeholder="Choose a date">
+                                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                  <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            <div class="dataText"> To </div>
+                            <div class="datLT">
+                              <div class="input-append date date-picker" data-date="ff" data-date-format="gg" data-date-viewmode="years">
+                                <mat-form-field style="color: black;">
+                                  <input (dateChange)="checkto_date()" formControlName="to_date" matInput [matDatepicker]="picker1" placeholder="Choose a date">
+                                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                  <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group m-b-sm">
+                              <label class="control-label ">
+                                <span>User :</span>
+                              </label>
+                              <div class="controls">
+                                <select formControlName="user_id" class="large m-wrap radius-b" name="user_id" id="user_id" tabindex="1">
+                                  <option *ngIf="!isprojectuser" value="{{ login_user_id }} ">Me</option>
+                                  <option *ngFor="let u of users" value="{{ u.user_id }}">{{u.first_name + ' ' + u.last_name}}</option>
+                                  <option *ngIf="!isprojectuser" value="">My Team</option>
+                                  <option *ngIf="chk_owner== '1'  && isshowallprojectuser==1 " value="all">All</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group m-b-sm">
+                              <label class="control-label">
+                                <span>Division :</span>
+                              </label>
+                              <div class="controls">
+                                <select (change)="get_division()" formControlName="division_id" class="large m-wrap radius-b" name="division_id" id="division_id_report"
+                                  tabindex="1">
+                                  <option value="">All</option>
+                                  <option *ngFor='let div of divisions' value="{{ div.division_id}}">{{div.devision_title}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group m-b-sm">
+                              <label class="control-label">
+                                <span>Department :</span>
+                              </label>
+                              <div class="controls">
+                                <select formControlName="department_id" class="large m-wrap radius-b" name="department_id" id="department_id_report" tabindex="1">
+                                  <option value="">All</option>
+                                  <option *ngFor='let dep of departments' value="{{ dep.department_id}}">{{dep.department_title}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group m-b-sm">
+                              <label class="control-label">
+                                <span>Category :</span>
+                              </label>
+                              <div class="controls">
+                                <select (change)="get_sub_category()" formControlName="category_id" class="large m-wrap radius-b" name="category_id" id="category_id"
+                                  tabindex="1">
+                                  <option value="">All</option>
+                                  <option *ngFor='let cat of category' value="{{ cat.category_id}}">{{cat.category_name}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group m-b-sm">
+                              <label class="control-label" style="width: 101px!important;">
+                                <span>Sub-Category :</span>
+                              </label>
+                              <div class="controls">
+                                <select formControlName="sub_category_id" class="large m-wrap radius-b" name="sub_category_id" id="sub_category_id" tabindex="1">
+                                  <option value="">All</option>
+                                  <option *ngFor='let scat of sub_category' value="{{ scat.category_id}}">{{scat.category_name}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group m-b-sm">
+                              <label class="control-label ">
+                                <span>Projects :</span>
+                              </label>
+                              <div class="controls">
+                                <select (change)="get_project_users()" formControlName="project_id" class="large m-wrap radius-b" name="project_id" id="project_id"
+                                  tabindex="1">
+                                  <option value="">All</option>
+                                  <option *ngFor='let pro of projects' value="{{ pro.project_id}}">{{pro.project_title}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6" *ngIf="customer_module_activation">
+                            <div class="form-group m-b-sm">
+                              <label class="control-label ">
+                                <span>Customers :</span>
+                              </label>
+                              <div class="controls">
+                                <select formControlName="customer_id" class="large m-wrap radius-b" name="customer_id" id="report_customer_id" tabindex="1">
+                                  <option value="">All</option>
+                                  <option *ngFor='let cust of customers' value="{{ cust.customer_id}}">{{cust.customer_name}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-control" style="background-color: #e5e9ec;border-top: 1px solid #e5e5e5;padding: 19px 20px 20px; height:72px;">
+                      <button type="submit" class="btn blue txtbold" [disabled]="!reportfilterform.valid" (click)="run_report(); ">
+                        <i class="icon-ok rprticn"></i> Run Report </button>
+                      <button type="button" id="export" (click)="export();" [disabled]="!reportfilterform.valid" name="submit" class="btn green txtbold">
+                      Export
+                        <i class="icon-external-link rprticn"></i>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- END BORDERED TABLE PORTLET-->
+          </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+          <div class="col-md-12" id="ajax_div" *ngIf="showtable" style="margin-bottom: 20px;">
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+              <div class="col-md-12" style="padding-right:0px !important">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box blue">
+                  <div class="portlet-title">
+                    <div class="caption">View Data</div>
+                  </div>
+                  <div class="portlet-body ">
+                    <div class="customtable" id="ajax_report_data">
+                      <!-- table -->
+                      <table *ngIf= "filtertab1 == false" class="table table-striped table-hover table-condensed flip-content">
+                        <thead class="flip-content">
+                          <tr>
+                            <th *ngFor='let header of view'>{{ header }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor='let report of report_data'>
+                            <td *ngFor='let header of view'>
+                              {{report[header]}}
+                            </td>
+                          </tr>
+                          <tr *ngIf="report_data=='' ">
+                            <td colspan="7">No Records found.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div *ngIf="filtertab1 == true" >
+                          <ngx-charts-bar-vertical-2d
+                          [view]="viewchart"
+                          [results]="charts_data"
+                          [xAxis]="showXAxis"
+                          [yAxis]="showYAxis"
+                          [legend]="showLegend"
+                          [roundDomains]="roundDomains"
+                          [showXAxisLabel]="showXAxisLabel"
+                          [showYAxisLabel]="showYAxisLabel"
+                          [xAxisLabel]="xAxisLabel"
+                          [yAxisLabel]="yAxisLabel"
+                          [groupPadding]=5
+                          [barPadding]=1
+                          >
+                        </ngx-charts-bar-vertical-2d>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+              </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END PAGE CONTAINER-->
+  <!-- Footer here -->
+  <footer-layout></footer-layout>

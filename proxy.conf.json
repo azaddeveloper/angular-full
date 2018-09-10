@@ -1,0 +1,6 @@
+{
+    "/v1": {
+       "target": "localhost/schedullo_dev",
+       "secure": false
+    }
+ }

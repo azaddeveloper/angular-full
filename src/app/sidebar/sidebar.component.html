@@ -1,0 +1,47 @@
+
+<div class="page-sidebar page-sidebar-closed" style="padding-top: 53px;position: fixed;">
+    <ul class="page-sidebar-menu">
+        <li *ngIf="user_access.dashboards == 1">
+            <a href="javascript:void(0)"> <i class="icon-dashboard"></i> <span class="title">Dashboard</span></a>
+            <ul class="sub-menu">
+                <li class="cstm_left_menu " routerLinkActive="active">
+                    <a href="javascript:void(0);" [routerLink]="['/user/dashboard']" class="nav-link "><span class="title">My Dashboard </span> </a>
+                </li>
+                <li class="cstm_left_menu" *ngIf="is_manger>1" routerLinkActive="active">
+                    <a href="javascript:void(0);" [routerLink]="['/user/teamdashboard']"><span class="title"> Team Dashboard</span></a> 
+                </li>
+                <li class="cstm_left_menu" routerLinkActive="active">
+                    <a href="javascript:void(0);" [routerLink]="['/user/capacity_dashboard']"><span class="title"> Capacity & Performance Dashboard</span></a> 
+                </li>
+            </ul>
+        </li>
+        <li *ngIf="user_access.calendar_module == 1"  routerLinkActive="active" >
+            <a href="javascript:void(0)" [routerLink]="['/todo']">  
+                <i class="fa fa-calendar" aria-hidden="true" style="margin-left: 2px"></i><span class="title">My Calendar</span>
+            </a>
+        </li>
+        <li *ngIf="user_access.kanban_module == 1" routerLinkActive="active">
+            <a href="javascript:void(0)" [routerLink]="['/kanban']">  
+                <i class="fa fa-columns" aria-hidden="true" style="margin-left: 3px"></i><span class="title">Kanban</span>
+            </a>
+        </li>
+        <li *ngIf="user_access.project_module == 1" routerLinkActive="active">
+            <a href="javascript:void(0)" [routerLink]="['/projects']">  
+                <i class="fa fa-cubes" aria-hidden="true"></i><span class="title">Projects</span>
+            </a>
+        </li>
+        <li *ngIf="customer_module_access == 1  && user_access.customer_module ==1" routerLinkActive="active">
+            <a href="javascript:void(0)" [routerLink]="['/customer']">  
+                <i class="fa fa-user" aria-hidden="true" style="margin-left: 5px"></i><span class="title">Customer</span>
+            </a>
+        </li>
+        <li routerLinkActive="active" *ngIf="customer_module_access == 1 && pricing_module_status == 1 && timesheet_module_status == 1 && user_access.timesheet_module == 1" >
+            <a href="javascript:void(0)" [routerLink]="['/timesheet']"><i class="icon-time"></i><span class="title"> Timesheet </span></a>
+       </li>
+       <li *ngIf="user_access.report_module == 1" routerLinkActive="active">
+        <a href="javascript:void(0)" [routerLink]="['/report']">  
+            <i class="stripicon icoreport "></i>  <span class="title">Report</span>
+        </a>
+    </li>
+    </ul>
+</div>

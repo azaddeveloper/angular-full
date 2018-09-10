@@ -1,0 +1,25 @@
+.mainpage-container2{
+    margin-top: 5%;
+    margin-left: 3%;
+    margin-right: 2%;
+}
+hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid #E0DFDF;
+    border-bottom: 1px solid #FEFEFE;
+}
+select{
+    color: black;
+}
+.customtable{
+    width: 100%;
+   overflow: auto;
+}
+.dataText{
+    float: left;
+    margin: 18px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #020202;
+}

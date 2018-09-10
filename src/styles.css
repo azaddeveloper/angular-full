@@ -1,0 +1,472 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import "./assets/css/angular-calendar.css";
+
+body{
+    /* overflow: hidden; */
+    font-family: 'Open Sans', sans-serif !important;
+}
+.login_logo {
+    display: inline-block;
+    font-size: 1em;
+    width: 2.5em;
+    height: 2.5em;
+    line-height: 2.5em;
+    text-align: center;
+    border-radius: 50%;
+    background: #17a3e9;
+    vertical-align: middle;
+    margin-right: 1em;
+    color: white;
+    font-weight: bold;
+}
+.logout{
+    float: right;
+    margin-top: 10px;
+    font-size: 21px;
+    margin-right: 10px;
+}
+
+.margin20{
+    margin-left: 20px !important;
+    margin-right: 5px !important;
+}
+.label-status{
+    font-size: 11px;
+    font-weight: 500 !important;
+    padding: 1px 2px;
+    text-shadow: none !important;
+    background-color: #ffb848;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    line-height: 14px;
+    vertical-align: baseline;
+    white-space: nowrap;
+    background-image: none !important;
+    position: relative;
+    top: -3px;
+    margin-top: 7px;
+}
+
+.task_border{
+    position: relative;
+    padding: 4px;
+    border: solid 1px #e5e9ec;
+    margin-bottom: 5px;
+    background-color: #fff;
+}
+.task_title{
+    padding-bottom: 2px;
+    font-size: 12px;
+    margin-bottom: 0px;
+    border-bottom: 1px dashed #e5e9ec;
+    color: #000;
+    border-radius: 3px;
+    cursor: pointer;
+    /* font-size: 13px; */
+    position: relative;
+    word-wrap: break-word;
+    /* word-break: break-all; */
+    /* line-height: 18px; */
+    /* background-color: #fff; */
+}
+.task_date{
+    padding: 5px 0;
+    font-size: 11px;
+    border-bottom: 1px dashed #e5e9ec;
+    color: #000;
+    font-weight: bold;
+}
+.label-Completed{
+	background-color: #555555;
+}
+
+.label-NotReady{
+	background-color: #d84a38;
+}
+
+.label-Ready{
+	background-color: #35aa47;
+}
+
+.label-InProgress{
+	background-color: #4d90fe;
+}
+
+.add_task_div{
+    border: 1px solid rgba(128, 128, 128, 0.25) !important;
+    height: 33px;
+    background-color: rgba(128, 128, 128, 0.25) !important;
+    text-align: center;
+}
+.white-box{
+    position: relative;
+    padding: 4px;
+    background-color: #fff;
+    color: #fff !important;
+}
+
+.add_task_icon{
+    font-size: 14px !important;
+    color: #999 !important;
+    text-align: center !important;
+    line-height: 30px !important;
+}
+
+.add_new_task{
+    width: 96% !important;
+    padding: 8px;
+    line-height: 15px;
+    border: 1px solid #d7d9dd;
+    font-size: 15px;
+    color: black !important;
+}
+::-webkit-scrollbar-corner {
+    background: none;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+ }
+ 
+  
+ /* Handle */
+ ::-webkit-scrollbar-thumb {
+     background: rgba(23, 163, 233, 0.61);
+     border-radius: 10px;
+    
+ }
+ .bottom_border{
+    border-bottom: 1px dashed #e5e9ec;
+ }
+
+ 
+/* Draggable*/
+
+.drag-border {
+    border: #aa9495 dashed 1px;
+}
+
+.drag-handle {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.drag-handle:active { 
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Droppable */
+
+.drag-hint-border {
+    border: #3c763d dashed 1px;
+}
+
+.drag-over-border {
+    border: #fbbc05 dashed 1px;
+}
+
+.drag-transit {
+    border: #3500FF dashed 1px;
+}
+
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+.page-content{
+    margin-left: 22px !important;
+    margin-right: 15px !important;
+}
+.cdk-overlay-container{
+    z-index: 9999999 !important;
+}
+.ngx-contextmenu li a {
+    padding: 6px 14px !important;
+}
+.dropdown-menu li a:hover > .due_date_picker{
+    background-color: #fff !important;
+    color: #000 !important;
+    padding: 0px !important;
+}
+.dropdown.t1.open .dropdown-toggle{
+    background: transparent !important;
+}
+.dropdown-menu.calendar_filter1 li a:hover{
+    color: #333 !important;
+    background: transparent !important;
+}
+.mat-dialog-container{
+    padding: 0px !important;
+}
+.btn.btn-block.btn-danger{
+    color: #fff !important;
+    background-color: #007fbe !important;
+    border-color: #006ea5 !important;
+    padding: 5px 10px !important;
+    font-size: 12px;
+    line-height: 1.5 !important;
+}
+.btn.btn-block.btn-default{
+    color: #fff !important;
+    background-color: #f34235 !important;
+    border-color: #f33123 !important;
+    padding: 5px 10px !important;
+    font-size: 12px;
+    line-height: 1.5 !important;
+    clear: unset !important;
+}
+
+.popover-header{
+    display: none;
+}
+.popover-content{
+ padding: 10px !important;
+ padding-top: 0px !important;
+}
+.task_popup_select .mat-select-trigger
+{
+    background: white!important;
+    width: 93%!important;
+    line-height: 30px!important;
+    border-radius: 5px!important;
+    border: 1px solid #e5e5e5!important;
+}
+
+.task_popup_select .mat-select-value
+{
+    padding-left: 5px!important;
+    line-height: 35px;
+}
+.task_logo{
+    display: inline-block;
+    font-size: 1em;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+    border-radius: 50%;
+    background: #17a3e9;
+    vertical-align: middle;
+    color: white;
+    font-weight: bold;
+}
+
+.green1{
+    border-left: 3px solid #48a593 !important;
+}
+.yellow1{
+    border-left: 3px solid #eeb269 !important;
+}
+.red1{
+    border-left: 3px solid #dc5753 !important;
+}
+
+.close{
+    opacity: 1 !important;
+}
+a{
+    text-decoration: none !important;
+}
+
+.modal .portlet{
+    border: none !important;
+    margin-bottom: 0px !important; 
+}
+.modal.fade.in {
+    top: 1% !important;
+}
+
+.modal-open .modal{
+    overflow: hidden !important;
+}
+
+.modal-body{
+    padding: 0px !important
+}
+.modal-header{
+    background-color: #F58F1F !important;
+    color: #fff !important;
+    padding: 5px !important;
+}
+.footer1{
+    padding: 0px;padding-left: 42px !important;
+}
+.default_color  a.c-inline-editor{
+    color: #fff !important;
+    font-weight: bold !important;
+    border-bottom: 1px dashed;
+}
+a.c-inline-editor{
+    border-bottom: 1px dashed;
+}
+inline-editor-select select{
+    padding: 0px !important;
+    height: 25px !important;
+    width: auto;
+    margin-left: 17px ;
+}
+inline-editor-select{
+    margin-right: 13px;
+}
+/* .updttskstatus .mat-form-field-infix{
+    padding: 0px !important;
+    border-top:none !important;
+}
+.updttskstatus .mat-form-field-wrapper{
+    padding-bottom:0px !important;
+    border-bottom: 1px dashed;
+}
+.updttskstatus .mat-form-field-underline{
+    height: 0px !important;
+}
+
+.updttskstatus .mat-form-field-ripple{
+    background-color: #fff !important;
+} */
+.ngx-pagination li {
+    font-weight: 600;
+}
+.ngx-pagination .current {
+    background: #0088cc!important;
+}
+.invite_user_delete mwl-confirmation-popover-window .popover{
+    left:5px!important;
+}
+.remove_datepicker_css .mat-form-field-infix{
+    padding: 0px !important;
+}
+.floating .btn-new{
+    font-size: 13px !important;
+    padding: 4px 16px !important;
+}
+
+.user_setting .mat-select-value {
+    color: #555 !important;
+}
+.color-picker{
+    top: -281px !important;
+    left: 16px !important;
+}
+.dvLoading {
+	background: url(assets/images/Preloader_8.gif) no-repeat center center;
+    /* background: url(../img/page_loader3.gif) no-repeat center center; */
+    height: 120px !important;
+    width: 303px !important;
+    margin: 18% 41% !important;
+    z-index: 100000 !important;
+    position: fixed;
+    z-index: 9999999;
+    height: 100%;
+    width: 100%;
+    
+}
+.color_td input{
+    height: 26px;
+    padding: 6px;
+    /* margin: 0px; */
+    font-size: 13px;
+}
+#company_skills tr td #inlineEditWrapper,#company_staffLevels tr td #inlineEditWrapper,#company_subTaskCategory tr td #inlineEditWrapper,#company_mainCategory tr td #inlineEditWrapper, #company_divisions tr td #inlineEditWrapper,#company_departments tr td #inlineEditWrapper{
+    margin-top:4px;
+    font-size: 13px;
+}
+
+.bar-chart, .line-chart {
+    display: block !important;
+}
+.capacity_align svg{
+    width: 68px !important;
+    height: 65px !important;
+    margin-left: -18px !important;
+}
+
+.capacity_switch .bootstrap-switch{
+    width: 98px !important;
+    border-radius: 0px !important;
+    border-color: #000 !important;
+}
+.capacity_switch .bootstrap-switch-container{
+    width:460px !important;
+}
+.capacity_switch .bootstrap-switch-primary{
+    border-radius: 0px !important;
+}
+.capacity_switch .bootstrap-switch-success{
+    border-radius: 0PX !important;
+}
+
+.team_button .bootstrap-switch{
+    width: 76px !important;
+    border-radius: 0px !important;
+    border-color: #000 !important;
+}
+.team_button .bootstrap-switch-container{
+    width:338px !important;
+}
+.team_button .bootstrap-switch-primary{
+    border-radius: 0px !important;
+}
+.team_button .bootstrap-switch-success{
+    border-radius: 0PX !important;
+}
+
+.billable_button .bootstrap-switch{
+    width: 76px !important;
+    border-radius: 0px !important;
+    border-color: #000 !important;
+}
+.billable_button .bootstrap-switch-container{
+    width:338px !important;
+}
+.billable_button .bootstrap-switch-primary{
+    border-radius: 0px !important;
+}
+.billable_button .bootstrap-switch-success{
+    border-radius: 0PX !important;
+}
+
+#chartdiv2 svg {
+    width: auto !important;
+}
+#ajax_report_data svg{
+    width:auto !important
+}
+.paddingadd_left inline-editor-text{
+    padding-left: 13px !important;
+}
+#chart_div123 svg{
+    width:500px !important;
+}
+#chart_div123 ngx-charts-legend{
+    float: right;
+}
+
+#chart_div123 .legend-labels{
+    width: 194% !important;
+}

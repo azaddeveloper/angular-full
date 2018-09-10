@@ -1,0 +1,43 @@
+.dropdown-menu>li>a{
+    padding: 5px !important;
+}
+ul li:hover ul {
+    display:block;
+    }
+.radio_error label{
+    font-weight: 500 !important;
+}
+.tabbable-custom .nav-tabs > li.active > a{
+    background: #0088CC;
+    color: #fff;
+}
+.comment-block{
+    border: none !important;
+}
+
+.navbar .nav>li>.dropdown-menu:before {
+    position: absolute;
+    top: -7px;
+    right: 9px;
+    display: inline-block;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+    border-left: 7px solid transparent;
+    border-bottom-color: rgba(0,0,0,0.2);
+    content: '';
+}
+
+.navbar .nav>li>.dropdown-menu:after {
+    position: absolute;
+    top: -6px;
+    right: 10px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #fff;
+    border-left: 6px solid transparent;
+    content: '';
+}
+
+.timer-btn .btn {
+    padding: 5px 8px !important;
+}

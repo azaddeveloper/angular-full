@@ -1,0 +1,541 @@
+
+<header></header>
+<sidebar></sidebar>
+<div class="container-fluid page-background kanban_consistency" >
+    <div class="mainpage-container">
+        <div class="user-block" id="kanban_view">
+            <div class="row">
+                <div class="col-md-12" style="padding: 50px 13px 5px 50px;">
+                    <div class="kanban-table ">
+                        <div class="kanban_filter" style="position: relative;">
+                            <div  dropdown>
+                                <button class="btn btn-new unsorttd filter_kan dropdown-toggle " type="button" dropdownToggle >
+                                    {{user_filter_board_name}}
+                                </button>
+                                <input type="hidden" id="from" value="from_kanban"/>
+                                <ul class="dropdown-menu calendar_filter1 filter_css" *dropdownMenu role="menu">
+                                        <div>
+                                            <li class="filter-header">
+                                                <a href="javascript:void(0);">
+                                                    <label class="control-label bold filter_label personal-calendar">Personal Board</label>
+                                                </a>
+                                            </li>
+                                            <li style="padding-left: 20px;">
+                                                <a href="javascript:void(0);" (click)="kanban_filter('me','user_filter');">My Board
+                                                    <span class="pull-right" style="padding-right: 20px;" *ngIf="login_user_id == filter_user && filter_project == 'all'">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </div>
+                            
+                                        <div class="" *ngIf="team">
+                                            <li class="filter-header">
+                                                <a href="javascript:void(0);" class="dropdown-item">
+                                                    <label class="control-label bold filter_label people_calendar">People Boards</label>
+                                                </a>
+                                            </li>
+                                            <li style="padding-left: 20px;" *ngFor="let u of team">
+                                                <a href="javascript:void(0);" class="dropdown-item" (click)="kanban_filter(u.user_id,'user_filter');">{{u.first_name}} {{u.last_name}}
+                                                    <span class="pull-right" style="padding-right: 20px;" *ngIf="filter_user == u.user_id && filter_project == 'all'">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </div>
+                            
+                                        <div class="" *ngIf="projects">
+                                            <li class="filter-header">
+                                                <a href="javascript:void(0);">
+                                                    <label class="control-label bold filter_label project-calendar">Projects Boards</label>
+                                                </a>
+                                            </li>
+                                            <li style="padding-left: 20px;">
+                                                <a href="javascript:void(0);" (click)="kanban_filter('all','project_filter');">All projects
+                                                    <span class="pull-right" style="padding-right:20px" *ngIf="filter_project =='all' && filter_user == login_user_id">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li *ngFor="let p of projects" style="padding-left: 20px;">
+                                                <a href="javascript:void(0);" (click)="kanban_filter(p.project_id,'project_filter');">{{p.project_title}}
+                                                    <span class="pull-right" style="padding-right:20px" *ngIf="filter_project == p.project_id">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+                            
+                                        </div>
+                            
+                                    </ul>
+                            </div>
+                        </div>
+                        <div class="kanbanscroll">
+                            <table class="table " id="sample_1">
+                                <thead>
+                                    <tr>
+                                        <th class="kanban_board_header board-collapsedColumnNameCell column-collapsed kanban-cell" *ngFor="let st of tasks;" id="th_hide_{{st.task_status_id}}" style="display: none;" >{{return_count(st.status_task)}}</th>
+                                        <th class="kanban_board_header" *ngFor="let st of tasks;" id="th_show_{{st.task_status_id}}" style="display:table-cell" (click)="compress_table(st.task_status_id)" >{{st.task_status_name }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="cstm_kanban" style="display:table-row">
+                                            <td *ngFor="let task of tasks;" id="td_hide_{{task.task_status_id}}" class=" kanban-cell task_hide_anchor board-collapsedColumnNameCell column-collapsed" style="display:none;" (click)="expand_table(task.task_status_id)" >
+                                                <div class="collapsed-info-wrapper">
+                                                    <div class="collapsed-rotation" >
+                                                        <h2 class="collapse_text">{{task.task_status_name}}</h2>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        <td *ngFor="let task of tasks; let i = index" id="td_show_{{task.task_status_id}}" style="display:table-cell">
+                                            <div style="padding-bottom: 6px;">
+                                                <div style="border : solid 1px #e5e9ec;">
+                                                    <div class="white-box">
+                                                        <div class="">
+                                                            <div class=" ">
+                                                                <div class="add_task_div" (click)="add_task(task.task_status_id)" id="task{{task.task_status_id}}">
+                                                                    <i class="fa fa-plus add_task_icon" aria-hidden="true"></i>
+                                                                </div>
+                                                                <div id="inputtag{{task.task_status_id}}" style="display:none">
+                                                                    <input type="text" class="m-wrap add_new_task" id="tasktag{{task.task_status_id}}" [(ngModel)]="taskclear" name="task_title" (keydown.tab)="create_task($event.target.value,task.task_status_id,'tab')" (keydown.enter)="create_task($event.target.value,task.task_status_id,'enter')"
+                                                                        (focusout)="changetag(task.task_status_id)" />';
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="full_task">
+                                                    <div [dragula]='"bag-task1"' [dragulaOptions]="options">
+                                                        <div *ngIf="task.status_task == ''" style="min-height:2px;"></div>
+                                                        <div [contextMenu]="contextmenu" [contextMenuSubject]="task_" *ngFor="let task_ of task.status_task; let j = index" class="dragbox "
+                                                            id="task_{{task_.task_id}}" [ngStyle]="{'border':'1px solid '+task_.outside_color_code}" style="padding-bottom: 0px !important;"
+                                                            [ngClass]="{green1:task_.task_priority == 'Low',yellow1:task_.task_priority == 'Medium',red1:task_.task_priority == 'High'}" [hidden]="task_.task_title == ''"  (click)="save_task_for_timer(task_.task_id,task_.task_title,task_.task_time_spent,chk_task_recurrence(task_.task_id),task_.completed_depencencies);">
+                                                            <div class="comm-box whitebox disabled_sort " [ngStyle]="{'background-color': task_.color_code}">
+                                                                <a href="javascript:void(0)" (click)="open(task_)" *ngIf="task_.frequency_type == 'one_off';else secondmodal">
+                                                                    <div class="comm-title clearfix ">
+                                                                        <div class="comtitle-LFD ">
+                                                                            <img class="tooltips profile-image_task" *ngIf="filter_project !='all' && task_.profile_image !='';else anotherimage" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}" alt="" src="{{Image_url+task_.profile_image}}" />
+                                                                            <ng-template #anotherimage>
+                                                                                <span  class="task_logo pull-right" *ngIf="filter_project !='all'" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}">{{task_.first_name | Initialletters|uppercase}}{{task_.last_name |Initialletters|uppercase}}</span>
+                                                                            </ng-template>
+                                                                            <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                                                            <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent =='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                                                            <div class="comttime " *ngIf="task_.task_time_estimate =='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                                                            <span *ngIf="task_.task_project_id !='0'; else elseBlock">{{task_.project_title}} - {{task_.task_title | titleDecode}}</span>
+                                                                            <ng-template #elseBlock>{{task_.task_title }}</ng-template>
+                                                                            <span class="tooltips" tooltipPlacement="right" tooltip="Watchlist" *ngIf="task_.watch == '1'">
+                                                                                <i class="stripicon startyellowicon"> </i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                                <ng-template #secondmodal>
+                                                                        <a href="javascript:void(0)" (click)="recurrence_open(task_);">
+                                                                            <div class="comm-title clearfix ">
+                                                                                <div class="comtitle-LFD ">
+                                                                                    <img class="tooltips profile-image_task" *ngIf="filter_project !='all' && task_.profile_image !='';else anotherimage" tooltipPlacement="left"
+                                                                                        tooltip="{{task_.allocated_user_name}}" alt="" src="{{Image_url+task_.profile_image}}" />
+                                                                                    <ng-template #anotherimage>
+                                                                                        <span class="task_logo pull-right" *ngIf="filter_project !='all'" tooltipPlacement="left" tooltip="{{task_.allocated_user_name}}">{{task_.first_name | Initialletters|uppercase}}{{task_.last_name |Initialletters|uppercase}}</span>
+                                                                                    </ng-template>
+                                                                                    <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                                                                    <div class="comttime " *ngIf="task_.task_time_estimate !='0' && task_.task_time_spent =='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                                                                    <div class="comttime " *ngIf="task_.task_time_estimate =='0' && task_.task_time_spent !='0'">{{task_.task_time_estimate | timeConvert}}/{{task_.task_time_spent | timeConvert}}</div>
+                                                                                    <span *ngIf="task_.task_project_id !='0'; else elseBlock">{{task_.project_title}} - {{task_.task_title | titleDecode}}</span>
+                                                                                    <ng-template #elseBlock>{{task_.task_title }}</ng-template>
+                                                                                    <span class="tooltips" tooltipPlacement="right" tooltip="Watchlist" *ngIf="task_.watch == '1'">
+                                                                                        <i class="stripicon startyellowicon"> </i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </a>
+                                                                </ng-template>
+                                                                <div id="hide_show_{{task_.task_id}}" [ngStyle]="{'display':task_.task_ex_pos == '1'?'block':'none'}">
+                                                                    <div class="comm-desc" *ngIf="task_.task_description !=''"><p style="word-break:break-all">{{task_.task_description}}</p></div>
+                                                                    <div class="duedate com-brdbtm " *ngIf="task_.task_due_date !='0000-00-00'">
+                                                                            <div *ngIf="task_.task_status_name == 'Completed'" > Due : {{task_.task_due_date | date:'dd/MM/y' }}</div>
+                                                                            <div *ngIf="task_.task_due_date < today_date && task_.task_status_name != 'Completed'" class="red"> Overdue : {{task_.task_due_date | date : 'dd/MM/y' }}</div>
+                                                                            <div *ngIf="task_.task_due_date >= today_date && task_.task_status_name != 'Completed'"> Due : {{task_.task_due_date | date : 'dd/MM/y' }}</div>
+                                                                    </div>
+                                                                    <div class="comm-step" style="border-bottom: 1px dashed #e5e9ec;" *ngIf="task_.ts !='0'">
+                                                                        <div class="form-group" style="margin-bottom:0px !important" *ngFor="let step of task_.step">
+                                                                            <label class="marginTop checkbox" [ngClass]="{'step-complete-class':step.is_completed=='1'}" style="margin-bottom:6px !important;font-weight: 500 !important;">
+                                                                            <input type="checkbox" name="step_chk" class="newcheckbox_task" style="position:inherit !important;" (click)="completed_step(task_,step.step_title,$event.target.checked);" value="" [checked]="step.is_completed == '1'" >
+                                                                                {{step.step_title}}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="commicon-list clearfix custom-height ">
+                                                                        <ul class="list-unstyled marginTop">
+                                                                                <li class="no-bottom-space" *ngIf="task_.is_prerequisite_task == '1'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="One or more tasks are blocked by this task" href="javascript:void(0);">
+                                                                                        <i class="icon-chain wvicn gray"> </i>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.tpp != '0' && task_.completed_depencencies != '0'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Dependencies" href="javascript:void(0);">
+                                                                                        <i class="icon-chain wvicn red"> </i>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.tpp != '0' && task_.completed_depencencies == '0'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Dependencies" href="javascript:void(0);">
+                                                                                        <i class="icon-chain wvicn green"> </i>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.frequency_type == 'recurrence'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Recurring task" href="javascript:void(0);">
+                                                                                        <i class="icon-refresh wvicn"> </i>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.frequency_type == 'one_off' && task_.master_task_id != 0">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Task disconnected from series" href="javascript:void(0);">
+                                                                                        <i class="icon-refresh wvicn " style="text-decoration: line-through"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.comments !='0'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Comments" href="javascript:void(0)">
+                                                                                        <i class="icon-comment-alt wvicn"> </i><sup>{{task_.comments}}</sup>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.is_personal == '1'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Private task">
+                                                                                        <i class="icon-eye-slash wvicn"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.files !='0'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Task Files" href="javascript:void(0)">
+                                                                                        <i class="icon-paperclip wvicn"></i><sup>{{task_.files}}</sup>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="no-bottom-space" *ngIf="task_.ts !='0'">
+                                                                                    <a class="tooltips" tooltipPlacement="right" tooltip="Task Steps" href="javascript:void(0)">
+                                                                                        <i class="icon-list-ul wvicn"></i><sup>{{task_.step_com}}/{{task_.ts}}</sup>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="chkbox new no-bottom-space marginTop">
+                                                                                    <a href="javascript:vid(0);" (click)="save_task_pos(task_.task_id);" id="chnage_icon_{{task_.task_id}}" *ngIf="task_.task_ex_pos == '1'; else collspediv">
+                                                                                        <i class="fa fa-compress" aria-hidden="true"></i>
+                                                                                    </a>
+                                                                                    <ng-template #collspediv>
+                                                                                        <a href="javascript:vid(0);" (click)="save_task_pos(task_.task_id);" id="chnage_icon_{{task_.task_id}}">
+                                                                                            <i class="fa fa-expand" aria-hidden="true"></i>
+                                                                                        </a>
+                                                                                    </ng-template>
+                                                                                </li>
+                                                                                <li class="chkbox new margin-bottom-3" style="right: 15px;">
+                                                                                    <label class="checkbox marginTop2">
+                                                                                        <input type="checkbox" name="is_completed" id="is_completed_{{task_.task_id}}" *ngIf="actual_time_status == '0' || task_.task_time_spent != 0 || task_.task_status_name == 'Completed'; else timepoup"
+                                                                                            (click)="is_completed(task_);" [checked]="task_.task_status_name =='Completed'" [disabled]="task_.completed_depencencies !='0'">
+                                                                                        <ng-template #timepoup>
+                                                                                            <input type="checkbox" name="is_completed" id="is_completed_{{task_.task_id}}" (click)="open_actual_time_popup(task_);" [disabled]="task_.completed_depencencies !='0'">
+                                                                                        </ng-template>
+                                                                                    </label>
+                                                                                </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="commicon-list clearfix" *ngIf="task_.customer_id !='0' && task_.customer_id !=''" >
+                                                                            <ul class="list-unstyled">
+                                                                                <li class="no-bottom-space">
+                                                                                    <span class="label-status label-Greylight">{{task_.customer_name}}</span>
+                                                                                </li>
+                                                                            </ul>
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer " style="padding: 0px;padding-left: 42px !important;">
+    <div class="footer-inner" style="padding: 9px 0px !important;">
+      &copy; {{ today | date: 'yyyy' }}. Schedullo. All rights reserved.
+      </div>
+      <div class="footer-filter" style="right: 0px !important;">
+      <div class="filter-group" >
+        <ul class="list-unstyled">
+           
+            <li>
+              <a href="javascript:void(0) " (click)="colorshow = !colorshow;duedateshow=false;"  [ngClass]="{filter_selected:filter_user_color_id!='0'}" >
+                <i class="stripicon" [ngClass]="{'filtericon-red':filter_user_color_id!='0',filtericon:filter_user_color_id == '0'}" > </i> Colour </a>
+              <div class="profilterbx" id="common-colorbox" [hidden]="!colorshow">
+                <div class="filter-listing">
+                  <select (change)="kanban_filter();" [(ngModel)]="filter_user_color_id" class="col-md-10 m-wrap no-margin" name="user_color_id"
+                    id="user_color_id">
+                    <option value="0">All</option>
+                    <option *ngFor="let c of color" (click)="colorshow =colorshow=false;" [ngValue]="c.user_color_id"> {{c.name}} </option>
+                  </select>
+                </div>
+              </div>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="duedateshow = !duedateshow;colorshow=false;" [ngClass]="{filter_selected:filter_user_due_date!='all'}">
+                <i class="stripicon " [ngClass]="{'filtericon-red':filter_user_due_date!='all',filtericon:filter_user_due_date == 'all'}" > </i> Due Date </a>
+              <div class="profilterbx " id="common-statusbox " [hidden]="!duedateshow">
+                <div class="filter-listing ">
+                <select (change)="kanban_filter();" [(ngModel)]="filter_user_due_date" class="col-md-10 m-wrap no-margin" name="user_color_id"
+                        id="user_color_id">
+                    <option value="all" selected="selected" > All </option>
+                    <option value="today"  > Today </option>
+                    <option value="this_week"  > This Week </option>
+                    <option value="next_week"  > Next Week </option>
+                    <option value="this_month"  > Due in ['May'] </option>
+                    <option value="next_month"  > Due in ['June'] </option>
+                    <option value="next_to_next_month"  > Due in ['July'] </option>
+                    <option value="next_ninty"  > Due next 90 days </option>
+                    <option value="this_year"  > This Year</option>
+                    <option value="next_year"  > Next Year</option>
+                    <option value="overdue" >Overdue</option>
+                </select>
+                </div>
+              </div>
+            </li>
+            <li class="timerbtn">
+                <a href="javascript:void(0);">&nbsp;</a>
+              <div class="profilterbx " id="common-statusbox " style="display: none;">
+                <div class="filter-listing ">
+                  
+                </div>
+              </div>
+            </li>
+          </ul>
+        
+      </div>
+    </div>
+  
+  </div>
+      
+    <!-- context menu start -->
+    <context-menu #contextmenu>
+        <ng-template contextMenuItem class="menuList" [subMenu]="colors">
+            <span><i class="stripicon set-color" style="margin-left: -3px !important;top:0px !important;margin-right:0px !important;height: 17px !important;"></i>Set a colour</span>
+        </ng-template>
+        <context-menu #colors>
+                <ng-template *ngFor="let c of color" contextMenuItem let-item (execute)="change_task_color($event.item.task_id,c.user_color_id,$event.item)">{{c.name}}</ng-template>
+            </context-menu>
+        <ng-template contextMenuItem class="menuList" [subMenu]="priority">
+            <span>
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Set Priority</span>
+        </ng-template>
+        <context-menu #priority>
+            <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'None',$event.item)">None</ng-template>
+            <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'Low',$event.item)">Low</ng-template>
+            <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'Medium',$event.item)">Medium</ng-template>
+            <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'High',$event.item)">High</ng-template>
+        </context-menu>
+        <ng-template class="menuList" contextMenuItem let-item>
+            <span *ngIf="item.watch == '0'; else otheroption"(click)="add_watch_list(item.task_id,item);">
+                <i class="fa fa-star-o" aria-hidden="true"></i> Add to Watch list</span>
+                <ng-template #otheroption>
+                    <span (click)="remove_watch_list(item.task_id,item);">
+                        <i class="fa fa-star-o" aria-hidden="true"></i> Remove to Watch list</span>
+                </ng-template>
+        </ng-template>
+        <ng-template class="menuList" contextMenuItem [subMenu] = 'taskduedate' >
+            <span>
+                <i class="fa fa-calendar" aria-hidden="true"></i> Set due date</span>
+        </ng-template>
+        <context-menu #taskduedate>
+            <ng-template contextMenuItem let-item passive="true" >
+                <div style="margin: -6px -14px !important;" class="due_date_picker">
+                    <mat-calendar [selected]="item.task_due_date" (selectedChange)="update_due_date($event,item)"></mat-calendar>
+                </div>
+            </ng-template>
+        </context-menu>
+         
+        <ng-template class="menuList" contextMenuItem let-item>
+            <span (click)="copy_task(item.task_id,item);">
+                <i class="fa fa-files-o" aria-hidden="true"></i> Copy task</span>
+        </ng-template>
+        <ng-template class="menuList" contextMenuItem [subMenu]="movtask" >
+            <span>
+                <i class="fa fa-random" aria-hidden="true"></i> Move task</span>
+         </ng-template>
+        <context-menu #movtask>
+            <ng-template contextMenuItem let-item >
+                <span (click)="move_task(item.task_id,item)" >Right Move</span>
+            </ng-template>
+        </context-menu>
+        <ng-template class="menuList" let-item contextMenuItem>
+            <span  (click)="rightclick_comment(item.task_id,item)">
+                <i class="fa fa-comment-o" aria-hidden="true"></i> Add comment</span>
+            
+        </ng-template>
+        <ng-template class="menuList" contextMenuItem let-item>
+            <span *ngIf="item.frequency_type == 'one_off' else anotherdelete" 
+            mwlConfirmationPopover
+            placement="right"
+            (confirm)="confirmClicked = delete_task(item,'single');"
+            (cancel)="cancelClicked = true" 
+            (click)="delete_task(item,'single');" >
+                <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+            <ng-template #anotherdelete>
+                <span (click)="right_click_delete(item);">
+                    <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+            </ng-template>
+        </ng-template>
+    
+    </context-menu>
+
+
+    <bs-modal #rightclickcomment [keyboard]="false" [backdrop]="'static'">
+        <div class="modal-header">
+            <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+                (click)="close_rightclick_comment();"></button>
+            <h3 style="margin-top: 9px !important; "> Comments </h3>
+        </div>
+        <div class="modal-body">
+            <div class="portlet" style="margin-bottom:0px !important;">
+                <div class="portlet-body  form flip-scroll">
+                    <form #rightcmt>
+                        <div style="padding: 15px;">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            <strong> Add Comment :
+                                                <span class="required">*</span>
+                                            </strong>
+                                        </label>
+                                        <div class="controls">
+                                            <textarea rows="3" name="right_task_comment" class="col-md-12 m-wrap"></textarea>
+                                        </div>
+                                        <div class="pull-right" style="margin-top: 10px;">
+                                            <input type="hidden" name="info" value="{{comment_data}}"/>
+                                            <button type="button" (click)="save_comment(rightcmt);" class="btn blue txtbold"> Add Comments </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </bs-modal>
+<bs-modal #recurrencewindow>
+        <div class="modal-header" >
+                <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;" (click)="recurrence_close();"></button>
+                <h3 style="margin-top: 10px;"> Occurence  </h3>
+            </div>
+            <div class="modal-body">
+                    <div class="portlet" style="margin-bottom:0px !important;">
+                    <div class="portlet-body  form flip-scroll">
+                        <div class="form-group" style="padding: 10px;">
+                            <label class="control-label">Do you want to update Task series or Task occurrence?</label>
+                            <div class="controls paddTop10" >
+                                <label class="radio1 edit_recurr_button btn blue">
+                                    <a id="series_task" href="javascript:void(0);" (click)="recurrence('series',task_detail.master_task_id)" style="color: #fff !important;">Task Series</a>
+                                </label>
+                                <label class="radio1 edit_recurr_button btn blue">
+                                    <a id="ocuurence_task" href="javascript:void(0);" (click)="recurrence('single',task_detail.task_id)" style="color: #fff !important;">Task Occurrence</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  </bs-modal>
+  <bs-modal #popupdeleteoption>
+    <div class="modal-header">
+            <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+                (click)="close_taskpopup_option();"></button>
+            <h3 style="margin-top: 9px !important; "> Delete Task </h3>
+        </div>
+    <div class="modal-body">
+        <div class="portlet">
+            <div class="portlet-body  form flip-scroll">
+    
+                <div class="form-group" style="padding:10px;">
+                    <label class="control-label col-md-12" style="padding-left:0px;padding-bottom: 10px">Do you want to delete the series or only future tasks?</label>
+                    <div class="controls">
+                        <label class="radio1 radio_to_button btn blue">
+                            <a  href="javascript:void(0);" (click)="delete_task('','series')" style="color:#fff !important;">
+                                    Task Series
+                            </a>
+                        </label>
+                        <label class="radio1 radio_to_button btn blue">
+                            <a href="javascript:void(0);" (click)="delete_task('','future');" style="color:#fff !important;">
+                                 Task Future
+                            </a>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</bs-modal>
+<bs-modal #taskactualtime [backdrop]="'static'">
+    <div class="modal-header">
+        <button type="button" class="close close_actual_time_task" (click)="close_actual_time_popup()" style="margin-right: 0px;margin-top: 10px;"></button>
+        <h3 style="margin-top: 9px !important; "> Actual time of task </h3>
+    </div>
+    <div class="modal-body">
+        <div class="portlet">
+            <div class="portlet-body  form flip-scroll" style="padding:10px;">
+                <form #actualtime>
+                <div class="form-group">
+                    <label class="control-label">Enter Actual Time : </label>
+                    <div class="controls">
+                        <input class="onsub m-wrap m-ctrl-small small_input" name="task_actual_time" (blur)="change_actual_time(actualtime)" placeholder="0h" value=""
+                            type="text" />
+                        <span class="word_set">time (ex. 130 for 1h30)</span>
+                    </div>
+                </div>
+                </form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" [disabled]="on_complete_actual_time == 0" (click)="save_actual_time(actualtime);" class="btn blue txtbold"> Save </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</bs-modal>
+
+<bs-modal #rightclickdelete>
+            <div class="modal-header">
+                    <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+                        (click)="close_right_click_delete();"></button>
+                    <h3 style="margin-top: 9px !important; "> Delete Task </h3>
+                </div>
+            <div class="modal-body">
+                <div class="portlet">
+                    <div class="portlet-body  form flip-scroll">
+            
+                        <div class="form-group" style="padding:10px;">
+                            <label class="control-label col-md-12" style="padding-left:0px;padding-bottom: 10px">Do you want to delete the series, this occurrence or only future tasks?</label>
+            
+                            <div class="controls">
+                                <label class="radio1 radio_to_button btn blue">
+                                    <a  href="javascript:void(0);" (click)="delete_task('','series')" style="color:#fff !important;">
+                                            Task Series
+                                    </a>
+                                </label>
+                                <label class="radio1 radio_to_button btn blue">
+                                    <a  href="javascript:void(0);" (click)="delete_task('','occurrence')" style="color:#fff !important;">
+                                            Task Occurrence
+                                    </a>
+                                </label>
+                                <label class="radio1 radio_to_button btn blue">
+                                    <a href="javascript:void(0);" (click)="delete_task('','future');" style="color:#fff !important;">
+                                         Task Future
+                                    </a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </bs-modal>

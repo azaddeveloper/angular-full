@@ -1,0 +1,615 @@
+<header></header>
+<sidebar></sidebar>
+<!-- BEGIN PAGE CONTAINER-->
+<div class="container-fluid rmBg" style="padding-left:20px;" >
+   <div class="mainpage-container1">
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row">
+            <input type="hidden" name="from" id="from" value=""/>
+         <div class="col-md-12" style="padding-right: 0px !important;">
+            <!-- BEGIN BORDERED TABLE PORTLET--> <!-- main block -->
+            <div class="portlet box list_cus page-background customer_module_divide_first" [ngStyle]="{'width': external_user_access == 1 ? '75%' : '', 'float' : external_user_access ?'left':'' }" style="margin-bottom:40px !important;">
+               <div class="col-md-12" style="margin-bottom:9px;">
+                  <a  [routerLink]="['/customer']" class="pull-left " style="padding-top: 8px;"> Return to Customer List</a> 
+                  
+                  <button type="button" [disabled]="customer_access == 0" mwlConfirmationPopover placement="bottom"
+                  (confirm)="confirmClicked = delete_customer(customerData['customer_id']);"
+                  (cancel)="cancelClicked = true" class="btn btn-common-red pull-right margin5 btn-new" style="margin-right:-4px;"
+                  data-toggle="confirmation" data-placement="left" style="background-color: #ef2d1f !important;color: #fff !important;"> Delete</button>
+                  <button type="button" [disabled]="customer_access == 0" class="btn btn-common-blue pull-right margin5 btn-new" (click)="open_editCustomer();" style="    background-color: #007fbe !important;color: #fff !important;" > Edit</button>
+                  
+                
+                  <button type="button" [disabled]="customer_access == 0"  mwlConfirmationPopover placement="bottom"
+                  (confirm)="confirmClicked = changeStatus(customerData['customer_id'],'inactive')"
+                  (cancel)="cancelClicked = true" *ngIf="customerData['status'] == 'active' else  active" id="deactive" class="btn white pull-right margin5  btn-new height34"  > Deactivate</button> 
+                  <ng-template #active>
+                    <button type="button" [disabled]="customer_access == 0" href="javascript:void(0)"  mwlConfirmationPopover placement="bottom"
+                     (confirm)="confirmClicked = changeStatus(customerData['customer_id'],'active')"
+                     (cancel)="cancelClicked = true" id="active" class="btn white pull-right margin5  btn-new height34" > Activate</button>
+                  </ng-template>
+
+               </div>
+               <div  class="col-md-12 ">
+                  <div>
+                     <div class="row cus_info" style="margin-left: -5px;">
+                        <div class="col-md-12 cus_heading" style="width:99.1%;">
+                           <div class="col-md-6">
+                              <h5 class='txtbold' style="font-size:18px;"> <b>{{ customerData['customer_name']}}</b> <span style="font-size: 15px;">({{ customerData['customer_id']}}) </span> </h5>
+                           </div>
+                           <div class="col-md-6" style="padding-top:10px;"> </div>
+                        </div>
+                     </div>
+                     <div class="row" style="padding-top: 10px; margin-left: -2px;">
+                        <div class="row">
+                           <div class="col-md-6">
+                              <div class="col-md-6">
+                                 <label class="control-label txtbold"> <b>External ID</b>
+                                 </label>
+                              </div>
+                              <div class="col-md-6">
+                                 {{customerData['external_id'] }}
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="col-md-6">
+                                 <label class="control-label txtbold"> <b>Contact</b>
+                                 </label>
+                              </div>
+                              <div class="col-md-6">
+                                 {{ customerData['first_name'] }}
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-6">
+                              <div class="col-md-6">
+                                 <label class="control-label txtbold"> <b>Owner</b>
+                                 </label>
+                              </div>
+                              <div class="col-md-6">
+                                 {{customerData['ownername'] }}
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="col-md-6">
+                                 <label class="control-label txtbold"> <b>Phone</b>
+                                 </label>
+                              </div>
+                              <div class="col-md-6">
+                                 {{ customerData['phone'] }}
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-6">
+                              <div class="col-md-6">
+                                 <label class="control-label txtbold"> <b>Parent customer</b>
+                                 </label>
+                              </div>
+                              <div class="col-md-6">
+                                 {{ customerData['name'] }}
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="col-md-6">
+                                 <label class="control-label txtbold"> <b>Email</b>
+                                 </label>
+                              </div>
+                              <div class="col-md-6">
+                                 {{customerData['email'] }}
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- Project part -->
+               <div class="row margin5">
+                  <div class="col-md-12 cus_heading margin5" style="width:95%;margin-left: 24px;">
+                     <div class="col-md-6">
+                        <h5 class='txtbold'>
+                           <b>Projects</b>
+                        </h5>
+                     </div>
+                     <div class="col-md-6" style="padding-top:10px;"> <span>
+                        <a class="pull-right" href="javascript:void(0);" (click)="hideproject = !hideproject; "  > <span>
+                        <b>
+                        <i class="icon-minus" *ngIf="!hideproject" style="color: #fff !important;"></i> <i class="icon-plus" *ngIf="hideproject" style="color: #fff !important;"></i> </b>
+                        </span>
+                        </a>
+                        </span>
+                        <span>
+                        <button type="button" (click)="open_addProject();"  class="subsection_btn btn-new unsorttd customer_project"  > Add Project</button> </span>
+                     </div>
+                  </div>
+                  <div class=" col-md-12 customtable table-scrollable margin5 projectData_1" id="projectData_1"  >
+                     <div id='page_project' [hidden]="hideproject">
+                        <div class="">
+                           <table class="table table-striped table-hover table-condensed flip-content" id="projectTable" >
+                              <thead class="flip-content">
+                                 <tr>
+                                    <th>Project Name</th>
+                                    <th>Status</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th *ngIf="pricing_module_status">Estimated Cost</th>
+                                    <th *ngIf="pricing_module_status">Estimated Revenue</th>
+                                    <th *ngIf="pricing_module_status">Committed Revenue</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let pro of projects | paginate: {  id:'server', itemsPerPage: 20, currentPage: project_page_number, totalItems:total_customer_project      };">
+                                    <td [routerLink]="['/editproject/',pro.encode_id]" style="cursor: pointer;">{{ pro.project_title }}</td>
+                                    <td>{{ pro.project_status }}</td>
+                                    <td>{{ pro.project_start_date }}</td>
+                                    <td>{{ pro.project_end_date }}</td>
+                                    <td *ngIf="pricing_module_status">
+                                        <span *ngIf=" pro.is_owner == 1 || pro.is_project_owner == 1   else estimated_costelse">
+                                            {{currency}}{{ convert_price(pro.estimated_cost) }}</span>
+                                        <ng-template #estimated_costelse>
+                                            <td>-</td>
+                                        </ng-template>
+                                    </td>
+                                    <td *ngIf="pricing_module_status">
+                                        <span *ngIf=" pro.is_owner == 1 || pro.is_project_owner == 1   else estimated_revenue">
+                                           {{currency}}{{ convert_price(pro.estimated_revenue) }}</span>
+                                        <ng-template #estimated_revenue>-</ng-template>
+                                    </td>
+                                    <td *ngIf="pricing_module_status">
+                                        <span *ngIf=" pro.is_owner == 1 || pro.is_project_owner == 1   else committed_revenue">
+                                            {{currency}}{{ convert_price(pro.committed_revenue) }}</span>
+                                        <ng-template #committed_revenue>-</ng-template>
+                                    </td>
+                                    </tr>
+                                    <tr *ngIf="projects == ''">
+                                        <td colspan="7">No projects found.</td>
+                                     </tr>
+                              </tbody>
+                           </table>
+                           <div class="has-text-centered" style="text-align: center;margin-top: 10px;">
+                              <pagination-controls (pageChange)="customer_project_pagination($event)" previousLabel="Pre" directionLinks="true"
+                                 autoHide="true"
+                                 id="server"></pagination-controls>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- Customer Task -->
+               <div class="row margin5" style="margin-bottom: 21px">
+                  <div class="col-md-12 cus_heading margin5" style="width:95%;margin-left: 24px;">
+                     <div class="col-md-6">
+                        <h5 class="txtbold pull-left"><b>Tasks</b></h5>
+                     </div>
+                     <div class="col-md-6" style="padding-top:10px"> <a class="pull-right"  href="javascript:void(0);" id="expand_data_2" (click)="hidetask = !hidetask; " > <span id="expand_2"><b><i class="icon-minus" *ngIf="!hidetask" style="color: #fff !important;"></i> <i class="icon-plus" *ngIf="hidetask" style="color: #fff !important;"></i> </b></span> </a>
+                        <span>
+                        <button type="button" class="subsection_btn btn-new unsorttd" style="float:right;margin-right:10px;padding:1px 9px 2px 8px; margin-top:-3px;" (click)="open(taskpopupdata);" > Add Task</button> </span>
+                     </div>
+                  </div>
+                  <div class="task" [hidden]="hidetask">
+                     <div class="customtable table-scrollable form-horizontal taskData_1"    >
+                        <div class="col-md-12 customer_task_filter" id="task_filter_option"   style="display:  'block'; ">
+                           <form [formGroup]="taskfilterform">
+                              <div class="col-md-3" style="padding-left: 5px !important;"> <input class="onsub m-wrap cus_input " (keyup)="taskformfilter();" formControlName="task_search" name="" id="task_search" placeholder="Search" value="" type="text"  tabindex="1" style="margin-top: 3px;padding: 0px 6px 4px 6px !important;"/> </div>
+                              <div class="col-md-2">
+                                 <label class="control-label col-md-5" style="font-weight: 600 !important;font-size:13px;padding-left: 0px;padding-top: 4px !important;">Status </label> 
+                                 <select class="col-md-7 m-wrap no-margin radius-b" formControlName="statusid" (change)="taskformfilter();" name="customer_task_status_id" id="customer_task_status_id" tabindex="3" style="margin-top: 3px !important;height:25px !important;padding:1px;" >
+                                    <option value="0">Open</option>
+                                    <option *ngFor="let status of task_status" value="{{ status.task_status_id }} ">{{status.task_status_name}}</option>
+                                 </select>
+                              </div>
+                              <div class="col-md-3">
+                                 <label class="control-label col-md-6" style="font-weight: 600 !important;font-size:13px;padding-top: 4px !important;">Owner </label> 
+                                 <select class="col-md-6 m-wrap no-margin  radius-b" formControlName="owner_id" (change)="taskformfilter();" name="owner_id" id="owner_id" tabindex="3" style="margin-top: 3px !important;height:25px !important;padding:1px;" >
+                                    <option value="0">All</option>
+                                    <option  *ngFor="let user of form_user;"  value="{{user.user_id }}">{{ user.first_name +" " + user.last_name }}</option>
+                                 </select>
+                              </div>
+                              <div class="col-md-3">
+                                 <label class="control-label col-md-6" style="font-weight: 600 !important;font-size:13px;padding-top: 4px !important;">Allocated </label> 
+                                 <select class="col-md-6 m-wrap no-margin  radius-b" formControlName="allocated_id" (change)="taskformfilter();" name="allocated_id" id="allocated_id" tabindex="3" style="margin-top: 3px !important;height:25px !important;padding:1px;" >
+                                    <option value="0">All</option>
+                                    <option  *ngFor="let user of form_user;"   value="{{user.user_id }}">{{ user.first_name +" " + user.last_name }}</option>
+                                 </select>
+                              </div>
+                              <div class="col-md-1">
+                                 <div class="col-md-6">
+                                    <a href="javascript:void(0)" (click)="task_form_filter_reset();" class="btn blue btn-new pull-right line_height" style="margin-top: 3px;margin-right: -45px;"> Reset</a> 
+                                 </div>
+                              </div>
+                           </form>
+                        </div>
+                        <div id="task_page">
+                           <div class="col-md-12" id="task_data" style="padding-left: 10px !important;padding-right: 20px !important;">
+                              <table class="table table-striped table-hover table-condensed flip-content margin5" id="taskTable">
+                                 <thead class="flip-content">
+                                    <tr>
+                                       <th>Task Name</th>
+                                       <th>Status</th>
+                                       <th>Scheduled date</th>
+                                       <th>Due Date</th>
+                                       <th>Allocated to</th>
+                                       <th>Owner</th>
+                                       <th>Action</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr *ngFor="let task_list of tasks | paginate: {  id:'server1', itemsPerPage: 20, currentPage: task_page_number, totalItems:total_customer_task      };">
+                                       <td [contextMenu]="contextmenu" [contextMenuSubject]="task_list"  (click)="recurrence_open(task_list);" *ngIf="task_list.frequency_type =='recurrence' "   >{{ task_list.task_title }}
+                                          <a class="tooltips" data-placement="right" data-original-title="Recurring task" ><i class="icon-refresh cmicn" > </i></a>
+                                       </td>
+                                       <td [contextMenu]="contextmenu" [contextMenuSubject]="task_list"  *ngIf="task_list.frequency_type =='one_off' "  (click)="open(task_list)" >{{ task_list.task_title }}
+                                           <a class="tooltips" data-placement="right" data-original-title="Task disconnected from series"  href="javascript:void(0)" > <em class="linethrought" *ngIf="task_list.master_task_id != '0'"><i class="icon-refresh cmicn" > </i></em></a>
+                                       </td>
+                                       
+                                       <td> <span class="label-status label label-sm label-{{replace_space(task_list.task_status_name)}}">{{ task_list.task_status_name }}</span></td>
+                                       <td *ngIf="task_list.task_scheduled_date != '0000-00-00' else taskscheduledelse">  {{ task_list.task_scheduled_date }}  </td>
+                                       <ng-template #taskscheduledelse>
+                                          <td>-</td>
+                                       </ng-template>
+                                       <td *ngIf="task_list.task_due_date != '0000-00-00' else taskdueelse">  {{ task_list.task_due_date }}  </td>
+                                       <ng-template #taskdueelse>
+                                          <td>-</td>
+                                       </ng-template>
+                                       <td>{{ task_list.allocated_user_name }}</td>
+                                       <td>{{ task_list.owner_name }}</td>
+                                       <td *ngIf="task_list.frequency_type == 'one_off' " ><a href="javascript:void(0);" mwlConfirmationPopover placement="bottom"
+                                        (confirm)="confirmClicked = delete_task(task_list,'single');"
+                                        (cancel)="cancelClicked = true" 
+                                          id="delete_task_"> <i class="icon-trash tmsticn" style="transform: scale(0.75);"></i> </a>
+                                       </td>
+                                       <td *ngIf="task_list.frequency_type == 'recurrence' " ><a href="javascript:void(0);" (click)="right_click_delete(task_list,'from_delete');"> <i class="icon-trash tmsticn" style="transform: scale(0.75);"></i> </a>
+                                       </td>
+                                    </tr>
+                                    <tr *ngIf="tasks.length == 0 ">
+                                       <td colspan="7">No tasks found.</td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                              <div class="has-text-centered" style="text-align: center;margin-top: 10px;">
+                                 <pagination-controls (pageChange)="customer_task_pagination($event)" previousLabel="Pre" directionLinks="true"
+                                    autoHide="true"
+                                    id="server1"></pagination-controls>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- main block end -->
+            <!-- external user -->
+            <div *ngIf='external_user_access' class="customer_module_divide_second">
+               <div class="col-md-12 panel-heading_pro " (click)="hide_invite_customer=!hide_invite_customer">
+                  <a href="javascript:void(0);">
+                     <span *ngIf="!hide_invite_customer else righticon"> <i class="icon-chevron-down default_color"></i> </span>
+                     <ng-template #righticon>
+                        <span>
+                        <i class="icon-chevron-right default_color"></i> </span>
+                     </ng-template>
+                     <label class="control-label default_color">External Users</label> 
+                  </a>
+               </div>
+               <div class="portlet-body form flip-scroll radius-b" [hidden]="hide_invite_customer" style="border-radius: 7px !important;background-color: #F0F0F0;">
+                  <div id="customer_user_list">
+                     <div class="row">
+                        <div class="col-md-12" style="padding-top: 10px;">
+                           <div class="people-list">
+                              <ul class="list-unstyled" id="add_new_customer_user">
+                                 <li *ngFor="let cuser of customer_users" class="customer-user_li">
+                                    <div class="people-block">
+                                       <div class="people-img">
+                                          <img *ngIf="cuser.profile_image !=''  else imagenull " src="{{Image_url+'upload/user/'+cuser.profile_image}}" class="img-polaroid img-circle"> 
+                                          <ng-template #imagenull>
+                                             <img src="{{Image_url+'upload/user/no_image.jpg'}}" class="img-polaroid img-circle"> 
+                                          </ng-template>
+                                          <a  mwlConfirmationPopover class="invite_user_delete"
+                                          placement="bottom"
+                                          (confirm)="confirmClicked = deleteCustomerUser(cuser.user_id)"
+                                          (cancel)="cancelClicked = true" *ngIf="cuser.is_customer_user_task == 0 && is_owner == 1  " href="javascript:void(0)"> <i class="stripicon iconredcolse"></i> </a>
+                                          <p> {{ cuser.first_name + " "+ cuser.last_name}}</p>
+                                       </div>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                           <div class="people-block">
+                              <a class="btn btn-new green" href="javascript:void(0);"(click)="open_inviteCustomer();" >Invite Customers</a> 
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- exter user end -->
+            <!-- END BORDERED TABLE PORTLET--> 
+         </div>
+      </div>
+      <!-- END PAGE CONTENT-->
+   </div>
+</div>
+<!-- END PAGE CONTAINER-->
+<!-- Footer here -->
+<footer-layout></footer-layout>
+<!-- Edit Customer Mode -->
+<bs-modal #editCustomer [keyboard]="false" [backdrop]="'static'"> 
+<div class="modal-header">
+   <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+      (click)="close_editCustomer();"></button> 
+   <h3 style="margin-top: 9px !important; "> Customer </h3>
+</div>
+<div class="modal-body">
+   <div class="portlet">
+      <div class="portlet-body  form flip-scroll" style="padding:10px;">
+         <div class="row form-horizontal" style="    margin-left: 10px; margin-right: 10px;">
+            <form [formGroup]="customerDataform">
+               <div class="form-group col-md-6">
+                  <label class="control-label">
+                  <strong>Name</strong>
+                  </label>
+                  <div class="controls">
+                     <input class="onsub m-wrap cus_input " formControlName="customer_name" name="customer_name" placeholder="Enter Name" type="text"
+                        tabindex="1" />
+                     <p *ngIf="customerDataform.get('customer_name').hasError('required')" class="help-inline"> This field is required.
+                     </p>
+                  </div>
+               </div>
+               <div class=" form-group col-md-6" style="margin-left: 0px;">
+                  <label class="control-label">
+                  <strong>External ID</strong>
+                  </label>
+                  <div class="controls">
+                     <input class="onsub m-wrap cus_input" formControlName="customer_external_id" name="customer_external_id" id="customer_external_id"
+                        placeholder="External ID" value="" type="text" tabindex="1" /> 
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <label class="control-label" style="margin-left: -15px"> <strong>Contact</strong>
+                  </label>
+               </div>
+               <div class="col-md-12 " style="padding: 0px !important;">
+                  <div class="form-group controls col-md-6"> <input class="onsub m-wrap cus_input" formControlName="first_name" name="first_name" id="first_name" placeholder="First name"
+                     value="" type="text" tabindex="1" /> </div>
+                  <div class="form-group controls col-md-6" style="margin-left: 0px;"> <input class="onsub m-wrap cus_input" formControlName="last_name" name="last_name" id="last_name" placeholder="Last Name"
+                     value="" type="text" tabindex="1" /> </div>
+               </div>
+               <div class="col-md-12 " style="padding: 0px !important; margin-left: 0px;">
+                  <div class="form-group controls col-md-6" style="margin-top:13px;">
+                     <input class="onsub m-wrap cus_input" formControlName="email" name="email" id="email" placeholder="Email address" value=""
+                        type="text" tabindex="1" />
+                     <p *ngIf="customerDataform.get('email').hasError('required')" class="help-inline"> Please enter a valid email address.
+                     </p>
+                  </div>
+                  <div class="form-group controls col-md-6" style="padding-top: 10px; margin-left: 0px;"> <input class="onsub m-wrap cus_input" formControlName="phone" name="phone" id="phone" placeholder="Phone" value="" type="text"
+                     tabindex="1" />
+                  </div>
+               </div>
+               <div class="form-group col-md-6">
+                  <label class="control-label">
+                  <strong>Internal Owner</strong>
+                  </label>
+                  <select class="col-md-12 m-wrap no-margin  radius-b" formControlName="internal_owner" name="internal_owner" id="internal_owner"
+                     tabindex="3">
+                     <option value="0">Please Select</option>
+                     <option *ngFor="let user of form_user;" value="{{user.user_id }}">{{ user.first_name +" " + user.last_name }}</option>
+                  </select>
+               </div>
+               <div class="form-group col-md-6" style="margin-left: 0px;">
+                  <label class="control-label">
+                  <strong>Parent Customer</strong>
+                  </label>
+                  <select class="col-md-12 m-wrap no-margin  radius-b" formControlName="parent_customer_id" name="parent_customer_id" id="parent_customer_id"
+                     tabindex="3">
+                     <option value="0">Please Select</option>
+                     <option *ngFor="let cust of form_customer_list;" value="{{ cust.customer_id}}">{{ cust.customer_name }}</option>
+                  </select>
+               </div>
+               <div class="pull-right col-md-12"> <button class="btn blue txtbold" style="margin-left:-15px;" id="customer_save" type="submit" [disabled]="!customerDataform.valid"
+                  (click)="update_customer(customerDataform.value);"> <i class="stripicon icosave"></i>Update Customer </button> <button class="btn red txtbold" id="close_customer_div" type="button"> <i class="stripicon icocancel"></i>Cancel </button> 
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+</bs-modal>
+<!-- Add Project Model -->
+<bs-modal #addProject [keyboard]="false" [backdrop]="'static'"> 
+<div class="modal-header">
+   <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+      (click)="close_addProject();"></button> 
+   <h3 style="margin-top: 9px !important; "> Add Project </h3>
+</div>
+<div class="modal-body">
+   <div class="portlet">
+      <div class="portlet-body  form flip-scroll" style="padding:10px;">
+         <div class="row form-horizontal" style="    margin-left: 10px; margin-right: 10px;">
+            <form [formGroup]="projectDataform">
+               <div class="form-group col-md-6">
+                  <label class="control-label">
+                  <strong>Project Name</strong>
+                  </label>
+                  <div class="controls">
+                     <input class="onsub m-wrap cus_input " formControlName="project_name" name="project_name" placeholder="Enter Project Name"
+                        type="text" tabindex="1" />
+                     <p *ngIf="projectDataform.get('project_name').hasError('required')" class="help-inline"> This field is required.
+                     </p>
+                  </div>
+               </div>
+               <div class="pull-right col-md-12"> <button class="btn blue txtbold" id="customer_save" type="submit" [disabled]="!projectDataform.valid" (click)="addProjectData(projectDataform.value);"> Add Project </button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+</bs-modal>
+<!-- Invite Customer Mode; -->
+<bs-modal #inviteCustomer [keyboard]="false" [backdrop]="'static'"> 
+<div class="modal-header">
+   <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+      (click)="close_inviteCustomer();"></button> 
+   <h3 style="margin-top: 9px !important; "> External User Details </h3>
+</div>
+<div class="modal-body">
+   <div class="portlet">
+      <div class="portlet-body  form flip-scroll" style="padding:10px;">
+         <div class="row form-horizontal" style="    margin-left: 10px; margin-right: 10px;">
+            <form [formGroup]="inviteCustomerform">
+               <div class="row">
+                  <div class=" col-md-6">
+                     <label class="control-label">
+                     <strong>First Name<span class="required" aria-required="true">*</span></strong> </label>
+                     <div class="controls">
+                        <input class="onsub m-wrap cus_input " formControlName="first_name" name="first_name" placeholder="First Name"
+                           type="text" tabindex="1" />
+                        <p *ngIf="inviteCustomerform.get('first_name').hasError('required') && inviteCustomerform.get('first_name').touched" class="help-inline"> This field is required.
+                        </p>
+                     </div>
+                  </div>
+                  <div class=" col-md-6" >
+                     <label class="control-label">
+                     <strong>Last Name<span class="required" aria-required="true">*</span></strong> </label>
+                     <div class="controls">
+                        <input class="onsub m-wrap cus_input " formControlName="last_name" name="last_name" placeholder="Last Name"
+                           type="text" tabindex="1" />
+                        <p *ngIf="inviteCustomerform.get('last_name').hasError('required') && inviteCustomerform.get('last_name').touched" class="help-inline"> This field is required.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="col-md-12 paddTop10">
+                     <label class="control-label"><strong>Email</strong><span class="required" aria-required="true">*</span> </label> 
+                     <div class="controls">
+                        <input class="onsub m-wrap cus_input valid" formControlName="customer_user_mail"   placeholder="Email Address" value="" type="text" tabindex="1" aria-required="true" aria-describedby="customer_user_mail-error" aria-invalid="false"> 
+                        <p *ngIf="inviteCustomerform.get('customer_user_mail').hasError('required') && inviteCustomerform.get('customer_user_mail').touched" class="help-inline"> This field is required.
+                        </p>
+                        <p *ngIf="inviteCustomerform.get('customer_user_mail').hasError('pattern') && inviteCustomerform.get('customer_user_mail').touched" class="help-inline"> This field not valid email.
+                        </p>
+                        <p *ngIf="inviteCustomerform.get('customer_user_mail').errors && inviteCustomerform.get('customer_user_mail').errors.exist" class="help-inline">
+                                There is an existing account associated with this email.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 margin-top-20" style="margin-left: -16px;"> <button class="btn blue txtbold" id="customer_save" type="submit" [disabled]="!inviteCustomerform.valid" (click)="inviteCustomertData(inviteCustomerform.value);">Send Invite</button> <button class="btn red txtbold" (click)="close_inviteCustomer();" aria-hidden="true" type="button">Cancel </button> </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+</bs-modal>
+<!-- Recurring Task check model -->
+<bs-modal #recurrencewindow>
+      <div class="modal-header" >
+              <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;" (click)="recurrence_close();"></button>
+              <h3 style="margin-top: 10px;"> Occurence  </h3>
+          </div>
+          <div class="modal-body">
+                  <div class="portlet" style="margin-bottom:0px !important;">
+                  <div class="portlet-body  form flip-scroll">
+                      <div class="form-group" style="padding: 10px;">
+                          <label class="control-label">Do you want to update Task series or Task occurrence?</label>
+                          <div class="controls paddTop10" >
+                              <label class="radio1 edit_recurr_button btn blue">
+                                  <a id="series_task" href="javascript:void(0);" (click)="recurrence('series',task_detail.master_task_id)" style="color: #fff !important;">Task Series</a>
+                              </label>
+                              <label class="radio1 edit_recurr_button btn blue">
+                                  <a id="ocuurence_task" href="javascript:void(0);" (click)="recurrence('single',task_detail.task_id)" style="color: #fff !important;">Task Occurrence</a>
+                              </label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+</bs-modal>
+
+
+  <!-- context menu start -->
+  <context-menu #contextmenu>
+       
+      
+       
+      <ng-template class="menuList" contextMenuItem [subMenu] = 'taskduedate' >
+          <span>
+              <i class="fa fa-calendar" aria-hidden="true"></i> Set due date</span>
+      </ng-template>
+      <context-menu #taskduedate>
+          <ng-template contextMenuItem let-item passive="true" >
+              <div style="margin: -6px -14px !important;" class="due_date_picker">
+                  <mat-calendar [selected]="item.task_due_date" (selectedChange)="update_due_date($event,item)"></mat-calendar>
+              </div>
+          </ng-template>
+      </context-menu>
+      <ng-template class="menuList" contextMenuItem [subMenu]="status1" >
+            <span>
+                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Change status</span>
+        </ng-template>
+        <context-menu #status1>
+            <ng-template *ngFor="let s of task_status" contextMenuItem let-item (execute)="right_click_change_status($event.item.task_id,s.task_status_id,$event.item)">{{s.task_status_name}}</ng-template>
+        </context-menu>
+    <ng-template class="menuList" contextMenuItem let-item>
+          <span (click)="copy_task(item.task_id,item);">
+              <i class="fa fa-files-o" aria-hidden="true"></i> Copy task</span>
+      </ng-template>
+      <ng-template class="menuList" contextMenuItem [subMenu]="taskscheduleddate" >
+            <span>
+                <i class="fa fa-random" aria-hidden="true"></i> Move task</span>
+        </ng-template>
+        <context-menu #taskscheduleddate>
+            <ng-template contextMenuItem let-item passive="true" >
+                <div style="margin: -6px -14px !important;" class="due_date_picker">
+                    <mat-calendar [selected]="item.task_scheduled_date" (selectedChange)="update_scheduled_date($event,item)"></mat-calendar>
+                </div>
+            </ng-template>
+      </context-menu>
+      <ng-template class="menuList" contextMenuItem let-item>
+          <span *ngIf="item.frequency_type == 'one_off' else anotherdelete" 
+          mwlConfirmationPopover
+          placement="right"
+          (confirm)="confirmClicked = delete_task(item,'single');"
+          (cancel)="cancelClicked = true" 
+          (click)="delete_task(item,'single');" >
+              <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+          <ng-template #anotherdelete>
+              <span (click)="right_click_delete(item);">
+                  <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+          </ng-template>
+      </ng-template> 
+  
+  </context-menu>
+
+  <bs-modal #rightclickdelete>
+    <div class="modal-header">
+            <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+                (click)="close_right_click_delete();"></button>
+            <h3 style="margin-top: 9px !important; "> Delete Task </h3>
+        </div>
+    <div class="modal-body">
+        <div class="portlet">
+            <div class="portlet-body  form flip-scroll">
+    
+                <div class="form-group" style="padding:10px;">
+                    <label class="control-label col-md-12" style="padding-left:0px;padding-bottom: 10px">Do you want to delete the series, this occurrence or only future tasks?</label>
+    
+                    <div class="controls">
+                        <label class="radio1 radio_to_button btn blue">
+                            <a  href="javascript:void(0);" (click)="delete_task('','series')" style="color:#fff !important;">
+                                    Task Series
+                            </a>
+                        </label>
+                        <label class="radio1 radio_to_button btn blue">
+                            <a  href="javascript:void(0);" (click)="delete_task('','occurrence')" style="color:#fff !important;">
+                                    Task Occurrence
+                            </a>
+                        </label>
+                        <label *ngIf="hide_task_future" class="radio1 radio_to_button btn blue">
+                            <a href="javascript:void(0);" (click)="delete_task('','future');" style="color:#fff !important;">
+                                 Task Future
+                            </a>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</bs-modal>

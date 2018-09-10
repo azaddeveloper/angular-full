@@ -1,0 +1,315 @@
+<header></header>
+<sidebar></sidebar>
+
+<div class="section-frame container-fluid margin-bottom-20">
+    <div class="connectedList ui-sortable mainpage-container">
+            <!-- BEGIN PAGE CONTENT-->
+            <!--<div class="row-fluid">-->
+                <input type="hidden" name="from" id="from" value=""/>
+              <div id="sortableItem_0" class="sortableList-item col-md-6 fixheight">
+                <!-- BEGIN BORDERED TABLE PORTLET-->
+                <div data-parent="sortableItem_0" class="portlet box blue">
+                  <div class="portlet-title">
+                    <div class="caption">Task to do list </div>
+                  </div>
+                  <div class="portlet-body minimumhight portlet-minhgt flip-scroll">
+                      <div class="table-toolbar">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <a class="btn btn-common-blue" href="javascript:void(0)" (click)="open(new_task_info,'todo');" > Add Task <i class="stripicon addicon"></i> </a>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="text-right">
+                                        <div class="controls2">
+                                             <select name="team_task_priority" class="small m-wrap radius-b" (change)="filter_apply();" [(ngModel)]="team_priority" >
+                                                <option value="">Select Priority</option>
+                                                <option value="None" >None</option>
+                                                <option value="Low">Low</option>
+                                                <option value="Medium">Medium</option>
+                                                <option value="High">High</option>
+                                            </select>
+                                            <select name="team_duration" class="small m-wrap radius-b" (change)="filter_apply();" [(ngModel)]="team_duration" >
+                                                <option value="today" >Today</option>
+                                                <option value="this_week">This Week</option>
+                                                <option value="next_week">Next Week</option>
+                                                <option value="this_month">This Month</option>
+                                                <option value="overdue">Overdue</option>
+                                                <option value="backlog">Back Log</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                     </div>
+    
+                    <div class="customtable table-scrollable scrollbaar" style="height:320px;overflow-y: scroll;overflow-x: hidden">
+                            <table id="filtertab1"  class="table tabrd table-striped table-hover table-condensed flip-content ">
+                                    <thead class="flip-content">
+                                      <tr>
+                                        <th>Task</th>
+                                        <th>Due Date</th>
+                                        <th>Scheduled Date</th>
+                                        <th>Priority</th>
+                                        <th class="hidden-480">Allocated</th>
+                                        <th>Status</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let list of todo_list">
+                                            <td>
+                                                    <a href="javascript:void(0)" tooltipPlacement="right" tooltip="{{list.task_title}}" *ngIf="list.frequency_type =='recurrence' " (click)="recurrence_open(list,'todo');" >{{string_length(list.task_title) | capitalizeFirst}}</a>
+                                                    <a href="javascript:void(0)" tooltipPlacement="right" tooltip="{{list.task_title}}" *ngIf="list.frequency_type =='one_off' "  (click)="open(list,'todo')">{{string_length(list.task_title) |capitalizeFirst}}</a>
+                                            </td>
+                                            <td>
+                                                    <mat-form-field style="width: 78px !important;">
+                                                            <input matInput [matDatepicker]="picker1"  [value]="list.task_due_date" (dateChange)="change_due_date($event,list)">
+                                                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                            <mat-datepicker #picker1></mat-datepicker>
+                                                            </mat-form-field>
+                                            </td>
+                                            <td>
+                                                    <mat-form-field style="width: 78px !important;">
+                                                            <input matInput [matDatepicker]="picker2"  [value]="list.task_scheduled_date" (dateChange)="change_scheduled_date($event,list)">
+                                                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                                            <mat-datepicker #picker2></mat-datepicker>
+                                                            </mat-form-field>
+                                            </td>
+                                            <td>{{list.task_priority}}</td>
+                                            <td class="hidden-480">
+                                                    <img tooltipPlacement="left" tooltip="{{list.first_name}} {{list.last_name}}" *ngIf="list.profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{list.profile_image}}"/>
+                                                    <ng-template #otherIcon>
+                                                      <span class="login_logo" tooltipPlacement="left" tooltip="{{list.first_name}} {{list.last_name}}" >{{list.first_name | Initialletters | capitalizeFirst}}{{list.last_name |Initialletters|capitalizeFirst}}</span>
+                                                    </ng-template>
+                                            </td>
+                                            <td><span class="label label-sm label-{{replace_space(list.task_status_name)}}">{{list.task_status_name}}</span></td>
+                                        </tr>
+                                        <tr *ngIf="todo_list == ''">
+                                            <td colspan="6">No record found.</td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                    </div>
+              </div>
+            </div>
+                <!-- END BORDERED TABLE PORTLET-->
+              </div>
+              <div id="sortableItem_1" class="sortableList-item col-md-6 fixheight">
+                <!-- BEGIN BORDERED TABLE PORTLET-->
+                <div data-parent="sortableItem_1" class="portlet box blue">
+                  <div class="portlet-title">
+                    <div class="caption">Task Pending</div>
+                    <!-- <input type="hidden" name="task_pending_page" id="task_pending_page" value="1"/>
+                    <div class="col-md-3" style="margin-bottom:0px;width:49% !important;float:right;margin-top: -3px;">     
+                            <input class="onsub m-wrap large cus_input " name="task_search" id="pending_task_search" placeholder="Search" value="" type="text"  tabindex="1" style="margin-top: 3px;padding: 0px 6px 4px 6px !important;"/>
+                        </div> -->
+                  </div>
+                     
+                  <div class="portlet-body minimumhight portlet-minhgt" >
+                     
+                    <div class="customtable table-scrollable scrollbaar1" style="height:370px;overflow-y: scroll;overflow-x: hidden">
+                      <table id="filtertab2" class="table tabrd table-striped table-hover">
+                        <thead>
+                            
+                          <tr>
+                            <th>Task</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                            <th>Task Owner </th>
+                            <th class="hidden-480">Pending With </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                                <tr *ngFor="let list of pending_task">
+
+                                        <td>
+                                            <a href="javascript:void(0)" tooltipPlacement="right" tooltip="{{list.task_title}}" (click)="recurrence_open(list,'pending');" *ngIf="list.frequency_type =='recurrence' " >{{string_length(list.task_title) | capitalizeFirst}}</a>
+                                            <a href="javascript:void(0)" tooltipPlacement="right" tooltip="{{list.task_title}}" *ngIf="list.frequency_type =='one_off' "  (click)="open(list,'pending')">{{string_length(list.task_title) |capitalizeFirst}}</a>
+                                        </td>
+                                        <td>
+                                          <span class="label label-sm label-{{replace_space(list.task_status_name)}}">{{list.task_status_name}}</span>
+                                        </td>
+                                        <td *ngIf="list.task_due_date !='0000-00-00' else other_due_date">{{list.task_due_date | date:'dd/MM/y'}}</td>
+                                        <ng-template #other_due_date><td>N/A</td></ng-template>
+                                        <td>
+                                          <img tooltipPlacement="left" tooltip="{{list.first_owner_name}} {{list.last_owner_name}}" alt="" *ngIf="list.owner_profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{list.owner_profile_image}}"
+                                          />
+                                          <ng-template #otherIcon>
+                                            <span class="login_logo" tooltipPlacement="left" tooltip="{{list.first_owner_name}} {{list.last_owner_name}}" >{{list.first_owner_name | Initialletters | capitalizeFirst}}{{list.last_owner_name |Initialletters
+                                              |capitalizeFirst}}</span>
+                                          </ng-template>
+                                        </td>
+                                        <td class="hidden-480">
+                                          <img tooltipPlacement="left" tooltip="{{list.allocated_user_first_name}} {{list.allocated_user_last_name}}" *ngIf="list.allocated_user_profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{list.allocated_user_profile_image}}"
+                                          />
+                                          <ng-template #otherIcon>
+                                            <span tooltipPlacement="left" tooltip="{{list.allocated_user_first_name}} {{list.allocated_user_last_name}}" class="login_logo">{{list.allocated_user_first_name | Initialletters | capitalizeFirst}}{{list.allocated_user_last_name
+                                              |Initialletters |capitalizeFirst}}</span>
+                                          </ng-template>
+                                        </td>
+                  
+                                      </tr>
+                                      <tr *ngIf="pending_task == ''">
+                                        <td colspan="5">No record found.</td>
+                                      </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- END BORDERED TABLE PORTLET-->
+              </div>
+              <div id="sortableItem_2" class="sortableList-item col-md-6 fixheight">
+                <!-- BEGIN BORDERED TABLE PORTLET-->
+                <div data-parent="sortableItem_2" class="portlet box blue">
+                  <div class="portlet-title">
+                    <div class="caption">Overdue Tasks </div>
+                    <input type="hidden" name="overdue_task_page" id="overdue_task_page" value="1"/>
+                  </div>
+                  <div class="portlet-body minimumhight portlet-minhgt">
+                    <div class="customtable table-scrollable scrollbaar2" style="height:370px;overflow-y: scroll;overflow-x: hidden" >
+                      <table id="filtertab3" class="table tabrd table-striped table-hover ">
+                        <thead>
+                          <tr>
+                            <th>Task</th>
+                            <th>Due Date</th>
+                            <th>Allocated </th>
+                            <th class="hidden-480">Delay</th>
+                            <th>Priority</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                              <tr *ngFor="let list of overdue_task">
+                                <td>
+                                        <a href="javascript:void(0)" tooltipPlacement="right" tooltip="{{list.task_title}}" (click)="recurrence_open(list,'overdue');" *ngIf="list.frequency_type =='recurrence' " >{{string_length(list.task_title) | capitalizeFirst}}</a>
+                                        <a href="javascript:void(0)" tooltipPlacement="right" tooltip="{{list.task_title}}" *ngIf="list.frequency_type =='one_off' "  (click)="open(list,'overdue')">{{string_length(list.task_title) |capitalizeFirst}}</a>
+                                </td>
+                                <td *ngIf="list.task_due_date !='0000-00-00' else other_due_date">{{list.task_due_date | date:'dd/MM/y'}}</td>
+                                <ng-template #other_due_date><td>N/A</td></ng-template>
+                                <td>
+                                    <img tooltipPlacement="left" tooltip="{{list.first_name}} {{list.last_name}}" alt="" *ngIf="list.profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{list.profile_image}}"/>
+                                    <ng-template #otherIcon>
+                                          <span class="login_logo" tooltipPlacement="left" tooltip="{{list.first_name}} {{list.last_name}}" >{{list.first_name | Initialletters | capitalizeFirst}}{{list.last_name |Initialletters
+                                            |capitalizeFirst}}</span>
+                                        </ng-template>
+                                </td>
+                                <td class="hidden-480">{{get_delay(list.task_due_date)}}</td>
+                                <td>{{list.task_priority}}</td>
+                              </tr>
+                              <tr *ngIf="overdue_task == ''">
+                                  <td colspan="5">No record found.</td>
+                              </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- END BORDERED TABLE PORTLET-->
+              </div>
+              <div id="sortableItem_3" class=" sortableList-item col-md-6 fixheight">
+    <!--</div>-->
+                <!-- BEGIN BORDERED TABLE PORTLET-->
+                <div data-parent="sortableItem_3" class="portlet box blue">
+                  <div class="portlet-title">
+                        <div class="caption" *ngIf="this_week == true" >My Time This Week</div>
+                        <div class="caption" *ngIf="this_week == false">My Time Next Week</div>
+                  </div>
+                  <div class="portlet-body minimumhight portlet-minhgt">
+                    <div *ngFor="let list of team_time_thisweek ">
+                        <div class="progress-loop margin-top-10 clearfix">	  	
+                        <div style="float:left;width:20%"> <span> {{list.day}} </span></div>
+                        <div style="width:60%;float:left;">
+                            <div class="progress">
+                              <div [ngStyle]="{'width': list.ration+'%','background-color':list.prog_clr}" class="progress-bar" role="progressbar"></div>
+                          </div>
+                        </div>
+                        <div class=" text-right">
+                            <span>
+                                    {{list.time_with_format}}/{{list.pro}}
+                            </span>
+                        </div>
+                       </div>
+                    </div>
+                    <div *ngIf="team_time_thisweek == ''">
+                        <div class="progress-loop margin-top-20 clearfix txt-clr"> No task Available</div>
+                    </div>
+                    <div>
+                        <div class="text-right " [hidden]="next">
+                            <a href="javascript:void(0);"  class="btn btn-common-blue" (click)="this_week=false;prevoius=true;next=true;get_nextweek();" > Next Week
+                                <i class="stripicon iconrightarro "></i>
+                            </a>
+                        </div>
+                        <div class="text-right" [hidden]="!prevoius">
+                            <a href="javascript:void(0);" (click)="this_week=true;next=false;prevoius=false;get_previousweek();" class="btn btn-common-blue">
+                                <i class="stripicon iconleftarro "></i> Previous Week 
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- END BORDERED TABLE PORTLET-->
+              </div>
+              </div>
+              <div id="sortableItem_4" class="sortableList-item col-md-6 fixheight">
+                <!-- BEGIN BORDERED TABLE PORTLET-->
+                <div data-parent="sortableItem_4" class="portlet box blue">
+                  <div class="portlet-title">
+                    <div class="caption">Time Allocation For Today </div>
+                  </div>
+                  <div class="portlet-body minimumhight">
+                      <div class="text-center chartdiv ajax_team_time_data" >
+                            <canvas #barCanvas style="margin-top: 30px;"></canvas>
+                      </div>
+                  </div>
+                </div>
+                <!-- END BORDERED TABLE PORTLET-->
+              </div>
+              <div id="sortableItem_5" class="sortableList-item col-md-6 fixheight">
+                <!-- BEGIN BORDERED TABLE PORTLET-->
+                <div data-parent="sortableItem_5" class="portlet box blue">
+                  <div class="portlet-title">
+                    <div class="caption">Time Allocation by Category for Today</div>
+                  </div>
+                  <div class="portlet-body minimumhight">
+                    <!--<div class="customtable">-->
+                        <div class="text-center chartdiv ajax_team_category_data" >
+                                <canvas #barCanvas1 style="margin-top: 30px;"></canvas>
+                        </div>
+                    <!--</div>-->
+                  </div>
+                </div>
+                <!-- END BORDERED TABLE PORTLET-->
+              </div>
+            <!--</div>-->
+            <!-- END PAGE CONTENT-->
+          
+    </div>
+</div>  
+
+<!-- Footer here -->
+<footer-layout></footer-layout>
+
+ <!-- Recurring Task check model -->
+<bs-modal #recurrencewindow>
+        <div class="modal-header" >
+                <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;" (click)="recurrence_close();"></button>
+                <h3 style="margin-top: 10px;"> Occurence  </h3>
+            </div>
+            <div class="modal-body">
+                    <div class="portlet" style="margin-bottom:0px !important;">
+                    <div class="portlet-body  form flip-scroll">
+                        <div class="form-group" style="padding: 10px;">
+                            <label class="control-label">Do you want to update Task series or Task occurrence?</label>
+                            <div class="controls paddTop10" >
+                                <label class="radio1 edit_recurr_button btn blue">
+                                    <a id="series_task" href="javascript:void(0);" (click)="recurrence('series',task_detail.master_task_id)" style="color: #fff !important;">Task Series</a>
+                                </label>
+                                <label class="radio1 edit_recurr_button btn blue">
+                                    <a id="ocuurence_task" href="javascript:void(0);" (click)="recurrence('single',task_detail.task_id)" style="color: #fff !important;">Task Occurrence</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </bs-modal>

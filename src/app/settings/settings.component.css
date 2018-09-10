@@ -1,0 +1,65 @@
+.btn{
+    border-radius: 4px;
+}
+.custom_company_setting{
+    overflow-x: hidden;
+    margin-left: 30px;
+    margin-bottom: 2%;
+    padding-top: 5%;
+    background: #eef1f5;
+}
+.label_des{
+    font-size: 11px !important;
+    color: #23527c !important;
+}
+.form-control{
+    border-radius: 0px !important;
+}
+.separte{
+    border-collapse: separate;
+    border-spacing: 0px 5px;
+}
+#addStatus td{
+    font-size: 13px !important;
+}
+#addStatus td a{
+    font-size: 16px !important;
+}
+.checkbox_setting{
+    margin-top: 10px;   
+}
+.btn-common-blue{
+    height: 33px !important;
+    padding: 4px 12px !important;
+    margin-left: 12px;
+    border-radius: 4px;
+    color: #fff !important;
+}
+.font_weight{
+    font-weight: 700 !important;
+}
+.mat_select{
+    border: 1px solid #ccc;
+    line-height: 30px;
+    border-radius: 5px;
+    padding-left: 5px;
+    columns: #555555;
+}
+.position_initial{
+    position: initial !important;
+}
+
+.edit_div{
+    padding: 19px 20px 20px;background-color: #e5e9ec;height:75px;
+    border-radius: 5px;
+}
+.mat-select-value{
+    padding-left: 5px !important;
+    color: #555 !important;
+}
+.company_force_time{
+    margin-top: 6px;
+}
+.customtable .table thead tr th, .customtable .table tbody tr td{
+    font-size:13px !important;
+}

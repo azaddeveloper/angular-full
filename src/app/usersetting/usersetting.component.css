@@ -1,0 +1,41 @@
+
+.page-footer-fixed .page-container{
+    background: #eef1f5;
+}
+.form-control{
+border-radius: 0px !important;
+}
+.m-wrap.large.select2{
+width: 100% !important;
+}
+.custom_margin_26{
+    margin-top: 5%;
+    margin-left: 60px !important;
+}
+.custom_my_setting{
+    margin-top: 0px !important;
+}
+
+.or{
+    margin-top: 7px !important;
+    float: left;
+    margin-right: 25px;
+}
+.preview_image{
+    width:80px; 
+    height:40px; 
+    display: inline-block; 
+    margin-left: 10%; 
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.btn:hover ,.btn[disabled]{
+    color: white !important;
+    /* text-shadow: none; */
+    background-color: #0088cc !important;
+}
+.position_inherit{
+    position: inherit !important;
+}
+

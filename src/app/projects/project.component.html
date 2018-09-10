@@ -1,0 +1,275 @@
+<header></header>
+<sidebar></sidebar>
+<!-- BEGIN PAGE CONTAINER-->
+<div class="container-fluid rmBg" style="padding-left:20px;padding-right:20px;height: -webkit-fill-available;" >
+    <div class="mainpage-container1">
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN BORDERED TABLE PORTLET-->
+                <div class="portlet box cstmRam page-background">
+                    <div class="portlet-title blue">
+                        <div class="caption">Project List </div>
+                    </div>
+                    <input type="hidden" name="from" id="from" value=""/>
+                    <div class="portlet-body flip-scroll ">
+                        <div class="table-toolbar">
+                            <div class="btn-group" style="float: left;" *ngIf="is_customer_user == 0">
+                                <a class="btn blue btn-new txtbold" href="javascript:void(0)" (click)="open_add_project();">Add Project
+                                    <i class="icon-plus"></i>
+                                </a>
+                            </div>
+                            <form #searchproject>
+                            <div class="btn-group search_project">
+                                <input type="text" class="search form-control" name="search" (keyup)="search_project(searchproject);" placeholder="Search...">
+                                <span class="counter"></span>
+                            </div>
+
+                            <div class="btn-group pull-right">
+                                <select name="duration" id="duration" class=" m-wrap radius-b" (change)="change_status($event.target.value)">
+                                    <option value="Open" selected>All Active Projects</option>
+                                    <option value="Complete">Completed Projects</option>
+                                    <option value="On_hold">Project On Hold</option>
+                                </select>
+                            </div>
+                            </form>
+                        </div>
+                        <div class="customtable table-scrollable" >
+                            <table class="table table-striped table-hover table-condensed flip-content results">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th *ngIf="customer_module_activation == 1">Customer</th>
+                                        <th>Status</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th class="center" width="25%"></th>
+                                        <th width="10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let pro of projects;">
+                                        <td>
+                                            <a href="javascript:void(0);" [routerLink]="['/editproject/',pro.encoded_id]">{{pro.project_title}}</a>
+                                        </td>
+                                        <td *ngIf="pro.customer_name !=null && customer_module_activation == 1; else customerblock">{{pro.customer_name}}</td>
+                                        <ng-template #customerblock><td *ngIf="customer_module_activation ==1">-</td></ng-template>
+                                        <td>{{pro.project_status}}</td>
+                                        <td>{{pro.project_start_date}}</td>
+                                        <td>{{pro.project_end_date}}</td>
+                                        <td class="center">
+                                            <span class="tasklbl pill_cstm">
+                                                <span>Upcoming</span>
+                                                <span class="pill_num" [ngClass]="{yellow:pro.total_upcoming_task !='0',light_cstm:pro.total_upcoming_task == '0'}" >
+                                                    {{pro.total_upcoming_task}}
+                                                </span>
+                                            </span>
+                                            <span class="tasklbl pill_cstm">
+                                                <span>Today</span>
+                                                <span class="pill_num" [ngClass]="{green:pro.total_today_task !='0',light_cstm:pro.total_today_task == '0'}" >
+                                                    {{pro.total_today_task}}
+                                                </span>
+                                            </span>
+                                            <span class="tasklbl pill_cstm">
+                                                <span>Overdue</span>
+                                                <span class="pill_num " [ngClass]="{red:pro.total_overdue_tasks !='0',light_cstm:pro.total_overdue_tasks == '0'}" >
+                                                    {{pro.total_overdue_tasks}}
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0);" [routerLink]="['/editproject/',pro.encoded_id]" *ngIf="pro.project_added_by == login_user_id || pro.is_project_owner == 1 || is_company_owner == 1">
+                                                <i class="icon-pencil prjcstmicn" style="transform: scale(0.75);"></i>
+                                            </a>
+                                            <a href="javascript:void(0);" *ngIf="(pro.project_added_by == login_user_id || pro.is_project_owner == 1 || is_company_owner == 1 ) && pro.delete_status == 0" mwlConfirmationPopover
+                                                placement="left"
+                                                (confirm)="confirmClicked = delete_project(pro.project_id,'delete');"
+                                                (cancel)="cancelClicked = true" >
+                                                <i class="icon-trash prjcstmicn" style="transform: scale(0.75);"></i>
+                                            </a>
+                                            <a href="javascript:void(0);" *ngIf="(pro.project_added_by == login_user_id || pro.is_project_owner == 1 || is_company_owner == 1 ) && pro.delete_status > 0;" (click)="open_delete_project_popup(pro.project_id);">
+                                                <i class="icon-trash prjcstmicn" style="transform: scale(0.75);"></i>
+                                            </a>
+                                            <a  href="javascript:void(0);" *ngIf="is_customer_user == 0" class="tooltips" tooltipPlacement="left" tooltip='Create Copy' mwlConfirmationPopover
+                                                placement="left"
+                                                (confirm)="confirmClicked = copy_project(pro.project_id);"
+                                                (cancel)="cancelClicked = true">
+                                                <i class="icon-copy prjcstmicn" style="transform: scale(0.75);"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="projects.length == 0"><td colspan="7">No record found.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END BORDERED TABLE PORTLET-->
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+    </div>
+</div>
+<!-- END PAGE CONTAINER-->
+<!-- Footer here -->
+<footer-layout></footer-layout>
+<bs-modal #addproject [keyboard]="false" [backdrop]="'static'">
+    <div class="modal-header">
+        <button type="button" class="close save_close_cross_modify" aria-hidden="true" (click)="close_add_project();"></button>
+        <h3 style="margin-top: 9px !important; "> Project </h3>
+    </div>
+    <div class="modal-body">
+        <div class="portlet">
+            <div class="portlet-body  form flip-scroll" style="padding-left:10px;padding-right: 10px;">
+                <div class="row form-horizontal">
+                    <form  [formGroup]="projectData">
+                        <div class="col-md-12">
+                            <label class="control-label">
+                                <strong>Project title</strong><span class="req">*</span>
+                            </label>
+                            <div class="controls">
+                                <input class="onsub m-wrap cus_input " formControlName="project_title" name="project_name" type="text" tabindex="1" />
+                                <p *ngIf="projectData.get('project_title').hasError('required') && projectData.get('project_title').touched" class="help-inline">
+                                        This field is required.
+                                    </p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">
+                                <strong>Description</strong>
+                            </label>
+                            <div class="controls">
+                                <textarea formControlName="project_description" style="width: 100%;border-radius: 5px;padding: 5px;" rows="4" name="project_description"
+                                    tabindex="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">
+                                <strong>Start date</strong><span class="req">*</span>
+                            </label>
+                            <div class="controls">
+                                    <mat-form-field>
+                                        <input matInput formControlName="project_start_date" [matDatepicker]="project_start_date" name="project_start_date" >
+                                        <mat-datepicker-toggle matSuffix [for]="project_start_date"></mat-datepicker-toggle>
+                                        <mat-datepicker #project_start_date></mat-datepicker>
+                                    </mat-form-field>
+                                    
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">
+                                <strong>End date</strong><span class="req">*</span>
+                            </label>
+                            <div class="controls">
+                                    <mat-form-field>
+                                        <input matInput formControlName="project_end_date"  [matDatepicker]="project_end_date" name="project_end_date"  >
+                                        <mat-datepicker-toggle matSuffix [for]="project_end_date"></mat-datepicker-toggle>
+                                        <mat-datepicker #project_end_date></mat-datepicker>
+                                        </mat-form-field>
+                                    
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">
+                                <strong>Status</strong><span class="req">*</span>
+                            </label>
+                            <div class="controls">
+                                <select class="form-control m-wrap radius-b" formControlName="project_status" name="project_status_id"  tabindex="5" style="padding-left: 0px !important">
+                                    <option value="Open" selected >Open</option>
+                                    <option value="On_hold">On Hold</option>
+                                </select>
+                                <p *ngIf="projectData.get('project_status').hasError('required')" class="help-inline">
+                                        This field is required.
+                                    </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">
+                                <strong>Customer</strong>
+                            </label>
+                            <select class="m-wrap no-margin radius-b form-control " formControlName="project_customer_id" name="project_customer_id" tabindex="6"  style="padding-left: 0px !important" >
+                                <option value="0">Please select</option>
+                                <option *ngFor="let cus of customers" value="{{cus.customer_id}}">{{cus.customer_name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">
+                                <strong>Division</strong>
+                            </label>
+                            <div class="controls">
+                                <select class="form-control radius-b m-wrap " formControlName="project_division_id" name="division_id" tabindex="7" [disabled]="division == ''" (change)="getdepartment($event.target.value);"  style="padding-left: 0px !important">
+                                    <option value="0">Select Division</option>
+                                    <option value="{{div.division_id}}" *ngFor="let div of division">{{div.devision_title}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">
+                                <strong>Department</strong>
+                            </label>
+                            <div class="controls">
+                                <select class="form-control m-wrap radius-b " formControlName="project_department_id" name="department_id" tabindex="8"  style="padding-left: 0px !important">
+                                    <option value="">Select Department</option>
+                                    <option value="dep.department_id" *ngFor="let dep of department">{{dep.department_title}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="pull-right col-md-12" style="margin: 10px 0 10px 0px;">
+                            <button class="btn blue txtbold" (click)="create_project(projectData);" type="button" tabindex="9" [disabled]="!projectData.valid" >
+                                <i class="fa fa-check" style="padding-right: 5px; " aria-hidden="true"></i>Create Project</button>
+                            <button class="btn red txtbold" (click)="close_add_project();" type="button" tabindex="10">
+                                <i class="fa fa-times" style="padding-right: 5px;" aria-hidden="true">
+                                </i>Cancel </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</bs-modal>
+
+<!-- DELETE PROJECT MODAL POPUP CODE -->
+<bs-modal #deleteProject>
+    <div class="modal-header">
+        <button type="button" class="close save_close_cross_modify" (click)="close_delete_project_popup();"></button>
+        <h3 style="margin-top: 9px;">Delete Project</h3>
+    </div>
+    <div>
+        <div style="padding: 15px;">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div>
+                        <label class="control-label" style="font-weight:500 !important;"> There are some open tasks left on the project you are trying to delete. Please confirm what you wish
+                            the system to do:</label>
+                    </div>
+                    <div class="form-group">
+                        <form #deleteprojectdata>
+                        <label class="control-label" style="float: left;margin-right: 10px;margin-top: 7px;">
+                            <strong> Action : </strong>
+                        </label>
+                        <div class="controls">
+                            <select (change)="project_lists = $event.target.value == 'remap'?true:false" class="large m-wrap radius-b" name="delete_status" >
+                                <option value="">-- Select --</option>
+                                <option value="close">Close open tasks</option>
+                                <option value="remap">Remap open tasks to other project</option>
+                                <option value="unlink">Un-link the tasks from the project</option>
+                                <option value="cancel">Cancel, do not close the project</option>
+                            </select>
+                        </div>
+                        <div class="controls" [hidden]="!project_lists" >
+                            <select class="large m-wrap radius-b" name="select_project" style="margin-top: 5px;">
+                                <option value="">Select</option>
+                                <option *ngFor="let p of projects_list" value="{{p.project_id}}">{{p.project_title}}</option>
+                            </select>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="pull-left">
+                        <button type="button" (click)="confirm_delete(deleteprojectdata);" name="confirm_delete" class="btn blue txtbold"> Submit </button>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</bs-modal>

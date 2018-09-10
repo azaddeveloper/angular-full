@@ -1,0 +1,52 @@
+.edit_redirect{
+    padding-left: 10px; margin-right:4px;
+}
+.edit_user_block{
+    background-color: rgba(255,255,255,0.9);
+    border-radius: 5px;
+}
+.edit_expand{
+    padding-top: 4px;
+    margin-right: 5px;
+}
+.edit_projecttask{
+    margin-top: 4px;
+}
+.project_select_width{
+    width: 100%;
+}
+.project_label{
+    font-weight: 500 !important;
+}
+.btn-new{
+    padding: 4px 16px !important;
+}
+.mainpage-container1{
+    margin-top: 70px;
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+.project_file{
+    margin-top: 0px;
+    margin-left: 20px;
+    margin-right: 0px;
+    margin-bottom: 10px;
+}
+.save_close_cross_modify{
+    margin-right: 0px;margin-top: 10px;
+}
+.header1{
+    margin-top: 10px;
+}
+.replace_block{
+    padding: 20px;
+}
+
+.project-add_task{
+    height:40px;margin-top: 10px;
+}
+.edit_task_date{
+    border-bottom: 1px dashed !important;
+    border: none;
+    width: 60%;
+}

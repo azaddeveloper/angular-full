@@ -1,0 +1,13 @@
+a {
+    text-decoration: none;
+}
+.footer .footer-inner{
+    padding: 9px 0px !important;
+}
+.checkbox input[type=checkbox]{
+    position: inherit !important;
+
+}
+.checkbox{
+    font-weight: 500 !important;
+}

@@ -1,0 +1,496 @@
+<div class="header navbar navbar-inverse navbar-fixed-top" style="border-bottom: 1px solid #d7d9dd !important;">
+  <div class="col-md-12" style="background-color: #fff;padding-left: 50px;line-height: 28px;">
+    <span class="pull-left" style="margin-left: 10px;margin-top: 5px;">
+      <img *ngIf="company_logo !='' else companyotherlogo" src="{{Image_url}}upload/company/{{company_logo}}"
+      />
+      <ng-template #companyotherlogo>
+        <img src="assets/images/logo_new.png" />
+      </ng-template>
+    </span>
+    <span *ngIf="loader" class="dvLoading"></span>  
+    <ul class="nav pull-right header_menu">
+      <!-- Timer icon -->
+      <li class="dropdown topnav-icon pull-left" *ngIf="timer_access"  >
+        <a href="javascript:void(0);" (click)="showhide();" id="timer_show" class="tooltips dropdown-toggle">
+          <i class="fa fa-hourglass" aria-hidden="true" style="font-size: 14px !important;"></i>
+        </a>
+      </li>
+      <!-- Search module-->
+      <li class="dropdown topnav-icon pull-left">
+        <a href="javascript:void(0);" [routerLink]="['/search']" class="tooltips dropdown-toggle">
+          <i class="fa fa-search " aria-hidden="true" style="font-size:16px !important;"></i>
+        </a>
+      </li>
+
+      <!-- BEGIN SETTINGS DROPDOWN -->
+      <li class="dropdown topnav-icon dropdown-user pull-left" *ngIf="is_admin == 1">
+        <a href="javascript:void(0)" class="dropdown-toggle ">
+          <i class="icon-cog "></i>
+          <span class="badge"></span>
+        </a>
+        <ul class="dropdown-menu" style="left:auto;right:13px;padding: 5px  !important;margin-top: 1px !important;">
+          <li>
+            <a href="javascript:void(0)" [routerLink]="['/settings']">
+              <i class="fa fa-cogs" aria-hidden="true"></i> Company Settings</a>
+          </li>
+          <li *ngIf="customer_module == 1 && pricing_module == 1">
+            <a href="javascript:void(0)" [routerLink]="['/pricing']">
+              <i style="padding-right: 2px;" class="glyphicon glyphicon-usd "></i> Price Maintenance</a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- END SETTINGS DROPDOWN -->
+
+      <!-- BEGIN INBOX DROPDOWN -->
+      <li class="dropdown topnav-icon pull-left">
+        <a href="javascript:void(0)" class="dropdown-toggle">
+          <i class="icon-bell-alt " style="font-size:15px !important;"></i>
+          <span class="badge" *ngIf="notification_count !=0">{{notification_count}}</span>
+        </a>
+        <ul class="dropdown-menu extended inbox" style="left:auto;right:10px;">
+          <li>
+            <ul class="dropdown-menu-list scroller " style="height:250px;overflow-y: scroll;">
+              <li class="external" *ngIf="notification_count != 0">
+                <a href="javascript:void(0);" (click)="read_all_notification()">
+                  <i class="icon-ok-sign" style="margin-top: 8px;font-weight: 600;"></i> Mark all as read </a>
+              </li>
+              <li *ngFor="let noti of notifications" [ngClass]="{'active':noti.is_read == 0}" [hidden]="noti.task_title == ''" >
+                <a href="javascript:void(0)" class="notifi-txt" (click)="open_notification_task(noti.task_id,noti.notification_user_id,noti.task_notification_id)"  *ngIf="noti.timesheet_notification =='0'">
+                  <span class="pull-left">
+                    <img *ngIf="noti.profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{noti.profile_image}}"
+                    />
+                    <ng-template #otherIcon>
+                      <span class="login_logo">
+                        {{noti.first_name | Initialletters | capitalizeFirst}}{{noti.last_name |Initialletters |capitalizeFirst}}
+                      </span>
+                    </ng-template>
+                  </span>
+                  <span class="subject">
+                    <span class="from" *ngIf="noti.notification_from !='' else notform">{{noti.first_name | capitalizeFirst}} {{noti.last_name | capitalizeFirst}}</span>
+                    <ng-template #notform>N/A</ng-template>
+                    <!-- <span class="time">{{noti.date_added}}</span> -->
+                  </span>
+                  <span class="message">{{noti.notification_text}}
+                  </span>
+                </a>
+
+                <a href="javascript:void(0)" (click)="open_notification_task(noti.task_id,noti.notification_user_id,noti.task_notification_id,noti.timesheet_id)" *ngIf="noti.timesheet_notification == 1" class="notifi-txt">
+                  <span class="pull-left">
+                    <img *ngIf="noti.profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{noti.profile_image}}"
+                    />
+                    <ng-template #otherIcon>
+                      <span class="login_logo">
+                        {{noti.first_name | Initialletters | capitalizeFirst}}{{noti.last_name |Initialletters |capitalizeFirst}}
+                      </span>
+                    </ng-template>
+
+                  </span>
+                  <span class="subject">
+                    <span class="from" *ngIf="noti.notification_from !='' else notform">{{noti.first_name | capitalizeFirst}} {{noti.last_name | capitalizeFirst}}</span>
+                    <ng-template #notform>N/A</ng-template>
+                    <!-- <span class="time">{{noti.date_added}}</span> -->
+                  </span>
+                  <span class="message">{{noti.notification_text}}
+                  </span>
+                </a>
+                <span class="notification-removeicon">
+                  <a href="javascript:void(0)" (click)="delete_notification(noti.task_notification_id)">
+                    <i class="icon-remove"></i>
+                  </a>
+                </span>
+              </li>
+
+              <li class="margin-left-10-custom" *ngIf="notifications == ''">No new notifications</li>
+
+            </ul>
+          </li>
+
+        </ul>
+      </li>
+      <!-- END INBOX DROPDOWN -->
+
+      <!-- START HELP DROPDOWN -->
+      <li class="dropdown topnav-icon dropdown user pull-left">
+        <a href="javascript:void(0)" class="dropdown-toggle ">
+          <i class=" icon-question-sign"></i>
+          <span class="badge"></span>
+        </a>
+        <ul class="dropdown-menu" style="left:auto;right:13px;padding: 5px !important;margin-top: 1px !important;">
+          <li>
+            <a href='https://schedullo.atlassian.net/wiki/' target="_blank">
+              <i class="fa fa-file-text" aria-hidden="true"></i>Documentation
+            </a>
+          </li>
+          <li>
+            <a href='https://www.youtube.com/channel/UCrviVzl0Rs_62yZ0qusmeGg' target="_blank">
+              <i class="fa fa-youtube" aria-hidden="true"></i>Video Channel
+            </a>
+          </li>
+          <li>
+            <a href='javascript:void(0);' (click)="open_feedback_modal()">
+              <i class="fa fa-envelope" aria-hidden="true"></i>Contact Support
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- END HELP DROPDOWN -->
+
+      <!-- BEGIN USER LOGIN DROPDOWN -->
+      <li class="dropdown user pull-left">
+        <a href="javascript:void(0)" class="dropdown-toggle myprofile-brand_header">
+          <img *ngIf="info.profile_image !='' else imgelse" src="{{Image_url}}upload/user/{{info.profile_image}}" class="profile-image"
+          />
+          <ng-template #imgelse>
+            <span class="login_logo">{{info.first_name | Initialletters |capitalizeFirst}}{{info.last_name |Initialletters |capitalizeFirst}}</span>
+          </ng-template>
+          <i class="icon-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu" style="left:auto;right: -1px;padding: 5px  !important; margin-top: 1px !important;">
+          <li>
+            <a href="javascript:void(0)" [routerLink]="['/my_settings']">
+              <i class="fa fa-cog" aria-hidden="true"></i> My Setting</a>
+          </li>
+          <li *ngFor="let c of company_list" [hidden]="company_list.length == 1" >
+            <a href="javascript:void(0)" (click)="switch_company(c.company_id);">
+              <div [ngClass]="{bold:c.company_id == company_id}">
+                <i class="fa fa-industry" aria-hidden="true"></i> {{c.company_name}} </div>
+            </a>
+          </li>
+          <li class="divider"> </li>
+          <li>
+            <a href="javascript:void(0)" (click)="logout();">
+              <i class="fa fa-power-off" aria-hidden="true"></i> Log Out </a>
+          </li>
+        </ul>
+      </li>
+      <!-- END USER LOGIN DROPDOWN -->
+
+    </ul>
+
+  </div>
+</div>
+
+<!-- Modal popup for getting user feedback -->
+
+<bs-modal #feedback>
+  <div class="modal-header">
+    <button type="button" class="close save_close_cross_modify" (click)='close_feedback_modal()' aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"></button>
+    <h3 style="margin-top: 9px !important; ">Contact Form </h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet" style="border-radius: 0px 0px 5px 5px !important;background-color: white;">
+      <div class="portlet-body flip-scroll">
+        <div class="col-md-12 form-horizontal" style="padding-left: 0px;">
+          <form [formGroup]="feedbackdata" >
+            <div class="col-md-12">
+              <label class="control-label">
+                <strong>Rate this Page:</strong>
+                <span class="required">*</span>
+              </label>
+              <div class="controls radio_error">
+                <input type="radio" formControlName="rating" name="rating" value="awesome!" id="awesome">
+                <label for="awesome">Awesome!</label>
+                <br>
+                <input type="radio" formControlName="rating" name="rating" value="good" id="good">
+                <label for="good">Good</label>
+                <br>
+                <input type="radio" formControlName="rating" name="rating" value="meh!" id="meh">
+                <label for="meh">Meh!</label>
+                <br>
+                <input type="radio" formControlName="rating" name="rating" value="bad" id="bad">
+                <label for="bad">Bad</label>
+                <br>
+                <input type="radio" formControlName="rating" name="rating" value="horrible!" id="horrible">
+                <label for="horrible">Horrible!</label>
+              </div>
+              <p *ngIf="feedbackdata.get('rating').hasError('required') && feedbackdata.get('rating').touched" class="help-inline">This field is required. </p>
+            </div>
+            <div class="col-md-12">
+              <label class="control-label">
+                <strong>What do you like?</strong>
+                <span class="required">*</span>
+              </label>
+              <div class="controls">
+                <textarea class="form-control" formControlName="like_description" rows="3" cols="50" name="like_description" id="like_description"></textarea>
+                <p *ngIf="feedbackdata.get('like_description').hasError('required') && feedbackdata.get('like_description').touched" class="help-inline">This field is required. </p>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="control-label">
+                <strong>What needs to improved?</strong>
+                <span class="required">*</span>
+              </label>
+              <div class="controls">
+                <textarea class="form-control" formControlName="improve_description" rows="3" cols="50" name="improve_description" id="improve_description"></textarea>
+                <p *ngIf="feedbackdata.get('improve_description').hasError('required') && feedbackdata.get('improve_description').touched"
+                  class="help-inline">This field is required. </p>
+              </div>
+            </div>
+          </form>
+          
+            <div class="col-md-12 ">
+              <label class="control-label">
+                <strong>Attach file:</strong>
+              </label>
+              <div class="controls">
+                <input type="file" (change)="handleFileInput($event.target.files)" name="feedback_file" value=""
+                />
+              </div>
+            </div>
+          
+            <div class="pull-right col-md-12 margin-top-20" style="margin-bottom:10px">
+              <button type="button" (click)="send_feedback_request(feedbackdata.value)" [disabled]="!feedbackdata.valid" class="btn blue txtbold" style="line-height: 16px !important;">Submit</button>
+              <button class="btn red txtbold" style="line-height: 16px !important;" type="button" (click)="close_feedback_modal()">Cancel </button>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</bs-modal>
+
+
+<div class="timerbox" id="common-timerbox" style="display:none;z-index: 100;height: 275px !important;">
+  <button type="button" (click)="showhide();" class="close timer_pos" data-dismiss="modal" aria-hidden="true"></button>
+  <h4> Timer </h4>
+  <input type="hidden" name="timer_task_id" id="timer_task_id" value="" />
+  <input type="hidden" name="current_page" id="current_page" value="" />
+  <input type="hidden" name="task_com_status" id="task_com_status" value="" />
+  <div class="timerinnerbox" id="timer_div">
+    <h2 class="heading2" id="timer_task_title" style="display:none"></h2>
+    <div class="time-box">
+      <div class="time-lt">
+        <p class="pera"> Timer </p>
+        <h3 class="heading3 timer" id="timer"> 00:00:00 </h3>
+      </div>
+      <div class="time-rt">
+        <dl>
+          <dt style="white-space: pre;text-align: left;">Total task time :</dt>
+          <dd id="total_timer">00:00:00</dd>
+
+          <dt style="text-align: left">Interruptions : </dt>
+          <dd id="total_interruptions">{{interruptions}}</dd>
+        </dl>
+      </div>
+      <div class="clearfix"> </div>
+    </div>
+
+    <div class="timer-btn row" style="margin-right: 0px !important;margin-left: 2px !important;">
+      <input type="text" name="timer_comment" id="timer_comment" value="" placeholder="Add notes before stopping" style="display:none; line-height: 1.8;"
+        class="radius-b" />
+      <a href="javascript:void(0)" class="btn blue txtbold" id="stop" (click)="stop_timer()" style="display: none;"> Stop</a>
+      <a href="javascript:void(0)" class="btn blue txtbold" (click)="select_task()" id="select_task">Click here to select a task</a>
+      <a href="javascript:void(0)" class="btn blue txtbold" id="start" style="display: none;"> Start</a>
+      <a href="javascript:void(0)" class="btn blue txtbold" id="start_interruption" (click)="start_interruption()" style="display:none;">
+        Start</a>
+      <a href="javascript:void(0)" class="btn blue txtbold" id="change_tak" (click)="change_task();" style="display: none;"> Change task</a>
+      <input type="hidden" name="hdn_timer" id="hdn_timer" value="" />
+      <input type="hidden" name="is_timer_on" id="is_timer_on" value="0" />
+      <input type="hidden" name="is_timer_popup" id="is_timer_popup" value="0" />
+    </div>
+
+    <div class="timer-list text-right" id="statics_link">
+      <ul class="list-unstyled">
+        <li>
+          <a href="javascript:void(0)" (click)="open_statistics_modal()"> Statistics </a> | </li>
+        <li>
+          <a href="javascript:void(0)" (click)="open_work_log_modal();"> Work log </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="timerinnerbox" id="reason_div" style="display: none;">
+    <h2 class="heading2">
+      <b>Why do you want to stop?</b>
+    </h2>
+    <div class="reason_scroll">
+      <ul style="padding-inline-start: 0px;-webkit-padding-start:0px;height: 200px;overflow: scroll;">
+        <li class="reason" id="resume">
+          <a href="javascript:void(0);" (click)="resume_timer()">Undo stop</a>
+        </li>
+        <li class="reason" id="endtask">
+          <a href="javascript:void(0);" (click)="end_task()">Task complete</a>
+        </li>
+        <li class="reason">
+          <a href="javascript:void(0);" (click)="add_interruption('Need to leave')">Need to leave</a>
+        </li>
+        <li class="reason">
+          <a href="javascript:void(0);" (click)="add_interruption('Meeting')">Meeting</a>
+        </li>
+        <li class="reason">
+          <a href="javascript:void(0);" (click)="add_interruption('Phone call')">Phone call</a>
+        </li>
+        <li class="reason">
+          <a href="javascript:void(0);" (click)="add_interruption('Email')">Email</a>
+        </li>
+        <li class="reason">
+          <a href="javascript:void(0);" (click)="add_interruption('Co-worker interruption')">Co-worker interruption</a>
+        </li>
+        <li class="reason">
+          <a href="javascript:void(0);" (click)="add_interruption('Others')">Others</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>
+
+<bs-modal #work_log size='lg'>
+  <div class="modal-header">
+    <button type="button" class="close save_close_cross_modify change_width_worklog" (click)="close_work_log_modal();" aria-hidden="true"
+      style="margin-right: 0px;margin-top: 6px;"></button>
+    <h3 style="margin-top: 9px !important; ">Work log</h3>
+  </div>
+  <div class="modal-body">
+    <div class="portlet" style="border-radius: 0px 0px 5px 5px !important;background-color: white;">
+      <div class="portlet-body flip-scroll">
+        <div class="col-md-12 form-horizontal" style="padding-left: 11px;">
+          <form [formGroup]="worklog" (submit)="get_date_range_work_flow(worklog.value)" style="border-bottom: 1px solid #ccc;">
+            <div style=" margin: 10px " class="form-group m-b-sm">
+              <label style=" float: left; padding:0 10px ;" class="control-label ">
+                <span>Date From :</span>
+              </label>
+              <div class="controls">
+                <div class="datLT">
+                  <mat-form-field>
+                    <input formControlName="worklog_start_date" matInput [matDatepicker]="picker3">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                  </mat-form-field>
+                  <p *ngIf="worklog.get('worklog_start_date').hasError('required') && worklog.get('worklog_start_date').touched" class="help-inline">
+                    This field is required.
+                  </p>
+                </div>
+                <div class="dattxt" style="font-weight: bold"> To </div>
+                <div class="datLT">
+                  <mat-form-field>
+                    <input formControlName="worklog_end_date" matInput [matDatepicker]="picker4">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                  </mat-form-field>
+                  <p *ngIf="worklog.get('worklog_end_date').hasError('required') && worklog.get('worklog_end_date').touched" class="help-inline">
+                    This field is required.
+                  </p>
+                </div>
+              </div>
+              <div style="float: right;">
+                <button type="submit" [disabled]="!worklog.valid" class="btn btn-common-blue"> Search </button>
+                <button type="button" class="btn btn-common-blue" (click)="worklog_reset()"> Reset </button>
+              </div>
+            </div>
+
+          </form>
+          <div style="margin-top: 10px;border:0px;height: 400px;overflow: scroll;">
+          <div class="comment-block margin-bottom-20"  *ngFor="let date of worklog_dates">
+            <div class="comment-title">
+              {{date | date :'MMM d, y'}}
+            </div>
+            <div *ngFor="let work_log of worklog_data[date]">
+              <ul class="list-unstyled">
+                <li class="light" style="border-bottom: 1px dashed #d7d9dd !important;">
+                  <div class="left_log paddingadd_left form-horizontal">
+                    <div class="txt">{{work_log.task_title}}</div>
+                    <div class="controls relative-position">
+                      <inline-editor type="text" [(ngModel)]="work_log.comment" empty="Add comment" pattern="^[a-zA-Z]*$" (onSave)="add_worklog_comment($event,work_log.timer_logs_id)"
+                        size="50"></inline-editor>
+                    </div>
+                    <div style="font-size: 13px;">Stopped Timer with reason "{{work_log.interruption}}" </div>
+                  </div>
+                  <div class="right_log" style="font-size: 13px;">
+                    {{work_log.date_added | date : 'MMM d, y h:mm a':'Asia/Kolkata'}}
+                  </div>
+                  <div class="right_log" style="font-size: 13px;">
+                    {{convert_time(work_log.spent_time)}}
+                  </div>
+
+                  <div class="clearfix"></div>
+                </li>
+              </ul>
+            </div>
+            <div class="clearfix"> </div>
+          </div>
+        </div>
+          <div *ngIf="worklog_dates == ''" style="margin-top: 10px;margin-bottom: 10px;">
+            No record found.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</bs-modal>
+
+<!-- timer Statistics graph -->
+
+<bs-modal #statistics size='lg'>
+  <div class="modal-header">
+    <button type="button" class="close save_close_cross_modify" (click)="close_statistics_modal()" style="margin-right: 0px;margin-top: 6px;"></button>
+    <h3 style="margin-top: 9px !important; ">Statistics</h3>
+  </div>
+  <div class="modal-body">
+    <div style="height: 500px;overflow: hidden;">
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="taskmain-container">
+        <div class="user-block">
+          <div class="row">
+            <div class="col-md-12 " style="padding-left: 20px;">
+              <div class="usertabs">
+                <div class="tabbable tabbable-custom">
+                  <ul class="nav nav-tabs" style="padding: 6px; border-bottom: 1px solid #ccc">
+                    <li class="active">
+                      <a href="#foot_tab_1" data-toggle="tab">Timer</a>
+                    </li>
+                    <li>
+                      <a href="#foot_tab_2" data-toggle="tab">Interruptions</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content" style="border: none !important">
+                    <div class="tab-pane active" id="foot_tab_1">
+                      <div class="portlet">
+                        <div id="chart_div"  >
+                            <canvas #barCanvas1></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Tab 1 -->
+                    <div class="tab-pane" id="foot_tab_2">
+                      <div class="portlet" style="height: 450px;overflow: scroll;">
+                        <div id="piechart" style="width: 465px;height: 232px;">
+                            <canvas  #barCanvas2></canvas>
+                        </div>
+                        <p style="font-weight: bold">Number of interruptions per day by type for the last 7 days
+                        </p>
+                        <div id="chart_div123" style="width:100%;">
+                            <ngx-charts-bar-horizontal-stacked
+                              [view]="view"
+                              [scheme]="colorScheme"
+                              [results]="stacked_graph"
+                              [xAxis]="showXAxis"
+                              [yAxis]="showYAxis"
+                              [legend]="showLegend"
+                              [showXAxisLabel]="showXAxisLabel"
+                              [showYAxisLabel]="showYAxisLabel"
+                              [xAxisLabel]="xAxisLabel"
+                             >
+                            </ngx-charts-bar-horizontal-stacked>
+                        </div>
+
+                      </div>
+                    </div>
+                    <!-- Tab 2 -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- END PAGE CONTENT-->
+      </div>
+    </div>
+  </div>
+</bs-modal>

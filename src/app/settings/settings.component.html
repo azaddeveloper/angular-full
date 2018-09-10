@@ -1,0 +1,1743 @@
+<header></header>
+<sidebar></sidebar>
+<!-- BEGIN PAGE CONTAINER-->
+<div class="page-container custom_company_setting ">
+  <span *ngIf="loader" class="dvLoading"></span>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <!-- BEGIN CONTENT BODY -->
+    <div style="margin-left: 26px;">
+        <input type="hidden" name="from" id="from" value=""/>
+      <div class="row">
+        <div class="col-md-12">
+          <!-- BEGIN PROFILE SIDEBAR -->
+          <div class="profile-sidebar">
+            <!-- PORTLET MAIN -->
+            <div class="portlet light profile-sidebar-portlet ">
+              <!-- SIDEBAR USERPIC -->
+              <div class="profile-userpic" style="border-radius: 0px !important">
+                <img *ngIf="company_info.company_logo !='' else companylogo" src="https://s3-ap-southeast-2.amazonaws.com/static.schedullo.com/upload/company/{{company_info.company_logo}}"
+                  class="img-responsive" alt="schedullo" />
+                <ng-template #companylogo>
+                  <img class="img-responsive" src="assets/images/logo_new.png" />
+                </ng-template>
+
+              </div>
+              <!-- END SIDEBAR USERPIC -->
+              <!-- SIDEBAR USER TITLE -->
+              <div class="profile-usertitle">
+                <div class="profile-usertitle-name">{{company_info.company_name}}</div>
+                <div class="profile-usertitle-job">
+                  FREE
+                </div>
+              </div>
+              <!-- END SIDEBAR USER TITLE -->
+
+              <!-- SIDEBAR MENU -->
+              <div class="profile-usermenu">
+                <ul class="nav">
+                  <li class="active">
+                    <a href="#main_tab_1" data-toggle="tab">
+                      <i class="fa fa-cog"></i> Company Settings </a>
+                  </li>
+                  <li class="">
+                    <a href="#main_tab_2" data-toggle="tab">
+                      <i class="fa fa-cog"></i> Users </a>
+                  </li>
+                  <li class="">
+                    <a href="#main_tab_3" data-toggle="tab">
+                      <i class="fa fa-cog"></i> Task Settings </a>
+                  </li>
+                  <li class="">
+                    <a href="#main_tab_4" data-toggle="tab">
+                      <i class="fa fa-cog"></i> Addons </a>
+                  </li>
+
+                  <li class="">
+                    <a href="#main_tab_5" data-toggle="tab">
+                      <i class="fa fa-cog"></i> Billing </a>
+                  </li>
+
+                </ul>
+              </div>
+              <!-- END MENU -->
+            </div>
+            <!-- END PORTLET MAIN -->
+            <!-- PORTLET MAIN -->
+            <div class="portlet light ">
+              <!-- STAT -->
+              <div class="row list-separated ">
+                <div class="col-md-4 col-sm-4 col-xs-6">
+                  <div class="uppercase profile-stat-title">{{other_info.total_company_projects}}</div>
+                  <div class="uppercase profile-stat-text"> Projects </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-6">
+                  <div class="uppercase profile-stat-title">{{other_info.total_company_users}}</div>
+                  <div class="uppercase profile-stat-text"> users </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-6">
+                  <div class="uppercase profile-stat-title">{{other_info.total_company_customers}}</div>
+                  <div class="uppercase profile-stat-text"> Customers </div>
+                </div>
+              </div>
+              <!-- END STAT -->
+
+            </div>
+            <!-- END PORTLET MAIN -->
+          </div>
+          <!-- BEGIN  CONTENT -->
+          <div class="tab-content">
+            <!-- COMPANY INFO TAB -->
+            <div class="profile-content custom_margin_20 tab-pane active" id="main_tab_1">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                      <div class="caption caption-md">
+                        <span class="caption-subject font-blue-madison bold uppercase">COMPANY SETTINGS</span>
+                      </div>
+                      <ul class="nav nav-tabs">
+                        <li class="active">
+                          <a href="#tab_1_1" data-toggle="tab">Company Info</a>
+                        </li>
+                        <li>
+                          <a href="#tab_1_2" data-toggle="tab">Company Structure</a>
+                        </li>
+                        <li>
+                          <a href="#tab_1_3" data-toggle="tab">Change Logo</a>
+                        </li>
+                        <li>
+                          <a href="#tab_1_4" data-toggle="tab">Default Calendar</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="portlet-body">
+                      <div class="tab-content">
+                        <!-- COMPANY INFO TAB -->
+                        <div class="tab-pane active" id="tab_1_1">
+                          <form [formGroup]="companySettings" (submit)="save_setting(companySettings.value)">
+                            <div class="form-group">
+                              <label class="control-label">Company Name
+                                <span class="required">*</span>
+                              </label>
+                              <input type="text" class="form-control" name="company_name" maxlength="40" formControlName="company_name" />
+                              <p *ngIf="companySettings.get('company_name').hasError('required') && companySettings.get('company_name').touched" class="help-inline">
+                                This field is required.
+                              </p>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">Phone Number</label>
+                              <input type="text" class="form-control" name="company_phone" formControlName="phone" />
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">Main Email Address
+                                <span class="required">*</span>
+                              </label>
+                              <input type="email" name="company_email" class="form-control" formControlName="company_email" />
+                              <p *ngIf="companySettings.get('company_email').hasError('required') && companySettings.get('company_email').touched" class="help-inline">
+                                This field is required.
+                              </p>
+                              <p *ngIf="companySettings.get('company_email').errors && companySettings.get('company_email').errors.exist && companySettings.get('company_email').touched" class="help-inline">
+                                There is an existing account associated with this email.
+                              </p>
+                              
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">Country
+                                <span class="required">*</span>
+                              </label>
+                              <select class="form-control" name="company_country" formControlName="country">
+                                <option value="">select</option>
+                                <option *ngFor="let c of countries" value="{{c.country_id}}">{{c.country_name}}</option>
+                              </select>
+                              <p *ngIf="companySettings.get('country').hasError('required') && companySettings.get('country').touched" class="help-inline">
+                                This field is required.
+                              </p>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">Billing Address</label>
+                              <textarea class="form-control" rows="3" name="company_address" formControlName="address"></textarea>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">Date Format -
+                                <span class="label_des">Select your preferred date format</span>
+                              </label>
+                              <select name="company_date_format" class="form-control" formControlName="date_format">
+                                <option value="m/d/Y">MM/DD/YYYY</option>
+                                <option value="d/m/Y">DD/MM/YYYY</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">Time Zone -
+                                <span class="label_des">The Default Time Zone is used for reporting and when creating new users</span>
+                              </label>
+                              <select class="form-control" name="company_timezone" formControlName="timezone">
+                                <option value="">Select</option>
+                                <option *ngFor="let t of timezone" value="{{t.timezone_name}}">{{t.name}}</option>
+                              </select>
+                            </div>
+                            <div class="margiv-top-10">
+                              <button class="btn btn-common-blue" type="submit" [disabled]="!companySettings.valid"> Save Changes </button>
+                              <button class="btn default" type="button"> Cancel </button>
+                            </div>
+                          </form>
+                        </div>
+                        <!-- END COMPANY INFO TAB -->
+                        <!-- COMPANY STRUCTURE TAB -->
+                        <div class="tab-pane" id="tab_1_2">
+                          <div class="controls">
+                            <label class="control-label">
+                              <b>Company Divisions</b>
+                            </label>
+                            <p class="alert alert-info">
+                              <strong>Divisions</strong> is often referred to as a profit/expense center and is acountable for both
+                              income and expenditure. For example, Finance, IT, Marketing or Sales. Another way to Consider
+                              the use of Divisions is via Divisional geographical unit such as: Australia, France, UK or
+                              USA.
+                            </p>
+
+
+                            <table class="table table-striped table-hover table-condensed flip-content separte">
+                              <thead class="flip-content">
+                                <tr>
+                                  <th></th>
+                                  <th>Name</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody id="company_divisions">
+
+                                <tr *ngFor="let div of other_info.divisions;" id="{{div.division_id}}">
+                                  <td width="3%" style="cursor:pointer">
+                                    <i class="stripicon status_header" aria-hidden="true"></i>
+                                  </td>
+                                  <td width="70%">
+                                    <inline-editor type="text" [(ngModel)]="div.devision_title" pattern="^[a-zA-Z0-9]*$" (onSave)="update_division(div.division_id,$event);"
+                                      size="10"></inline-editor>
+                                  </td>
+                                  <td>
+                                    <div style="float: left;margin-top: 2px;">
+                                      <ui-switch [checked]="div.devision_status == 'Active'" (change)="change_division_status(div.division_id,$event)"></ui-switch>
+                                    </div>
+                                    <div style="margin-top: 8px;">
+                                      <a href="javascript:void(0)" mwlConfirmationPopover placement="left" (confirm)="confirmClicked = delete_division(div.division_id)"
+                                        (cancel)="cancelClicked = true">
+                                        <i class="icon-trash stngicn"></i>
+                                      </a>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr *ngIf="other_info.divisions == ''">
+                                  <td colspan="3">No record found.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div>
+                              <form #division_tab>
+                                <input type="text" class="large m-wrap valid" name="devision_title" maxlength="30">
+                                <a href="javascript:void(0)" class="btn btn-common-blue txtbold sm" (click)="add_division(division_tab.devision_title.value);division_tab.devision_title.value=''">Add</a>
+                              </form>
+                            </div>
+
+                          </div>
+                          <div class="controls">
+                            <label class="control-label dept_company_css">
+                              <b>Company Departments</b>
+                            </label>
+                            <p class="alert alert-info">
+                              <strong>Departments</strong> can be referred to as cost centres. Another definition may be for teams
+                              that form part of overall Divisions. For example, if the Finance team was categorised as a
+                              Division within schedullo, then you may have Accounts Payable, Payroll, Reporting and Performance
+                              teams as Departments within Divisions.
+                            </p>
+                            <div class="form-group">
+                              <label class="control-label col-md-4 dept_label_css">
+                                <b>Parent Company Division </b>
+                              </label>
+                              <div class="controls relative-position">
+                                <select class="large m-wrap radius-b" name="parent_division" [(ngModel)]="division_id" (change)="setCompanyDepartment($event.target.value);">
+                                  <option *ngFor="let div of other_info.divisions" value="{{div.division_id}}">{{div.devision_title}}</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="controls">
+
+                                <table class="table table-striped table-hover table-condensed flip-content separte">
+                                  <thead class="flip-content">
+                                    <tr>
+                                      <th></th>
+                                      <th>Name</th>
+                                      <th>Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="company_departments">
+
+                                    <tr *ngFor="let div of other_info.department" id="{{div.department_id}}">
+                                      <td width="3%" style="cursor:pointer">
+                                        <i class="stripicon status_header" aria-hidden="true"></i>
+                                      </td>
+                                      <td width="70%">
+                                        <inline-editor type="text" [(ngModel)]="div.department_title" pattern="^[a-zA-Z0-9]*$" (onSave)="update_department(div.department_id,$event,div.deivision_id);"
+                                          size="10"></inline-editor>
+                                      </td>
+                                      <td>
+                                        <div style="float: left;margin-top: 2px;">
+                                          <ui-switch [checked]="div.status == 'Active'" (change)="change_department_status(div.department_id,$event)"></ui-switch>
+                                        </div>
+                                        <div style="margin-top: 8px;">
+                                          <a href="javascript:void(0)" mwlConfirmationPopover placement="left" (confirm)="confirmClicked = delete_department(div.department_id)"
+                                            (cancel)="cancelClicked = true">
+                                            <i class="icon-trash stngicn"></i>
+                                          </a>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr *ngIf="other_info.department == ''">
+                                      <td colspan="3">No record found.</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <div>
+                                  <form #department_tab>
+                                    <input type="text" class="large m-wrap valid" name="department_title" maxlength="30">
+                                    <a href="javascript:void(0)" class="btn btn-common-blue txtbold  sm" (click)="add_department(department_tab.department_title.value);department_tab.department_title.value=''">Add</a>
+                                  </form>
+                                </div>
+
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </div>
+                        <!-- END COMPANY STRUCTURE TAB -->
+                        <!-- CHANGE LOGO TAB -->
+                        <div class="tab-pane" id="tab_1_3">
+                          <div class="controls">
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                              <div style="margin-bottom:10px ;">
+                                <span>
+                                  <img *ngIf="company_info.company_logo !='' else companylogo" src="https://s3-ap-southeast-2.amazonaws.com/static.schedullo.com/upload/company/{{company_info.company_logo}}"
+                                    class="img-responsive" alt="schedullo" />
+                                  <ng-template #companylogo>
+                                    <img class="img-responsive" src="assets/images/logo_new.png" />
+                                  </ng-template>
+                                </span>
+                              </div>
+                              <div class="input-append">
+                                <button type="button" class="btn btn-file" [dropzone]="change_company_logo_config" (success)="update_company_logo_image($event);">
+                                  Browse
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END CHANGE LOGO TAB -->
+                        <!-- CALENDAR TAB -->
+                        <div class="tab-pane" id="tab_1_4">
+                          <div class="form-group">
+                            <label class="control-label">
+                              <b>First day of the week</b>
+                              <span class="required">*</span> -
+                              <span class="label_des">The first day of the week will show as the first day in your weekly calendar</span>
+                            </label>
+                            <div class="controls relative-position">
+                              <select class="large m-wrap radius-b" name="fisrt_day_of_week" [(ngModel)]="calendar.fisrt_day_of_week" (change)="change_company_working_day($event.target.value)">
+                                <option *ngFor="let d of days" value="{{d}}">{{d}}</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <p class="alert alert-info">Select the days your employees normally work and how many hours are available each day. Each
+                              user will have the ability to adjust their default working hours.
+                              <br>
+                              <br>Examples :
+                              <br>
+                              <br>50 minutes ==> enter 50
+                              <br>1h30 ==> 130
+                              <br>8 hours ==> 800
+                            </p>
+                            <label class="control-label">
+                              <b>Default Working Day</b>
+                            </label>
+                            <div class="controls">
+                              <div class="row setworkchk">
+                                <div class="col-md-12">
+                                  <div class="col-md-2"></div>
+                                  <div class="col-md-2">
+                                    <label class="checkbox line company_top">
+                                      <input class="setting-cal-chkbox newcheckbox_task" [checked]="calendar.MON_closed ==1" type="checkbox" name="MON_closed"
+                                        style="position: initial;" (click)="set_calendar_day('MON',$event.target.checked)"
+                                      />Monday
+                                    </label>
+                                  </div>
+                                  <div class="col-md-8  relative-position">
+                                    <input type="text" name="MON_hours" class="m-wrap small time-text" [disabled]="calendar.MON_closed == 0" [value]="change_time(calendar.MON_hours)"
+                                      (blur)="convet_time($event.target.value,'MON')" />
+                                    <span class="hravailable"> hours available </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row setworkchk">
+                                <div class="col-md-12">
+                                  <div class="col-md-2"></div>
+                                  <div class="col-md-2">
+                                    <label class="checkbox line company_top">
+                                      <input class="setting-cal-chkbox newcheckbox_task" [checked]="calendar.TUE_closed ==1" type="checkbox" name="TUE_closed"
+                                        style="position: initial;" (click)="set_calendar_day('TUE',$event.target.checked)"
+                                      />Tuesday
+                                    </label>
+                                  </div>
+                                  <div class="col-md-8  relative-position">
+                                    <input type="text" name="TUE_hours" class="m-wrap small time-text" [disabled]="calendar.TUE_closed == 0" [value]="change_time(calendar.TUE_hours)"
+                                      (blur)="convet_time($event.target.value,'TUE')" />
+                                    <span class="hravailable"> hours available </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row margin-top-10 setworkchk">
+                                <div class="col-md-12">
+                                  <div class="col-md-2"></div>
+                                  <div class="col-md-2">
+                                    <label class="checkbox line company_top">
+                                      <input class="setting-cal-chkbox newcheckbox_task" [checked]="calendar.WED_closed ==1" type="checkbox" name="WED_closed"
+                                        style="position: initial;" (click)="set_calendar_day('WED',$event.target.checked)"
+                                      />Wednesday
+                                    </label>
+                                  </div>
+                                  <div class="col-md-8  relative-position">
+                                    <input type="text" name="WED_hours" class="m-wrap small time-text" [disabled]="calendar.WED_closed == 0" [value]="change_time(calendar.WED_hours)"
+                                      (blur)="convet_time($event.target.value,'WED')" />
+                                    <span class="hravailable"> hours available </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row setworkchk">
+                                <div class="col-md-12">
+                                  <div class="col-md-2"></div>
+                                  <div class="col-md-2">
+                                    <label class="checkbox line company_top">
+                                      <input class="setting-cal-chkbox newcheckbox_task" [checked]="calendar.THU_closed ==1" type="checkbox" name="THU_closed"
+                                        style="position: initial;" (click)="set_calendar_day('THU',$event.target.checked)"
+                                      />Thursday
+                                    </label>
+                                  </div>
+                                  <div class="col-md-8  relative-position">
+                                    <input type="text" name="THU_hours" class="m-wrap small time-text" [disabled]="calendar.THU_closed == 0" [value]="change_time(calendar.THU_hours)"
+                                      (blur)="convet_time($event.target.value,'THU')" />
+                                    <span class="hravailable"> hours available </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row setworkchk">
+                                <div class="col-md-12">
+                                  <div class="col-md-2"></div>
+                                  <div class="col-md-2">
+                                    <label class="checkbox line company_top">
+                                      <input class="setting-cal-chkbox newcheckbox_task" [checked]="calendar.FRI_closed ==1" type="checkbox" name="FRI_closed"
+                                        style="position: initial;" (click)="set_calendar_day('FRI',$event.target.checked)"
+                                      />Friday
+                                    </label>
+                                  </div>
+                                  <div class="col-md-8  relative-position">
+                                    <input type="text" name="FRI_hours" class="m-wrap small time-text" [disabled]="calendar.FRI_closed == 0" [value]="change_time(calendar.FRI_hours)"
+                                      (blur)="convet_time($event.target.value,'FRI')" />
+                                    <span class="hravailable"> hours available </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row setworkchk">
+                                <div class="col-md-12">
+                                  <div class="col-md-2"></div>
+                                  <div class="col-md-2">
+                                    <label class="checkbox line company_top">
+                                      <input class="setting-cal-chkbox newcheckbox_task" [checked]="calendar.SAT_closed ==1" type="checkbox" name="SAT_closed"
+                                        style="position: initial;" (click)="set_calendar_day('SAT',$event.target.checked)"
+                                      />Saturday
+                                    </label>
+                                  </div>
+                                  <div class="col-md-8  relative-position">
+                                    <input type="text" name="SAT_hours" class="m-wrap small time-text" [disabled]="calendar.SAT_closed == 0" [value]="change_time(calendar.SAT_hours)"
+                                      (blur)="convet_time($event.target.value,'SAT')" />
+                                    <span class="hravailable"> hours available </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row  setworkchk">
+                                <div class="col-md-12">
+                                  <div class="col-md-2"></div>
+                                  <div class="col-md-2">
+                                    <label class="checkbox line company_top">
+                                      <input class="setting-cal-chkbox newcheckbox_task" [checked]="calendar.SUN_closed ==1" type="checkbox" name="SUN_closed"
+                                        style="position: initial;" (click)="set_calendar_day('SUN',$event.target.checked)"
+                                      />Sunday
+                                    </label>
+                                  </div>
+                                  <div class="col-md-8  relative-position">
+                                    <input type="text" name="SUN_hours" class="m-wrap small time-text" [disabled]="calendar.SUN_closed == 0" [value]="change_time(calendar.SUN_hours)"
+                                      (blur)="convet_time($event.target.value,'SUN')" />
+                                    <span class="hravailable"> hours available </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <!-- END CALENDAR TAB -->
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- USERS INFO TAB -->
+            <div class="profile-content custom_margin_20 tab-pane" id="main_tab_2">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                      <div class="caption caption-md">
+                        <span class="caption-subject font-blue-madison bold uppercase">Users</span>
+                      </div>
+                      <ul class="nav nav-tabs">
+                        <li class="active">
+                          <a href="#tab_2_1" data-toggle="tab">Company Users</a>
+                        </li>
+                        <li class="" *ngIf="customer_module == 1 && external_user_access == 1">
+                          <a href="#tab_2_2" data-toggle="tab">External Users</a>
+                        </li>
+
+                      </ul>
+                    </div>
+                    <div class="portlet-body">
+                      <div class="tab-content">
+                        <!-- COMPANY USER INFO TAB -->
+                        <div class="tab-pane active" id="tab_2_1">
+                          <div [hidden]="update_user_status">
+                            <div class="table-toolbar">
+                              <div>
+                                <a href="javascript:void(0)" (click)="add_new_user();" class="btn blue txtbold">
+                                  <i class="icon-plus"></i> Add User</a>
+                              </div>
+                            </div>
+                            <div class="customtable table-scrollable form-horizontal" style="border:0 !important;">
+                              <table class="table table-striped table-hover table-condensed flip-content">
+                                <thead class="flip-content">
+                                  <tr>
+                                    <th>User Name</th>
+                                    <th>Email</th>
+                                    <th>Level</th>
+                                    <th>Division</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                    <th>Admin</th>
+                                    <th>Owner</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let u of user_list">
+                                    <td width="20%">{{u.first_name}} {{u.last_name}}</td>
+                                    <td>{{u.email}}</td>
+                                    <td>{{u.staff_level_name}}</td>
+                                    <td>{{u.division_name}}</td>
+                                    <td>{{u.department_name}}</td>
+                                    <td>
+                                      <i *ngIf="u.user_status == 'Active'" class="fa fa-check" aria-hidden="true" style="color:green"></i>
+                                      <i *ngIf="u.user_status == 'Inactive'" class="fa fa-times " aria-hidden="true" style="color:red"></i>
+                                    </td>
+                                    <td>
+                                      <i *ngIf="u.is_administrator == 1" class="fa fa-check" aria-hidden="true" style="color:green"></i>
+                                      <i *ngIf="u.is_administrator == 0" class="fa fa-times " aria-hidden="true" style="color:red"></i>
+                                    </td>
+                                    <td>
+                                      <i *ngIf="u.is_owner == 1" class="fa fa-check" aria-hidden="true" style="color:green"></i>
+                                      <i *ngIf="u.is_owner == 0" class="fa fa-times" aria-hidden="true" style="color:red"></i>
+                                    </td>
+                                    <td width="5%">
+                                      <a *ngIf="(u.is_owner == 0 && u.is_administrator == 1) || (u.is_owner == 0 && u.is_administrator == 0) || (login_user_id == u.user_id)"
+                                        href="javascript:void(0)" (click)="editCompanyUser(u.user_id);">
+                                        <i class=" icon-pencil stngicn company_icon_black"></i>
+                                      </a>
+                                      <a *ngIf="u.is_owner == 0" href="javascript:void(0);" mwlConfirmationPopover placement="left" (confirm)="confirmClicked = delete_user(u.user_id)"
+                                      (cancel)="cancelClicked = true">
+                                        <i class="icon-trash stngicn company_icon_black"></i>
+                                      </a>
+                                    </td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          <div class="col-md-12" [hidden]="!update_user_status">
+                            <div class="form-horizontal">
+                              <form [formGroup]="frm_add_user" (submit)="update_user(frm_add_user.value);">
+                                <div class="form-group ">
+                                    <label class="control-label col-md-3">First Name
+                                        <span class="required">*</span>
+                                      </label>
+                                      <div class="controls col-md-8">
+                                        <input type="text" formControlName="first_name" name="first_name" value="" class="m-wrap large" />
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('first_name').hasError('required') && frm_add_user.get('first_name').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('first_name').hasError('pattern')" class="help-inline">
+                                          Please enter only letters.
+                                      </p>
+                                      </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Last Name
+                                        <span class="required">*</span>
+                                      </label>
+                                      <div class="controls col-md-8">
+                                        <input type="text" formControlName="last_name" name="last_name" value="" class="m-wrap large" />
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('last_name').hasError('required') && frm_add_user.get('last_name').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('last_name').hasError('pattern')" class="help-inline">
+                                          Please enter only letters.
+                                      </p>
+                                      </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3">Email
+                                    <span class="required">*</span>
+                                  </label>
+                                  <div class="controls col-md-8">
+                                    <input type="text" name="email" value="" formControlName="email" class="m-wrap large" />
+                                    <p style="display: inherit;" *ngIf="frm_add_user.get('email').hasError('required') && frm_add_user.get('email').touched" class="help-inline">
+                                      This field is required.
+                                    </p>
+                                    <p style="display: inherit;" *ngIf="frm_add_user.get('email').errors && frm_add_user.get('email').errors.exist" class="help-inline">
+                                      There is an existing account associated with this email.
+                                  </p>
+                                  <p style="display: inherit;" *ngIf="frm_add_user.get('email').hasError('email') && frm_add_user.get('email').touched" class="help-inline">
+                                    Email is not valid.
+                                </p>
+                                  </div>
+                                </div>
+
+                                <div class="form-group" >
+                                  <label class="control-label col-md-3">Division </label>
+                                  <div class="controls col-md-9">
+                                    <mat-select name="division" class="mat_select" multiple formControlName="user_division">
+                                        <mat-option (click)="getDepartmentList();" *ngFor="let div of other_info.divisions" value="{{div.division_id}}">{{div.devision_title}}</mat-option>
+                                    </mat-select>
+                                    
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3">Departments </label>
+                                  <div class="controls col-md-9">
+                                    <mat-select class="mat_select" name="department" multiple formControlName="user_department">
+                                        <mat-option *ngFor="let div of edit_user_info.company_department" value="{{div.department_id}}">{{div.department_title}}</mat-option>
+                                      </mat-select>
+                                    
+                                  </div>
+                                </div>
+                                <div class="form-group" >
+                                  <label class="control-label col-md-3">Skills </label>
+                                  <div class="controls col-md-9">
+                                    <mat-select class="mat_select" name="skills"multiple formControlName="user_skills">
+                                        <mat-option *ngFor="let div of other_info.skills" value="{{div.skill_id}}">{{div.skill_title}}</mat-option>
+                                    </mat-select>
+                                  </div>
+                                </div>
+                                <div class="form-group" *ngIf="updated_user_info.is_administrator == 0">
+                                  <label class="control-label col-md-3">Staff Level </label>
+                                  <div class="controls col-md-9">
+                                    <select class="large m-wrap" name="staff_level" formControlName="user_staff_level" style="padding:5px;border-radius:4px;">
+                                      <option value="0">--Select--</option>
+                                      <option *ngFor="let s of other_info.staffLevels" value="{{s.staff_level_id}}">{{s.staff_level_title}}</option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="control-label col-md-3">Timesheet Approver</label>
+                                  <div class="controls relative-position col-md-8">
+                                    <div>
+                                      <select class="large m-wrap radius-b" formControlName="approver_select" name="approver_select">
+                                        <option value="0">Select option</option>
+                                        <option *ngFor="let approver of edit_user_info.approver_list" value="{{approver.manager_id}}">{{approver.first_name}} {{approver.last_name}}</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="control-label col-md-3">Time Zone
+                                    <span class="required">*</span>
+                                  </label>
+                                  <div class="controls col-md-8">
+                                    <select class="large m-wrap radius-b" name="user_time_zone" formControlName="usertimezone">
+                                      <option value="">--Select--</option>
+                                      <option *ngFor="let tz of timezone" value="{{tz.timezone_name}}">{{tz.name}}</option>
+                                    </select>
+                                    <p style="display: inherit;" *ngIf="frm_add_user.get('usertimezone').hasError('required') && frm_add_user.get('usertimezone').touched" class="help-inline">
+                                      This field is required.
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="control-label col-md-3">Reports to </label>
+                                  <div class="controls col-md-9">
+                                    <div class="margin-bottom-10">
+                                      <div class="listbox_spn4" style="width: 250px !important;">
+                                        <label>&nbsp;</label>
+                                        <select formControlName="manager_list" multiple="multiple" id="select_user_value" name="manager_multiselect" class="large m-wrap" size="5" style="padding:5px;border-radius:4px;width: 265px !important;">
+                                          <option *ngFor="let m of edit_user_info.managers" value="{{m.user_id}}" >{{m.first_name}} {{m.last_name}}</option>
+                                        </select>
+                                      </div>
+                                      <div class="listbox_spn2" style="width: 125px !important;">
+                                        <div class="adjbtn-group">
+                                          <a class="btn blue adj-btn" href="javascript:void(0);" (click)="push_right_box()">
+                                            <i class="stripicon iconrightarro"></i>
+                                          </a>
+                                          <a class="btn blue adj-btn" href="javascript:void(0);" (click)="push_left_box()">
+                                            <i class="stripicon iconleftarro"></i>
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div class="listbox_spn4" style="width: 250px !important;">
+                                        <label class="form-group" style="margin-bottom: 6px;font-weight: 700;">Selected </label>
+                                        <select formControlName="selected_manager" multiple="multiple" name="manager_multiselect_to" class="large m-wrap margin-bottom-10"
+                                          size="5" style="border-radius:4px;padding:5px;width: 265px !important;margin-left: -14px;">
+                                            <option *ngFor="let m of edit_user_info.user_managers" value="{{m.manager_id}}" >{{m.first_name}} {{m.last_name}}</option>
+                                        </select>
+                                      </div>
+                                      <div class="clearfix"> </div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3">&nbsp;</label>
+                                  <div class="controls col-md-8">
+                                    <label class="checkbox" *ngIf="updated_user_info.is_owner == 0 || updated_user_info == ''">
+                                        <input type="checkbox" formControlName="is_admin" class="newcheckbox_task position_initial" name="is_administrator" value="1" /> Administrator
+                                    </label>
+                                    <label class="checkbox">
+                                      <input type="checkbox" formControlName="is_manager" (click)="check_user_under_manager();" class="newcheckbox_task position_initial" name="is_manager" value="1" /> Manager
+                                    </label>
+                                    <label class="checkbox">
+                                      <input type="checkbox" formControlName="user_status" class="newcheckbox_task position_initial" name="user_status" value="Active" /> Active
+                                    </label>
+                                  </div>
+                                </div>
+                                <div class="form-group" *ngIf="customer_module == 1 && updated_user_info !=''">
+                                  <label class="control-label col-md-3">&nbsp;</label>
+                                  <div class="controls col-md-9">
+                                    <label class="checkbox">
+                                        <input type="checkbox" formControlName="customer_access" class="newcheckbox_task position_initial" name="customer_access" /> Add/Edit Customers
+                                      </label>
+                                      <label class="checkbox" *ngIf="xero_integration_status == 1">
+                                        <input type="checkbox" formControlName="xero_export_access" class="newcheckbox_task position_initial" name="xero_export_access" /> Timesheet Export(XERO)
+                                      </label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3">Default Working Day </label>
+                                  <div class="controls col-md-9">
+                                    <div class="row margin-top-10 setworkchk">
+                                      <div class="col-md-2 padding-top-7">
+                                        <label class="checkbox line">
+                                          <input type="checkbox" formControlName="MON_closed" (click)="set_user_calendar_day($event.target.checked,'MON')" class="newcheckbox_task position_initial" name="MON_closed" [checked]="edit_user_info.MON_closed == 1"/>Monday
+                                        </label>
+                                      </div>
+                                      <div class="col-md-5">
+                                        <input type="text" name="MON_hours" formControlName="MON_hours" (blur)="convet_time($event.target.value,'MON','user_edit')"  class="m-wrap small setHourErr user-time-text"/>
+                                        <span class="hravailable"> hours available </span>
+                                        <div class="clearfix"></div>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('MON_hours').hasError('required') && frm_add_user.get('MON_hours').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div class="row margin-top-10 setworkchk">
+                                      <div class="col-md-2 padding-top-7">
+                                        <label class="checkbox line">
+                                          <input type="checkbox" formControlName="TUE_closed" (click)="set_user_calendar_day($event.target.checked,'TUE')" class="newcheckbox_task position_initial" name="TUE_closed" value="1" />Tuesday
+                                        </label>
+                                      </div>
+                                      <div class="col-md-5">
+                                        <input type="text" name="TUE_hours" formControlName="TUE_hours" (blur)="convet_time($event.target.value,'TUE','user_edit')" class="m-wrap small setHourErr user-time-text"
+                                          />
+                                        <span class="hravailable"> hours available </span>
+                                        <div class="clearfix"></div>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('TUE_hours').hasError('required') && frm_add_user.get('TUE_hours').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div class="row margin-top-10 setworkchk">
+                                      <div class="col-md-2 padding-top-7">
+                                        <label class="checkbox line">
+                                          <input type="checkbox" formControlName="WED_closed" (click)="set_user_calendar_day($event.target.checked,'WED')" class="newcheckbox_task position_initial" name="WED_closed" value="1" />Wednesday
+                                        </label>
+                                      </div>
+                                      <div class="col-md-5">
+                                        <input type="text" formControlName="WED_hours" name="WED_hours" (blur)="convet_time($event.target.value,'WED','user_edit')" class="m-wrap small setHourErr user-time-text"
+                                          />
+                                        <span class="hravailable"> hours available </span>
+                                        <div class="clearfix"></div>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('WED_hours').hasError('required') && frm_add_user.get('WED_hours').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div class="row margin-top-10 setworkchk">
+                                      <div class="col-md-2 padding-top-7">
+                                        <label class="checkbox line">
+                                          <input type="checkbox" formControlName="THU_closed" (click)="set_user_calendar_day($event.target.checked,'THU')" class="newcheckbox_task position_initial" name="THU_closed" value="1" />Thursday
+                                        </label>
+                                      </div>
+                                      <div class="col-md-5">
+                                        <input type="text" formControlName="THU_hours" name="THU_hours" (blur)="convet_time($event.target.value,'THU','user_edit')" class="m-wrap small setHourErr user-time-text"
+                                          />
+                                        <span class="hravailable"> hours available </span>
+                                        <div class="clearfix"></div>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('THU_hours').hasError('required') && frm_add_user.get('THU_hours').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div class="row margin-top-10 setworkchk">
+                                      <div class="col-md-2 padding-top-7">
+                                        <label class="checkbox line">
+                                          <input type="checkbox" formControlName="FRI_closed" (click)="set_user_calendar_day($event.target.checked,'FRI')" class="newcheckbox_task position_initial" name="FRI_closed" value="1" />Friday
+                                        </label>
+                                      </div>
+                                      <div class="col-md-5">
+                                        <input type="text" formControlName="FRI_hours" name="FRI_hours" (blur)="convet_time($event.target.value,'FRI','user_edit')" class="m-wrap small setHourErr user-time-text"
+                                           />
+                                        <span class="hravailable"> hours available </span>
+                                        <div class="clearfix"></div>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('FRI_hours').hasError('required') && frm_add_user.get('FRI_hours').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div class="row margin-top-10 setworkchk">
+                                      <div class="col-md-2 padding-top-7">
+                                        <label class="checkbox line">
+                                          <input type="checkbox" formControlName="SAT_closed" (click)="set_user_calendar_day($event.target.checked,'SAT')" class="newcheckbox_task position_initial" name="SAT_closed" value="1" />Saturday
+                                        </label>
+                                      </div>
+                                      <div class="col-md-5">
+                                        <input type="text" formControlName="SAT_hours" name="SAT_hours" (blur)="convet_time($event.target.value,'SAT','user_edit')" class="m-wrap small setHourErr user-time-text"
+                                           />
+                                        <span class="hravailable"> hours available </span>
+                                        <div class="clearfix"></div>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('SAT_hours').hasError('required') && frm_add_user.get('SAT_hours').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div class="row margin-top-10 setworkchk">
+                                      <div class="col-md-2 padding-top-7">
+                                        <label class="checkbox line">
+                                          <input type="checkbox" formControlName="SUN_closed" (click)="set_user_calendar_day($event.target.checked,'SUN')" class="newcheckbox_task position_initial" name="SUN_closed" value="1" />Sunday
+                                        </label>
+                                      </div>
+                                      <div class="col-md-5">
+                                        <input type="text" formControlName="SUN_hours" name="SUN_hours" (blur)="convet_time($event.target.value,'SUN','user_edit')" class="m-wrap small setHourErr user-time-text"
+                                          />
+                                        <span class="hravailable"> hours available </span>
+                                        <div class="clearfix"></div>
+                                        <p style="display: inherit;" *ngIf="frm_add_user.get('SUN_hours').hasError('required') && frm_add_user.get('SUN_hours').touched" class="help-inline">
+                                          This field is required.
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                                <div class="edit_div">
+                                  <button type="submit" [disabled]="!frm_add_user.valid" *ngIf="update_user_status" name="saveBtnUser" class="btn blue txtbold">
+                                    <i class="icon-ok"></i> Save</button>
+                                  <button type="submit" [disabled]="!frm_add_user.valid"  *ngIf="update_user_status" name="addBtnUser" class="btn blue txtbold">
+                                    <i class="icon-ok"></i> Add</button>
+                                  <button type="button" (click)="cancel()" name="cancelBtnUser" class="btn red txtbold">
+                                    <i class="icon-remove "></i> Cancel</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END COMPANY USERS INFO TAB -->
+                        <!-- CUSTOMER USERS INFO TAB -->
+
+                        <div class="tab-pane" id="tab_2_2">
+                          <div>
+                            <div class="table-toolbar">
+                              <div>
+                                <a href="javascript:void(0);" (click)="open_external_customer_modal('');" class="btn blue txtbold">
+                                  <i class="icon-plus"></i> Invite External Users</a>
+                              </div>
+                            </div>
+                            <div class="customtable table-scrollable form-horizontal" style="border:0 !important;">
+                              <table class="table table-striped table-hover table-condensed flip-content">
+                                <thead class="flip-content">
+                                  <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Customer Name</th>
+                                    <th>Status</th>
+                                    <th>Last Connection</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let ex of external_users">
+                                    <td>
+                                      {{ex.first_name}}
+                                    </td>
+                                    <td>
+                                      {{ex.last_name}}
+                                    </td>
+                                    <td>
+                                      {{ex.email}}
+                                    </td>
+                                    <td>
+                                      {{ex.customer_name}}
+                                    </td>
+                                    <td>
+                                      {{ex.user_status}}
+                                    </td>
+                                    <td>
+                                      {{ex.last_connection_date}}
+                                    </td>
+                                    <td>
+                                      <a href="javascript:void(0);" (click)="open_external_customer_modal(ex)">
+                                        <i class="icon-pencil stngicn company_icon_black"></i>
+                                      </a>
+                                      <a href="javascript:void(0);" mwlConfirmationPopover placement="left" (confirm)="confirmClicked = delete_external_user(ex.user_id,ex.total_task)"
+                                      (cancel)="cancelClicked = true"  >
+                                        <i class="icon-trash stngicn company_icon_black"></i>
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr *ngIf="external_users == ''">
+                                    <td colspan="7">No record found...</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- END CUSTOMER USERS INFO TAB -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- TASK SETTING TAB -->
+            <div class="profile-content custom_margin_20 tab-pane" id="main_tab_3">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                      <div class="caption caption-md">
+                        <span class="caption-subject font-blue-madison bold uppercase">task settings</span>
+                      </div>
+                      <ul class="nav nav-tabs">
+                        <li class="active">
+                          <a href="#tab_3_1" data-toggle="tab">General</a>
+                        </li>
+                        <li>
+                          <a href="#tab_3_2" data-toggle="tab">Task Status</a>
+                        </li>
+                        <li>
+                          <a href="#tab_3_3" data-toggle="tab">Categories </a>
+                        </li>
+                        <li>
+                          <a href="#tab_3_4" data-toggle="tab">Staff Levels</a>
+                        </li>
+                        <li>
+                          <a href="#tab_3_5" data-toggle="tab">Skills </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="portlet-body">
+                      <div class="tab-content">
+                        <!-- GENERAL INFO TAB -->
+                        <div class="tab-pane active" id="tab_3_1">
+                          <div class="form-group">
+                            <p class="alert alert-info" style="margin-bottom: 20px">Switching this function
+                              <strong>On</strong> will force users to enter the time it took to complete a task on completion</p>
+                            <label class="control-label col-md-5 company_force_time">
+                              <b>Force users to enter actual time :</b>
+                            </label>
+                            <div class="controls relative-position">
+                              <ui-switch [checked]="company_info.actual_time_on == '1'" (change)="change_setting('actual_time_on',$event)"></ui-switch>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <p class="alert alert-info" style="margin-bottom: 20px">When
+                              <strong>on</strong>, users will be able to create tasks with a scheduled date and due date in the past
+                            </p>
+                            <label class="control-label company_force_time col-md-5">
+                              <b>Allow new task to be created in the past :</b>
+                            </label>
+                            <div class="controls relative-position">
+                              <ui-switch [checked]="company_info.allow_past_task == '1'" (change)="change_setting('allow_past_task',$event)"></ui-switch>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <p class="alert alert-info" style="margin-bottom: 20px">When
+                              <strong>on</strong>, users will be able to access new task pop up window</p>
+                            <label class="control-label company_force_time col-md-5">
+                              <b>Allow to access new task pop up :</b>
+                            </label>
+                            <div class="controls relative-position">
+                              <ui-switch [checked]="company_info.new_task_popup == '1'" (change)="change_setting('new_task_popup',$event)"></ui-switch>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END GENERAL INFO TAB -->
+                        <!-- COMPANY STATUS TAB -->
+                        <div class="tab-pane" id="tab_3_2">
+                          <div class="form-group">
+                            <p class="alert alert-info">Task statuses are used to define the
+                              <strong>kanban board columns.</strong> You can create up to 4 additional statuses. Not Ready, Ready,
+                              In Progress and Completed are required for Schedullo to work.
+                              <br>
+                              <br> Typically, we find that our users love adding the following statuses :
+                              <br> -
+                              <b>Backlog</b> - to keep track of your ideas and tasks that you will need to work on later.
+                              <br> -
+                              <b>Waiting on</b> - to keep track of tasks that you cannot complete because you are waiting for
+                              someone else to finish something.
+                              <br>
+                              <br>
+                              <strong>The Sequence of statuses will impact the sequence of columns in kanban </strong>
+                            </p>
+                            <label class="control-label">
+                              <b>Task Status </b>
+                            </label>
+
+                            <div class="customtable form-horizontal">
+                              <table class="table table-striped table-hover table-condensed flip-content" id="status_table">
+                                <thead class="flip-content">
+                                  <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="addStatus">
+                                  <tr *ngFor="let st of other_info.taskStatus" id="{{st.task_status_id}}">
+                                    <td width="3%" style="cursor:pointer">
+                                      <i class="stripicon status_header" aria-hidden="true"></i>
+                                    </td>
+                                    <td width="70%">
+                                      {{st.task_status_name}}
+                                    </td>
+                                    <td>
+                                      <div>
+                                        <a href="javascript:void(0)" class="not_access" *ngIf="st.is_default_status ==1; else notdefalut">
+                                          <i class="fa fa-trash-o company_trash_icon"></i>
+                                        </a>
+                                        <ng-template #notdefalut>
+                                          <a href="javascript:void(0)" mwlConfirmationPopover placement="top" (confirm)="confirmClicked = delete_status(st.task_status_id)"
+                                            (cancel)="cancelClicked = true">
+                                            <i class="fa fa-trash-o company_trash_icon"></i>
+                                          </a>
+                                        </ng-template>
+                                      </div>
+                                    </td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
+                              <div>
+                                <form #addstatus>
+                                  <input type="text" class="large m-wrap valid" name="task_status_name" value="">
+                                  <button type="button" class="btn btn-common-blue txtbold sm" (click)="add_status(addstatus.task_status_name.value);addstatus.task_status_name.value=''">
+                                    Add</button>
+                                </form>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                        <!-- END COMPANY STATUS TAB -->
+                        <!-- COMPANY CATEGORY TAB -->
+                        <div class="tab-pane" id="tab_3_3">
+                          <div class="form-group">
+                            <label class="control-label">
+                              <b>Parent Task Categories</b>
+                            </label>
+                            <p class="alert alert-info">Categories and sub categories are used to classify your tasks when you create them . It is particularly
+                              useful if you want to review where you spend most of your time.
+                              <br>
+                              <br> Some Examples of categories and sub categories :
+                              <br>
+                              <br>
+                              <b>Sales</b>
+                              <br> #Business Development
+                              <br> #Account Management
+                              <br> #Marketing
+                              <br>
+                              <br>
+
+                              <b>Service Delivery</b>
+                              <br> #Support
+                              <br> #Project Activity
+                              <br> #Conference
+                              <br> #Training
+                              <br>
+                            </p>
+
+                            <table class="table table-striped table-hover table-condensed flip-content" id="maincategory_table">
+                              <thead class="flip-content">
+                                <tr>
+                                  <th></th>
+                                  <th>Name</th>
+                                  <th *ngIf="pricing_module ==1">Chargeable</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody id="company_mainCategory">
+                                <tr *ngFor="let category of other_info.ParentTaskCategory" id="{{category.category_id}}">
+                                  <td width="3%" style="cursor:pointer">
+                                    <i class="stripicon status_header" aria-hidden="true"></i>
+                                  </td>
+                                  <td width="300px">
+                                    <inline-editor type="text" [(ngModel)]="category.category_name" pattern="^[a-zA-Z0-9]*$" (onSave)="update_category_name(category.category_id,$event);"
+                                      size="10"></inline-editor>
+                                  </td>
+
+                                  <td width="100px" *ngIf="pricing_module == 1">
+                                    <input type="checkbox" class="cstm_chkbox checkbox_setting" (click)="make_chargeable_category($event.target.checked,category.category_id)"
+                                      [checked]="category.is_chargeable == 1" />
+                                  </td>
+
+                                  <td width="200px">
+                                    <div style="float: left;margin-top: 2px;">
+                                      <ui-switch [checked]="category.category_status == 'Active'" (change)="change_category_status(category.category_id,$event)"></ui-switch>
+                                    </div>
+                                    <div style="margin-top:8px;">
+                                      <a href="javascript:void(0)" mwlConfirmationPopover placement="top" (confirm)="confirmClicked = delete_category(category.category_id)"
+                                        (cancel)="cancelClicked = true">
+                                        <i class="icon-trash stngicn"></i>
+                                      </a>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr *ngIf="other_info.ParentTaskCategory == ''">
+                                  <td colspan="4">No record found.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                            <div class="form-group">
+                              <form #add_category>
+                                <input type="text" class="large m-wrap valid" name="main_category_name" value="">
+                                <a href="javascript:void(0)" class="btn btn-common-blue txtbold sm" (click)="addCategory(add_category.main_category_name.value);add_category.main_category_name.value=''">Add</a>
+                              </form>
+                            </div>
+
+                            <div class="form-horizontal form-group">
+                              <label class="control-label col-md-4" style="padding-left:0px !important;">
+                                <b>Parent Task Category</b>
+                              </label>
+                              <div class="controls">
+                                <select class="large m-wrap radius-b" name="parent_category" (change)="get_subcategory_list();" [(ngModel)]="other_info.parent_category_id">
+                                  <option *ngFor="let cat of other_info.ParentTaskCategory" value="{{cat.category_id}}">{{cat.category_name}}</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">
+                                <b>Associated Sub Categories</b>
+                              </label>
+                              <div class="controls">
+                                <table class="table table-striped table-hover table-condensed flip-content" id="maincategory_table">
+                                  <thead class="flip-content">
+                                    <tr>
+                                      <th></th>
+                                      <th>Name</th>
+                                      <th *ngIf="pricing_module ==1">Chargeable</th>
+                                      <th>Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="company_subTaskCategory">
+                                    <tr *ngFor="let sub of other_info.subTaskCategory" id="{{sub.category_id}}">
+                                      <td width="3%" style="cursor:pointer">
+                                        <i class="stripicon status_header" aria-hidden="true"></i>
+                                      </td>
+                                      <td width="300px">
+                                        <inline-editor type="text" [(ngModel)]="sub.category_name" pattern="^[a-zA-Z0-9]*$" (onSave)="update_sub_category_name(sub.category_id,$event,sub.parent_id);"
+                                          size="10"></inline-editor>
+                                      </td>
+
+                                      <td width="100px" *ngIf="pricing_module == 1">
+                                        <input type="checkbox" class="cstm_chkbox checkbox_setting" (click)="make_chargeable_category($event.target.checked,sub.category_id)"
+                                          [checked]="sub.is_chargeable == 1" />
+                                      </td>
+
+                                      <td width="200px">
+                                        <div style="float: left;margin-top: 2px;">
+                                          <ui-switch [checked]="sub.category_status == 'Active'" (change)="change_category_status(sub.category_id,$event)"></ui-switch>
+                                        </div>
+                                        <div style="margin-top:8px;">
+                                          <a href="javascript:void(0)" mwlConfirmationPopover placement="top" (confirm)="confirmClicked = delete_subcategory(sub.category_id)"
+                                            (cancel)="cancelClicked = true">
+                                            <i class="icon-trash stngicn"></i>
+                                          </a>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr *ngIf="other_info.subTaskCategory == ''">
+                                      <td colspan="4">No record found.</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <div class="form-group">
+                                  <form #add_sub_category>
+                                    <input type="text" class="large m-wrap valid" name="sub_category_name">
+                                    <a href="javascript:void(0)" class="btn btn-common-blue txtbold sm" (click)="add_subcategory(add_sub_category.sub_category_name.value);add_sub_category.sub_category_name.value=''">Add</a>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END COMPANY STATUS TAB -->
+                        <!-- STAFF TAB -->
+                        <div class="tab-pane" id="tab_3_4">
+                          <div class="form-group">
+                            <p class="alert alert-info">Staff levels are only used for reporting purposes. A staff level can be allocated to a task and
+                              to a user. It allows you to perform some analysis on the type of work performed by specific
+                              task levels. </p>
+                            <label class="control-label">
+                              <b>Staff Levels</b>
+                            </label>
+                            <div class="form-group">
+
+                              <table class="table table-striped table-hover table-condensed flip-content" id="staff_level_table">
+                                <thead class="flip-content">
+                                  <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="company_staffLevels">
+                                  <tr *ngFor="let staff of other_info.staffLevels" id="{{staff.staff_level_id}}">
+                                    <td width="3%" style="cursor:pointer">
+                                      <i class="stripicon status_header" aria-hidden="true"></i>
+                                    </td>
+                                    <td width="400px">
+                                      <inline-editor type="text" [(ngModel)]="staff.staff_level_title" (onSave)="update_stafflevel_name(staff.staff_level_id,$event);"
+                                        pattern="^[a-zA-Z0-9]*$" size="10"></inline-editor>
+                                    </td>
+                                    <td>
+                                      <div style="float: left;margin-top: 2px;">
+                                        <ui-switch [checked]="staff.staff_level_status == 'Active'" (change)="change_staff_status(staff.staff_level_id,$event)"></ui-switch>
+                                      </div>
+                                      <div style="margin-top:8px;">
+                                        <a href="javascript:void(0)" mwlConfirmationPopover placement="top" (confirm)="confirmClicked = delete_staff_level(staff.staff_level_id)"
+                                          (cancel)="cancelClicked = true">
+                                          <i class="icon-trash stngicn"></i>
+                                        </a>
+                                      </div>
+                                    </td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
+
+                            </div>
+                            <div>
+                              <form #addStafflevel>
+                                <input type="text" class="large m-wrap valid" name="staff_level_title">
+                                <a href="javascript:void(0)" class="btn btn-common-blue txtbold sm" (click)="create_staff_level(addStafflevel.staff_level_title.value);addStafflevel.staff_level_title.value=''">Add</a>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END STAFF TAB -->
+                        <!-- SKILL TAB -->
+                        <div class="tab-pane" id="tab_3_5">
+                          <div class="form-group">
+                            <p class="alert alert-info">Skills can be allocated to users and allow you to perform some analysis on the alignment between
+                              your staff skills and the tasks performed. </p>
+                            <label class="control-label">
+                              <b>Skills</b>
+                            </label>
+                            <div class="controls form-group">
+
+                              <table class="table table-striped table-hover table-condensed flip-content" id="skill_table">
+                                <thead class="flip-content">
+                                  <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="company_skills">
+                                  <tr *ngFor='let skill of other_info.skills' id="{{skill.skill_id}}">
+                                    <td width="3%" style="cursor:pointer">
+                                      <i class="stripicon status_header" aria-hidden="true"></i>
+                                    </td>
+                                    <td width="400px">
+                                      <inline-editor type="text" [(ngModel)]="skill.skill_title" (onSave)="update_skill_name(skill.skill_id,$event);" pattern="^[a-zA-Z0-9]*$"
+                                        size="10"></inline-editor>
+                                    </td>
+                                    <td>
+                                      <div style="float: left;margin-top: 2px;">
+                                        <ui-switch [checked]="skill.skill_status == 'Active'" (change)="change_skill_status(skill.skill_id,$event)"></ui-switch>
+                                      </div>
+                                      <div style="margin-top:8px;">
+                                        <a href="javascript:void(0)" mwlConfirmationPopover placement="top" (confirm)="confirmClicked = delete_skill(skill.skill_id)"
+                                          (cancel)="cancelClicked = true">
+                                          <i class="icon-trash stngicn"></i>
+                                        </a>
+                                      </div>
+                                    </td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
+
+                            </div>
+                            <div>
+                              <form #addskills>
+                                <input type="text" class="large m-wrap valid" name="skill_title" id="skill_title">
+                                <a href="javascript:void(0)" class="btn blue txtbold sm btn-common-blue" (click)="insert_skill(addskills.skill_title.value);addskills.skill_title.value =''">Add</a>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END SKILL TAB -->
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- END TASK SETTING TAB -->
+            <!-- USERS ADDONS TAB -->
+            <div class="profile-content custom_margin_20 tab-pane" id="main_tab_4">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                      <div class="caption caption-md">
+                        <span class="caption-subject font-blue-madison bold uppercase">addons</span>
+                      </div>
+                      <ul class="nav nav-tabs">
+                        <li class="active">
+                          <a href="#tab_4_1" data-toggle="tab">General</a>
+                        </li>
+                        <li>
+                          <a href="#tab_4_2" data-toggle="tab">API Access</a>
+                        </li>
+
+                      </ul>
+                    </div>
+                    <div class="portlet-body">
+                      <div class="tab-content">
+                        <!-- GENERAL INFO TAB -->
+                        <div class="tab-pane active" id="tab_4_1">
+                          <!--  customer module status code-->
+
+                          <div class="col-md-12" style="margin-bottom: 10px;">
+                            <p class="alert alert-info">
+                              <b>Customer module</b>
+                              <br>
+                              <br>The customer module allows you to link your tasks and projects to customers. Once activated,
+                              you will also be able to activate the Pricing and the timesheet modules.</p>
+                            <label class="control-label padding-top-7 col-md-4 font_weight">Activate Customer AddOn: </label>
+                            <div class="relative-position ">
+                              <ui-switch [checked]="customer_module == 1" (change)="change_status('customer',$event)"></ui-switch>
+                            </div>
+                          </div>
+
+                          <!--   pricing module status code-->
+                          <div>
+
+                            <div class="col-md-12" style="margin-bottom: 10px;">
+                              <p class="alert alert-info">
+                                <b>Pricing Maintenance</b>
+                                <br>
+                                <br>The pricing module allows you to record a cost per hour against your users and setup a charge
+                                out rate for your customers, projects or type of tasks. You will be able to keep track of
+                                your project profitability and review how much you should charge your customers by period.</p>
+                              <label class="control-label padding-top-7 col-md-4 font_weight">Activate Pricing Module: </label>
+                              <div class="relative-position ">
+                                <ui-switch [checked]="pricing_module == 1" [disabled]="customer_module == 0" (change)="change_status('price',$event)"></ui-switch>
+                              </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-bottom: 10px;">
+                              <label class="control-label padding-top-7 col-md-4 font_weight">Choose your currency :</label>
+                              <select class="col-md-4 radius-b" [(ngModel)]="currency_code" [disabled]="customer_module == 0 || pricing_module == 0" style="padding-left: 2px !important;"
+                                name="change_currency_name" (change)="change_status('currency','')">
+                                <option value="">Please select</option>
+                                <option *ngFor="let currency of other_info.currency" value="{{currency.currency_code}}">{{currency.currency}}({{currency.currency_symbol}})</option>
+                              </select>
+                            </div>
+                          </div>
+
+
+                          <!--  timesheet status code-->
+
+                          <div class="col-md-12" style="margin-bottom: 10px;">
+                            <label class="control-label padding-top-7 col-md-4 font_weight">Timesheet Module: </label>
+                            <div class="relative-position ">
+                              <ui-switch [checked]="timesheet_module == 1" [disabled]="customer_module == 0 || pricing_module == 0" (change)="change_status('timesheet',$event)"></ui-switch>
+                            </div>
+                          </div>
+
+
+                          <!-- Xero integration  -->
+
+                          <div class="col-md-12" style="margin-bottom: 10px;">
+                            <label class="control-label padding-top-7 col-md-4 font_weight">Xero Integration: </label>
+                            <div class="relative-position col-md-1" style="padding-left:0px !important;">
+                              <ui-switch [checked]="xero_integration_status == 1" [disabled]="customer_module == 0" (change)="change_status('xero',$event)"></ui-switch>
+                            </div>
+                            <p>
+                              <a href="javascript:void(0);" class="btn blue txtbold sm" id="show_xero_setup" style="display:none;line-height: 20px !important;">Xero Setup</a>
+                            </p>
+                          </div>
+
+                        </div>
+                        <!-- END GENERAL INFO TAB -->
+
+                        <!-- API TAB -->
+                        <div class="tab-pane" id="tab_4_2">
+                          <div class="form-group">
+                            <label class="control-label padding-top-7 col-md-3">
+                              <b>Activate Apis Access:</b>
+                            </label>
+                            <div class="relative-position ">
+                              <ui-switch [checked]="app_info != ''" (change)="change_oauth_status($event)"></ui-switch>
+                            </div>
+                          </div>
+
+                          <div class="row" *ngIf="app_info !=''">
+                            <div class="col-md-12 form-group">
+                              <div class="col-md-3">
+                                <label class="control-label">
+                                  <b>Client ID</b>
+                                </label>
+                              </div>
+                              <div>
+                                {{app_info.client_id}}
+                              </div>
+                            </div>
+                            <div class="col-md-12 form-group">
+                              <div class="col-md-3">
+                                <label class="control-label ">
+                                  <b>Client Secret</b>
+                                </label>
+                              </div>
+                              <div>
+                                {{app_info.client_secret}}
+                              </div>
+                            </div>
+                            <div class="col-md-12 form-group">
+                              <div class="col-md-3">
+                                <label class="control-label ">
+                                  <b>Token Generate URL</b>
+                                </label>
+                              </div>
+                              <div>
+                                http://192.168.1.27/schedullo/OAuth2/token
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                        <!-- END API TAB -->
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- BILLING TAB -->
+
+            <div class="profile-content custom_margin_20 tab-pane" id="main_tab_5">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                      <div class="caption caption-md">
+                        <span class="caption-subject font-blue-madison bold uppercase">billing</span>
+                      </div>
+                      <ul class="nav nav-tabs">
+                        <li class="active">
+                          <a href="#tab_5_1" data-toggle="tab">General</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="portlet-body">
+                      <div class="tab-content">
+                        <!-- GENERAL INFO TAB -->
+                        <div class="tab-pane active" id="tab_5_1">
+                          <div class="form-horizontal">
+
+                            <div class="form-group">
+                              <label class="control-label padding-top-7 col-md-3">Credit Card Information:</label>
+                              <div class="controls" *ngIf="other_info.credit_card != '' && other_info.expiry_date !=''; else otherbilling">
+                                <div class="row margin-top-10 setworkchk">
+                                  <div class="col-md-2">
+                                    <label class="checkbox line">
+                                      Credit Card :
+                                    </label>
+                                  </div>
+                                  <div class="col-md-4  relative-position">
+                                    <span class="hravailable">{{other_info.credit_card}} </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+
+                                <div class="row margin-top-10 setworkchk" style="margin-left: 25%;">
+                                  <div class="col-md-2">
+                                    <label class="checkbox line">
+                                      Expiry Date :
+                                    </label>
+                                  </div>
+                                  <div class="col-md-4  relative-position">
+                                    <span class="hravailable">{{other_info.expiry_date}} </span>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <ng-template #otherbilling>
+                                <div class="controls">
+                                  <div class="row margin-top-10 setworkchk">
+                                    <div class="col-md-2">
+                                      <label class="checkbox line">
+                                        &nbsp;
+                                      </label>
+                                    </div>
+                                    <div class="col-md-4  relative-position" *ngIf="other_info.credit_card == 'error' else noterror">
+                                      <span class="hravailable" style="line-height: 0px !important;">Unable to retrieve your billing information. Please try again later.</span>
+                                      <div class="clearfix"></div>
+                                    </div>
+                                    <ng-template #noterror>
+                                      <div class="col-md-4  relative-position">
+                                        <span class="hravailable" style="line-height: 0px !important;">No payment method found</span>
+                                        <div class="clearfix"></div>
+                                      </div>
+                                    </ng-template>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3">&nbsp;</label>
+                              <div class="relative-position">
+                                <a href="javascript:void(0)" class="btn blue txtbold sm" id="billing">Access billing portal</a>
+                                <a href="javascript:void(0)" *ngIf="is_owner ==1" class="btn red txtbold sm" (click)="open_reason_modal()">Close My Account</a>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="form-group">
+                            <div>
+                              <label class="bld control-label padding-top-7">
+                                <b>Invoices:</b>
+                              </label>
+                            </div>
+
+                            <div class="customtable form-horizontal">
+                              <table class="table table-striped table-hover table-condensed flip-content">
+                                <thead class="flip-content">
+                                  <tr>
+                                    <th>
+                                      <span>
+                                        <i class="fa fa-hashtag" aria-hidden="true"></i>
+                                      </span>Invoice ID</th>
+                                    <th>Date</th>
+                                    <th>Charges</th>
+                                    <th>Payments</th>
+                                    <th>Paid(Yes/No)</th>
+                                    <th>Paid On</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let statement of other_info.statements">
+                                    <td width="22%">
+                                      <a href="javascript:void(0);">{{statement.id}} </a>
+                                    </td>
+                                    <td *ngIf="statement.updated_at !=''">{{statement.updated_at | date:'dd/MM/y' }}</td>
+                                    <td *ngIf="statement.updated_at ==''">N/A</td>
+                                    <td> ${{(statement.total_in_cents/100)}}</td>
+                                    <td> ${{(((statement.total_in_cents+statement.starting_balance_in_cents)-(statement.ending_balance_in_cents))/100)}}</td>
+                                    <td *ngIf="statement.settled_at !=''">Yes </td>
+                                    <td *ngIf="statement.settled_at ==''">NO </td>
+                                    <td *ngIf="statement.settled_at ==''">N/A </td>
+                                    <td *ngIf="statement.settled_at !=''">{{statement.settled_at | date:'dd/MM/y'}}</td>
+                                  </tr>
+                                  <tr *ngIf="other_info.statements == ''">
+                                    <td colspan="6">No Invoice Available</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END GENERAL INFO TAB -->
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- END  CONTENT -->
+          <!-- END BEGIN PROFILE SIDEBAR -->
+        </div>
+      </div>
+    </div>
+    <!-- END CONTENT BODY -->
+  </div>
+  <!-- END CONTENT -->
+</div>
+<!-- END PAGE CONTAINER-->
+<!-- Footer here -->
+<footer-layout></footer-layout>
+<bs-modal #reason>
+  <div class="modal-body">
+    <div class="portlet new_porlet_body">
+      <div class="portlet-body flip-scroll padd15">
+        <strong>Your Schedullo is ready to close.</strong> Could you please tell us why you want to close your account?
+        <form #closeAccountForm>
+          <div class="form-group">
+            <label class="control-label">Reason : </label>
+            <div class="controls">
+              <select class=" m-wrap mysetting-select alert_input" id="close_reason" (change)="$event.target.value == 'Other' ?reason_other=true:reason_other=false"
+                name="close_reason" tabindex="1" required>
+                <option value="">--Select--</option>
+                <option value="I don't need a task management app"> I don't need a task management app</option>
+                <option value="Schedullo is too complex"> Schedullo is too complex</option>
+                <option value="Missing functionality">Missing functionality</option>
+                <option value="I don't like Schedullo">I don't like Schedullo</option>
+                <option value="I found another app">I found another app</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" [hidden]="!reason_other" style='margin-bottom:45px;'>
+            <label class="control-label">Justify : </label>
+            <div class="controls">
+              <input type="text" name="close_reason_other" value="" class="m-wrap col-md-12" placeholder="" tabindex="1">
+            </div>
+          </div>
+
+          <div>
+            <button class="btn green" (click)="close_account(closeAccountForm);">Close Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</bs-modal>
+
+<!-- External customer -->
+<bs-modal #externalCustomer [keyboard]="false" [backdrop]="'static'"> 
+  <div class="modal-header">
+     <button type="button" class="close save_close_cross_modify" aria-hidden="true" style="margin-right: 0px;margin-top: 10px;"
+        (click)="close_external_customer_modal();"></button> 
+     <h3 style="margin-top: 9px !important; "> External User Details </h3>
+  </div>
+  <div class="modal-body">
+     <div class="portlet">
+        <div class="portlet-body  form flip-scroll" style="padding:10px;">
+           <div class="row form-horizontal" style="    margin-left: 10px; margin-right: 10px;">
+              <form [formGroup]="externalcustomerform" (submit)="update_external_customer_data(externalcustomerform.value);">
+                 <div class="row">
+                    <div class=" col-md-6">
+                       <label class="control-label">
+                       <strong>First Name<span class="required" aria-required="true">*</span></strong> </label>
+                       <div class="controls">
+                          <input class="onsub m-wrap cus_input " formControlName="customer_user_first" name="first_name" placeholder="First Name"
+                             type="text"  />
+                          <p *ngIf="externalcustomerform.get('customer_user_first').hasError('required') && externalcustomerform.get('customer_user_first').touched" class="help-inline"> This field is required.
+                          </p>
+                       </div>
+                    </div>
+                    <div class=" col-md-6" >
+                       <label class="control-label">
+                       <strong>Last Name<span class="required" aria-required="true">*</span></strong> </label>
+                       <div class="controls">
+                          <input class="onsub m-wrap cus_input " formControlName="customer_user_last" name="last_name" placeholder="Last Name"
+                             type="text"  />
+                          <p *ngIf="externalcustomerform.get('customer_user_last').hasError('required') && externalcustomerform.get('customer_user_last').touched" class="help-inline"> This field is required.
+                          </p>
+                       </div>
+                    </div>
+                    <div class="col-md-12 paddding-5">
+                        <label class="control-label"><strong>Active Customers</strong><span class="required">*</span> </label>
+                        <div class="controls">
+                            <select class="m-wrap" formControlName="parent_customer" name="parent_customer" style="width: 100%;border-radius: 5px;">
+                                <option value=""> Select customer</option>
+                                <option *ngFor="let c of customers" value="{{c.customer_id}}">{{c.customer_name}}</option>
+                            </select>
+                            <p *ngIf="externalcustomerform.get('parent_customer').hasError('required') && externalcustomerform.get('parent_customer').touched" class="help-inline"> This field is required.
+                              </p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 paddTop10">
+                       <label class="control-label"><strong>Email</strong><span class="required" aria-required="true">*</span> </label> 
+                       <div class="controls">
+                          <input class="onsub m-wrap cus_input valid" formControlName="customer_user_mail"   placeholder="Email Address" value="" type="text" tabindex="1" aria-required="true" aria-describedby="customer_user_mail-error" aria-invalid="false"> 
+                          <p *ngIf="externalcustomerform.get('customer_user_mail').hasError('required') && externalcustomerform.get('customer_user_mail').touched" class="help-inline"> This field is required.
+                          </p>
+                          <p *ngIf="externalcustomerform.get('customer_user_mail').hasError('email') && externalcustomerform.get('customer_user_mail').touched" class="help-inline"> This field not valid email.
+                          </p>
+                          <p *ngIf="externalcustomerform.get('customer_user_mail').errors && externalcustomerform.get('customer_user_mail').errors.exist" class="help-inline">
+                              There is an existing account associated with this email.
+                          </p>
+                       </div>
+                    </div>
+                 </div>
+                 <div class="col-md-12 margin-top-20" style="margin-left: -16px;margin-bottom: 10px;"> 
+                   <button class="btn blue txtbold" type="submit" [disabled]="!externalcustomerform.valid" *ngIf="external_customer_data !=''" >Update</button>
+                   <button class="btn blue txtbold" type="submit" [disabled]="!externalcustomerform.valid" *ngIf="external_customer_data ==''" >Send Invite</button> 
+                   <button class="btn red txtbold" (click)="close_external_customer_modal();" type="button">Cancel </button>
+                 </div>
+              </form>
+           </div>
+        </div>
+     </div>
+  </div>
+  </bs-modal>

@@ -1,0 +1,533 @@
+<header></header>
+<sidebar></sidebar>
+
+<!-- BEGIN PAGE CONTAINER-->
+<div class="page-container custom_my_setting">
+    <span *ngIf="loader" class="dvLoading"></span>            
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="custom_margin_26">
+                <input type="hidden" name="from" id="from" value=""/>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN PROFILE SIDEBAR -->
+                    <div class="profile-sidebar">
+                        <!-- PORTLET MAIN -->
+                        <div class="portlet light profile-sidebar-portlet ">
+                            <!-- SIDEBAR USERPIC -->
+                            <div class="profile-userpic" >
+                               <img  *ngIf="user_info.profile_image !='' else secondimage" src="{{Image_url}}upload/user/{{user_info.profile_image}}" class="img-responsive" alt=""/> 
+                              <ng-template #secondimage><img src="{{Image_url}}upload/user/no_image.jpg" class="img-responsive" alt=""/> </ng-template>
+                              </div>
+                            <!-- END SIDEBAR USERPIC -->
+                            <!-- SIDEBAR USER TITLE -->
+                            <div class="profile-usertitle">
+                                <div class="profile-usertitle-name">{{user_info.first_name}} {{user_info.last_name}} </div>
+                                <div class="profile-usertitle-job"> 
+                                    Admin
+                                </div>
+                            </div>
+                            <!-- END SIDEBAR USER TITLE -->
+                            
+                            <!-- SIDEBAR MENU -->
+                            <div class="profile-usermenu">
+                                <ul class="nav">
+                                    <li class="active">
+                                        <a href="javascript:void(0)">
+                                            <i class="fa fa-cog"></i> My Settings </a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                            <!-- END MENU -->
+                        </div>
+                        <!-- END PORTLET MAIN -->
+                        <!-- PORTLET MAIN -->
+                        <div class="portlet light ">
+                            <!-- STAT -->
+                            <div class="row list-separated profile-stat">
+                                <div class="col-md-4 col-sm-4 col-xs-6">
+                                    <div class="uppercase profile-stat-title">{{other_info.total_projects}} </div>
+                                    <div class="uppercase profile-stat-text"> Projects </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-6">
+                                    <div class="uppercase profile-stat-title"> {{other_info.total_tasks}} </div>
+                                    <div class="uppercase profile-stat-text"> Tasks </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-6">
+                                    <div class="uppercase profile-stat-title"> {{other_info.total_customers}} </div>
+                                    <div class="uppercase profile-stat-text"> Customers </div>
+                                </div>
+                            </div>
+                            <!-- END STAT -->
+                            <div class="form-group">
+                                <label class="control-label new_content-label col-md-9 ">Office 365 Integration : </label>
+                                <div class="controls relative-position">
+                                    <div>
+                                        <ui-switch [checked]="outlook_sync == 1" (change)="outlook_integration($event);" name="outlook_sync"></ui-switch>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label new_content-label col-md-9">Gmail Integration : </label>
+                                <div class="controls relative-position">
+                                    <div>
+                                        <ui-switch [checked]="gmail_sync == 1" (change)="gmail_integration($event);" name="gmail_sync"></ui-switch>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END PORTLET MAIN -->
+                    </div>
+                    <!-- END BEGIN PROFILE SIDEBAR -->
+                    <!-- BEGIN PROFILE CONTENT -->
+                    <div class="profile-content custom_margin_20">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet light ">
+                                    <div class="portlet-title tabbable-line">
+                                        <div class="caption caption-md">
+                                            <span class="caption-subject font-blue-madison bold uppercase">MY SETTINGS</span>
+                                        </div>
+                                        <ul class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#tab_1_1" data-toggle="tab">Personal Info</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_2" data-toggle="tab">Profile Image</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_3" data-toggle="tab">Change Password</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_7" data-toggle="tab">Notifications</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_4" data-toggle="tab">Calendar</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_6" data-toggle="tab">Color</a>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="tab-content">
+                                            <!-- PERSONAL INFO TAB -->
+                                            <div class="tab-pane active" id="tab_1_1" >
+                                                <form  [formGroup]="userinfosetting"  >
+                                                    <div class="form-group">
+                                                        <label class="control-label">First Name<span class="required">*</span></label>
+                                                        <input type="text" placeholder="John" formControlName="first_name" class="form-control"/>
+                                                        <p *ngIf="userinfosetting.get('first_name').hasError('required')" class="help-inline">
+                                                                This field is required.
+                                                        </p>
+                                                        <p *ngIf="userinfosetting.get('first_name').hasError('maxlength')" class="help-inline">
+                                                            Only 25 letters allowed.
+                                                        </p>
+                                                        <p *ngIf="userinfosetting.get('first_name').hasError('pattern')" class="help-inline">
+                                                            Please enter only letters.
+                                                        </p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Last Name<span class="required">*</span></label>
+                                                        <input type="text" placeholder="Doe" formControlName="last_name" class="form-control"/> 
+                                                        <p *ngIf="userinfosetting.get('last_name').hasError('required')" class="help-inline">
+                                                                This field is required.
+                                                        </p>
+                                                        <p *ngIf="userinfosetting.get('last_name').hasError('maxlength')" class="help-inline">
+                                                            Only 25 letters allowed.
+                                                        </p>
+                                                        <p *ngIf="userinfosetting.get('last_name').hasError('pattern')" class="help-inline">
+                                                            Please enter only letters.
+                                                        </p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Email Address<span class="required">*</span></label>
+                                                        <input type="email" class="form-control" value="" formControlName="email" />
+                                                        <p *ngIf="userinfosetting.get('email').hasError('required')" class="help-inline">
+                                                                This field is required.
+                                                        </p>
+                                                        <p *ngIf="userinfosetting.get('email').hasError('email')" class="help-inline">
+                                                                Please enter a valid email address.
+                                                        </p>
+                                                        <p *ngIf="userinfosetting.get('email').errors && userinfosetting.get('email').errors.exist" class="help-inline">
+                                                            There is an existing account associated with this email.
+                                                        </p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Mobile Number</label>
+                                                        <input type="text"  class="form-control" value="" formControlName="mobile" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Time Zone<span class="required">*</span></label>
+                                                        <select class="form-control" formControlName="user_time_zone" >
+                                                            <option value="">Select</option>
+                                                            <option *ngFor="let timezone of other_info.timezone" value="{{timezone.timezone_name}}">{{timezone.name}}</option>
+                                                        </select>
+                                                        <p *ngIf="userinfosetting.get('user_time_zone').hasError('required')" class="help-inline">
+                                                                This field is required.
+                                                        </p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                            <label class="control-label">Division</label>
+                                                            <mat-select [disabled]="is_admin == 0" formControlName="tag_division"  class=" form-control user_setting " placeholder="Division" multiple>
+                                                                <mat-option *ngFor="let div of other_info.division" value="{{div.division_id}}" (click)="getdepartment(divisionform)">{{div.devision_title}}</mat-option>
+                                                            </mat-select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                            <label class="control-label">Department <span *ngIf="is_admin == 1"><a href="javascript:void(0)"> Setup Department in Company Settings</a></span></label>
+                                                            <mat-select [disabled]="is_admin == 0" formControlName="tag_department"class=" form-control user_setting " placeholder="Department" multiple>
+                                                                <mat-option *ngFor="let dep of other_info.department" value="{{dep.department_id}}">{{dep.department_title}}</mat-option>
+                                                            </mat-select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Home Page
+                                                            <span class="required">*</span>
+                                                        </label>
+                                                        <select class="form-control" formControlName="user_default_page" >
+                                                            <option value="dashboard">My Dashboard</option>
+                                                            <option value="team_dashboard">Team dashboard</option>
+                                                            <option value="weekly_calendar">Weekly Calendar</option>
+                                                            <option value="monthly_calendar">Monthly Calendar</option>
+                                                            <option value="kanban">Kanban Board</option>
+                                                        </select>  
+                                                    </div>
+                                                    <div class="form-group">
+                                                    <label class="control-label">Change Background</label>
+                                                    </div>
+                                                </form>
+                                                <div class="form-group" style="margin-left:-15px">
+                                                    <div class="form-group">
+                                                        <span class="col-md-2">
+                                                            <input class="form-control" [(colorPicker)]="color" [style.background]="color">
+                                                        </span>
+                                                        <span class="col-md-2">
+                                                            <button class="btn btn-common-blue" type="button" [disabled]="color == ''" (click)="set_background_color(color)" >Validate Color</button>
+                                                        </span>
+                                                    </div>
+                                                    <p class="or">OR</p>
+                                                    <div class="fileupload fileupload-new pull-left">
+                                                        <div class="input-append">
+                                                            <span class="btn btn-file" style="border-radius: 4px;">
+                                                                <span class="fileupload-new" [dropzone]="add_background_config" (success)="Addbackground($event);">Upload Image</span>
+                                                                <!-- <input type="file" accept="image/*" class="default" name="background_image" /> -->
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                    <strong style="margin-left:100px;font-size: 18px;"> Preview</strong>
+                                                    <div class="form-group preview_image"  [ngStyle]="{background:user_info.user_background_type == 'Color'? user_info.user_background_name:''}" >
+                                                        <img class="preview_image" *ngIf="user_info.user_background_type == 'Image'" src="{{Image_url}}upload/user/{{user_info.user_background_name}}" />
+                                                    </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div style="margin-bottom: 10px;">
+                                                <a href="javascript:void(0)" (click)="set_default_background();" style="text-decoration: underline !important;">Restore default background</a>
+                                                </div>
+                                                <div class="margiv-top-10">
+                                                    <button class="btn btn-common-blue" type="button" (click)="update_user_info(userinfosetting.value)" [disabled]="!userinfosetting.valid">
+                                                    Save Changes </button>
+                                                    <button class="btn default" type="button"> Cancel </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- END PERSONAL INFO TAB -->
+                                            <!-- CHANGE AVATAR TAB -->
+                                            <div class="tab-pane" id="tab_1_2">
+                                                <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="controls relative-position margin-top-10">
+                                                        <div class="cus_margin_bottom20">
+                                                            <span class="cus_margin_left10" >
+                                                              <img class ="myprofile-brand_header custom_profile_size" *ngIf="user_info.profile_image !='' else secondimage1" src="{{Image_url}}upload/user/{{user_info.profile_image}}">
+                                                              <ng-template #secondimage1><img src="{{Image_url}}upload/user/no_image.jpg" class="myprofile-brand_header custom_profile_size" alt=""/> </ng-template>
+                                                            </span>
+                                                        </div>
+                                                        <button type="button" class="btn btn-file blue" style="border-radius: 4px;" [dropzone]="change_profile_config" (success)="update_user_image($event);">
+                                                            Change Image
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                   
+                                            </div>
+                                            <!-- END CHANGE AVATAR TAB -->
+                                            <!-- CHANGE PASSWORD TAB -->
+                                            <div class="tab-pane" id="tab_1_3">
+                                                <form [formGroup]="changePassword" id="frm_change_password" (submit)="change_password(changePassword.value)" >
+                                                    <div class="form-group ">
+                                                        <label class="control-label">Current Password<span class="required">*</span></label>
+                                                        <p *ngIf="changePassword.get('old_password').hasError('required') && changePassword.get('old_password').touched" class="help-inline">is required. </p>
+                                                        <p *ngIf="changePassword.get('old_password').errors && changePassword.get('old_password').errors.exist" class="help-inline">is not correct, Please try again..!</p>
+                                                        <input [type]="old_password?'text':'password'" formControlName="old_password" class="form-control " name="old_password" autocomplete="off"/><span class="show_password show_old_pass" (click)="old_password= !old_password" ><img src="assets/images/eye.png"/></span> 
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">New Password<span class="required">*</span></label>
+                                                        <p *ngIf="changePassword.get('new_password').hasError('required') && changePassword.get('new_password').touched" class="help-inline">is required. </p>
+                                                        <p *ngIf="changePassword.get('new_password').hasError('pattern')" class="help-inline">Provide atleast 1 Number, 1 Alphabet and between 8 to 16 characters. </p>
+                                                        <input [type]="new_password?'text':'password'" formControlName="new_password" class="form-control" name="password"  autocomplete="off" /><span class="show_password display_password" (click)="new_password = !new_password" ><img src="assets/images/eye.png"/></span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Re-type New Password<span class="required">*</span></label>
+                                                        <p *ngIf="changePassword.get('confirm_password').hasError('required') && changePassword.get('confirm_password').touched" class="help-inline">is required. </p>
+                                                        <p *ngIf="changePassword.get('confirm_password').errors && changePassword.get('confirm_password').errors.MatchPassword" class="help-inline">Please enter the same value again. </p>
+                                                        <input type="password" class="form-control" formControlName="confirm_password" name="confirm_password"  autocomplete="off"  />
+                                                    </div>
+                                                    <div class="margin-top-10">
+                                                        <button class="btn sm btn-common-blue"  type="submit" [disabled]="changePassword.invalid" > Change Password </button>
+                                                        <button class="btn sm default" (click)="changePassword.reset();" type="button"> Cancel </button>
+                                                    </div>
+                                                </form>  
+                                            </div>
+                                            <!-- END CHANGE PASSWORD TAB -->
+                                            <!-- CALENDAR TAB -->
+                                            <div class="tab-pane" id="tab_1_4" style="margin-left: 15px;margin-right: 15px;">
+                                                    <div class="form-horizontal">
+                                                            <div class="form-group">
+                                                                <p class="alert alert-info">Select the days you normally work and how many hours are available each day. Your capacity is displayed on the calendar and allow you to identify whether you are over committing yourself or not. 
+                                                                    <br><br>Examples :
+                                                                    <br><br>50 minutes ==> enter 50
+                                                                    <br>1h30 ==> 130
+                                                                    <br>8 hours ==> 800
+                                                                </p>
+                                                                <label class="control-label" >Default Working Day </label>
+                                                                    <div class="controls">
+                                                                        <div  class="row margin-top-10 setworkchk">
+                                                                            <div class="col-md-12">
+                                                                                <div class="col-md-2"></div>
+                                                                                <div class="col-md-2 top5">
+                                                                                    <label class="checkbox line" >
+                                                                                       <input class="mysetting-cal-chkbox newcheckbox_task position_inherit" type="checkbox" name="MON_closed" [checked]="user_info.MON_closed == 1" (click)="set_calendar_day('MON',$event.target.checked)" />Monday
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="col-md-8 relative-position">
+                                                                                    <input type="text" name="MON_hours" class="m-wrap small setHourErr time-text" [disabled]="user_info.MON_closed == 0" [value]="change_time(user_info.MON_hours)" (blur)="convet_time($event.target.value,'MON')"  />
+                                                                                    <span class="hravailable"> hours available </span>
+                                                                                    <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div  class="row margin-top-10 setworkchk">
+                                                                            <div class="col-md-12">
+                                                                                <div class="col-md-2"></div>
+                                                                                <div class="col-md-2 top5">
+                                                                                    <label class="checkbox line">
+                                                                                        <input class="mysetting-cal-chkbox newcheckbox_task position_inherit" type="checkbox" name="TUE_closed" [checked]="user_info.TUE_closed == 1" (click)="set_calendar_day('TUE',$event.target.checked)"  />Tuesday
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="col-md-8 relative-position">
+                                                                                    <input type="text" name="TUE_hours" class="m-wrap small setHourErr time-text" [disabled]="user_info.TUE_closed == 0" value="{{change_time(user_info.TUE_hours)}}" (blur)="convet_time($event.target.value,'TUE')" />
+                                                                                    <span class="hravailable"> hours available </span>
+                                                                                    <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div  class="row margin-top-10 setworkchk">
+                                                                            <div class="col-md-12">
+                                                                                <div class="col-md-2"></div>
+                                                                                <div class="col-md-2 top5">
+                                                                                    <label class="checkbox line">
+                                                                                        <input class="mysetting-cal-chkbox newcheckbox_task position_inherit" type="checkbox" name="WED_closed" [checked]="user_info.WED_closed == 1" (click)="set_calendar_day('WED',$event.target.checked)" />Wednesday
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="col-md-8 relative-position">
+                                                                                    <input type="text" name="WED_hours" class="m-wrap small setHourErr time-text" [disabled]="user_info.WED_closed == 0" value="{{change_time(user_info.WED_hours)}}" (blur)="convet_time($event.target.value,'WED')" />
+                                                                                    <span class="hravailable"> hours available </span>
+                                                                                    <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div  class="row margin-top-10 setworkchk">
+                                                                            <div class="col-md-12">
+                                                                                <div class="col-md-2"></div>
+                                                                                <div class="col-md-2 top5">
+                                                                                    <label class="checkbox line">
+                                                                                        <input class="mysetting-cal-chkbox newcheckbox_task position_inherit" type="checkbox" name="THU_closed" [checked]="user_info.THU_closed == 1" (click)="set_calendar_day('THU',$event.target.checked)" />Thursday
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="col-md-8 relative-position">
+                                                                                    <input type="text" name="THU_hours" class="m-wrap small setHourErr time-text" [disabled]="user_info.THU_closed == 0" value="{{change_time(user_info.THU_hours)}}" (blur)="convet_time($event.target.value,'THU')" />
+                                                                                    <span class="hravailable"> hours available </span>
+                                                                                    <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div  class="row margin-top-10 setworkchk">
+                                                                            <div class="col-md-12">
+                                                                                <div class="col-md-2"></div>
+                                                                                <div class="col-md-2 top5">
+                                                                                    <label class="checkbox line"> 
+                                                                                        <input class="mysetting-cal-chkbox newcheckbox_task position_inherit" type="checkbox" name="FRI_closed" [checked]="user_info.FRI_closed == 1" (click)="set_calendar_day('FRI',$event.target.checked)" />Friday
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="col-md-8 relative-position">
+                                                                                    <input type="text" name="FRI_hours" class="m-wrap small setHourErr time-text" [disabled]="user_info.FRI_closed == 0" value="{{change_time(user_info.FRI_hours)}}" (blur)="convet_time($event.target.value,'FRI')" />
+                                                                                    <span class="hravailable"> hours available </span>
+                                                                                    <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div  class="row margin-top-10 setworkchk">
+                                                                            <div class="col-md-12">
+                                                                                <div class="col-md-2"></div>
+                                                                                <div class="col-md-2 top5">
+                                                                                    <label class="checkbox line">
+                                                                                        <input class="mysetting-cal-chkbox newcheckbox_task position_inherit" type="checkbox" name="SAT_closed" [checked]="user_info.SAT_closed == 1" (click)="set_calendar_day('SAT',$event.target.checked)" />Saturday
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="col-md-8 relative-position">
+                                                                                    <input type="text" name="SAT_hours" class="m-wrap small setHourErr time-text" [disabled]="user_info.SAT_closed == 0" value="{{change_time(user_info.SAT_hours)}}" (blur)="convet_time($event.target.value,'SAT')" />
+                                                                                    <span class="hravailable"> hours available </span>
+                                                                                    <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div  class="row margin-top-10 setworkchk">
+                                                                            <div class="col-md-12">
+                                                                                <div class="col-md-2"></div>
+                                                                                <div class="col-md-2 top5">
+                                                                                    <label class="checkbox line">
+                                                                                        <input class="mysetting-cal-chkbox newcheckbox_task position_inherit" type="checkbox" name="SUN_closed" [checked]="user_info.SUN_closed == 1" (click)="set_calendar_day('SUN',$event.target.checked)" />Sunday
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div class="col-md-8 relative-position">
+                                                                                        <input type="text" name="SUN_hours" class="m-wrap small setHourErr time-text" [disabled]="user_info.SUN_closed == 0" value="{{change_time(user_info.SUN_hours)}}" (blur)="convet_time($event.target.value,'SUN')" />
+                                                                                        <span class="hravailable"> hours available </span>
+                                                                                        <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                            </div>
+                                            <!-- END CALENDAR TAB -->
+                                           
+                                            <!-- COLOR TAB -->
+                                            <div class="tab-pane" id="tab_1_6">
+                                                    <p class="alert alert-info">
+                                                        <strong>Colours</strong> are user specific and allow you to identify visually your tasks on your Kanban board or in the calendar.
+                                                        You can change the name of each colour.
+                                                        <br>
+                                                        <br>When you are viewing your kanban board or your calendar, right-click on a task to allocate a colour.
+                                                    </p>
+                                                    <div class="customtable form-horizontal">
+                                                        <div>
+                                                            <table class="table table-striped table-hover table-condensed flip-content" style="border-collapse: separate;border-spacing: 0px 5px;">
+                                                                <thead class="flip-content">
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>Colour</th>
+                                                                        <th>Name</th>
+                                                                        <th>Active</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="colors_table">
+                                                                    <tr *ngFor="let color of colors" id="{{color.user_color_id}}">
+                                                                        <td width="3%" style="cursor:pointer"><i class="stripicon color_header" aria-hidden="true"></i></td>
+                                                                        <td width="22%">
+                                                                            <span class="green-color" [ngStyle]="{'background-color':color.color_code,'border':'1px solid '+color.outside_color_code,'color':color.outside_color_code }">{{color.color_name}}</span>
+                                                                        </td>
+                                                                        <td width="50%" class="color_td">
+                                                                            <inline-editor type="text" [(ngModel)]="color.name" pattern="^[a-zA-Z0-9]*$" (onSave)="update_color_name($event,color.user_color_id)" size="10"></inline-editor>
+                                                                        </td>
+                                                                        <td>
+                                                                            <ui-switch [checked]="color.status == 'Active'" (change)="change_color_status($event,color.user_color_id)"  name="status"></ui-switch>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-2">Default Colour:</label>
+                                                            <div class="controls relative-position">
+                                                                <select class="large m-wrap color-select" (change)="change_default_color($event.target.value)" name="default_color" style="border-radius:4px;padding-left: 2px;" [(ngModel)]="user_info.default_color" >
+                                                                    <option value="0">--Select--</option>
+                                                                    <option *ngFor="let col of colors" value="{{col.user_color_id}}">{{col.name}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <!-- END COLOR TAB -->
+                                            <!-- NOTIFICATION TAB -->
+                                            <div class="tab-pane" id="tab_1_7">
+                                                <div class="form-group custom-margin10">
+                                                    <label class="control-label col-md-9">Daily email summary : </label>
+                                                    <div class="controls relative-position">
+                                                        <div>
+                                                            <ui-switch [checked]="user_info.daily_email_summary == 1" (change)="change_notification_setting($event,'daily_email_summary')" name="daily_email_summary"></ui-switch>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group custom-margin10">
+                                                    <label class="control-label col-md-9">A file has been added to a task you own : </label>
+                                                    <div class="controls relative-position">
+                                                        <div>
+                                                            <ui-switch [checked]="notification.file_added_to_task == 1" (change)="change_notification_setting($event,'file_added_to_task')" name="file_added_to_task"></ui-switch>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group custom-margin10">
+                                                    <label class="control-label col-md-9">A task you have allocated to someone has been re-opened (task uncompleted) : </label>
+                                                    <div class="controls relative-position">
+                                                        <div>
+                                                            <ui-switch [checked]="notification.task_uncompleted == 1" (change)="change_notification_setting($event,'task_uncompleted')" name="task_uncompleted"></ui-switch>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group custom-margin10">
+                                                    <label class="control-label col-md-9">A comment has been added to a project you are part of : </label>
+                                                    <div class="controls relative-position">
+                                                        <div>
+                                                            <ui-switch [checked]="notification.comment_on_project == 1" (change)="change_notification_setting($event,'comment_on_project')" name="comment_on_project"></ui-switch>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group custom-margin10">
+                                                    <label class="control-label  col-md-9">A task you have allocated to someone has been completed : </label>
+                                                    <div class="controls relative-position">
+                                                        <div>
+                                                            <ui-switch [checked]="notification.completed_task == 1" (change)="change_notification_setting($event,'completed_task')" name="completed_task"></ui-switch>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group custom-margin10">
+                                                    <label class="control-label col-md-9">The due date of a task you have allocated has been modified : </label>
+                                                    <div class="controls relative-position">
+                                                        <div>
+                                                            <ui-switch [checked]="notification.due_date_modified == 1" (change)="change_notification_setting($event,'due_date_modified')" name="due_date_modified"></ui-switch>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group custom-margin10">
+                                                    <label class="control-label col-md-9">A comment has been added to a task you own : </label>
+                                                    <div class="controls relative-position">
+                                                        <div>
+                                                            <ui-switch [checked]="notification.comment_added_to_task == 1" (change)="change_notification_setting($event,'comment_added_to_task')" name="comment_added_to_task"></ui-switch>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <!-- END NOTIFICATION TAB -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PROFILE CONTENT -->
+                </div>
+            </div>
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END PAGE CONTAINER-->
+
+<!-- Footer here -->
+<footer-layout></footer-layout>

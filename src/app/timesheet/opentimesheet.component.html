@@ -1,0 +1,295 @@
+<header></header>
+<sidebar></sidebar>
+<!-- main content start here -->
+<div class="container-fluid page-background" style="padding:15px;margin-bottom:40px;" >
+        <span *ngIf="loader" class="dvLoading"></span>  
+    <div class="border timesheet_div">
+            <input type="hidden" name="from" id="from" value=""/>
+        <div class="col-md-12">
+            <a href="javascript:void(0)" [routerLink]="['/timesheet']" class="pull-left" style="padding: 5px 0 5px 0;font-size: 13px;"> Return to Timesheet List</a>
+        </div>
+        <div class="col-md-12 ">
+            <div class="col-md-3 ">
+                <div class="form-group border timesheet_header">
+                    <label class="control-label timesheet_label">Employee</label>
+                    <h4>
+                        <b>{{timesheet_info.first_name }} {{timesheet_info.last_name  }}</b>
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-group border timesheet_header">
+                    <label class="control-label timesheet_label">Status</label>
+                    <h4>
+                        <b>{{timesheet_info.timesheet_status }}</b>
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-group border timesheet_header">
+                    <label class="control-label timesheet_label">Period</label>
+                    <h4>
+                        <b>{{timesheet_info.from_date | date: 'dd MMM y' }} - {{timesheet_info.to_date | date: 'dd MMM y' }}</b>
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-group border timesheet_header">
+                    <label class="control-label timesheet_label">Timesheet Total</label>
+                    <h4>
+                        <b *ngIf="filter_type == 'time'">{{change_widget_time(timesheet_info.total_hours)}}</b>
+                        <b *ngIf="filter_type == 'revenue'">{{currency}}{{convert_price(overall_total_time_array.overall_charge_out,'total')}}</b>
+                        <b *ngIf="filter_type == 'cost'">{{currency}}{{convert_price(overall_total_time_array.overall_cost,'total')}}</b>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 margin5">
+            <div class="form-group floating">
+                <button name="exceptions" class="btn red btn-new unsorttd tooltips" style="padding-bottom: 2px;cursor: default !important"
+                     tooltipPlacement="top" tooltip="Number of tasks that have actual time but status isn't completed.">Exceptions
+                    <span class="badge timesheet_pills">{{timesheet_info.exception_task}}</span>
+                </button>
+            </div>
+            <div class="form-group floating">
+                <button name="days_changed" class="btn green btn-new unsorttd tooltips" style="cursor: default !important" tooltipPlacement="top" tooltip="Number of days where actual time is different to the billed time.">Days Changed
+                    <span class="badge timesheet_pills">{{timesheet_info.days_changed}}</span>
+                </button>
+            </div>
+            <div class="form-group floating col-md-6" style="padding-left:40px">
+                <label class="control-label col-md-2 margin5" style="margin-top: 5px">
+                    <b>Show</b>
+                </label>
+                <select class="col-md-4 m-wrap no-margin radius-b change_customer_timesheet" (change)="change_view();" [(ngModel)]="filter_type" >
+                    <option value="time">Time</option>
+                    <option value="revenue" *ngIf="is_manager == 1">Revenue</option>
+                    <option value="cost" *ngIf="is_manager == 1">Cost</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+
+            <div class="main col-md-12">
+                <div class="left cols">
+                    <table>
+                        <tr>
+                            <th>
+                                <span>Customers</span>
+                            </th>
+                        </tr>
+
+                        <tr *ngFor="let cus of customers">
+                            <td>{{cus.customer_name}}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Non Customer Related</td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="middle cols" style="width:calc(94% - 205px)" >
+                    <table [style.width.px]="width">
+                        <tr>
+                            <th *ngFor="let date of date_range">{{date |  date: 'E dd'}}
+                                <span style="display: block">{{date |  date: 'MMM'}}</span>
+                            </th>
+                        </tr>
+                        <tr *ngFor="let cus of customers;">
+                            <td class="timesheet_link" *ngFor="let info of cus.data"  [ngSwitch]="filter_type"  >
+                                <span *ngSwitchCase="'time'"(click)="open_edit_time_modal(cus.customer_id,info.date);" >{{convert_time(info.time)}}</span>
+                                <span *ngSwitchCase="'revenue'">{{convert_price(info.revenue)}}</span>
+                                <span *ngSwitchCase="'cost'">{{convert_price(info.cost)}}</span>
+                                <i class="stripicon iconhigh" *ngIf="info.exception_task > 0"></i>
+                                <i class="fa fa-check" style="color: #0de40d !important;" *ngIf="info.day_changed_task > 0"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="timesheet_link" *ngFor="let info of non_customer.date" [ngSwitch]="filter_type">
+                                <span *ngSwitchCase="'time'" (click)="open_edit_time_modal('',info.date);">{{convert_time(info.time)}}</span>
+                                <span *ngSwitchCase="'revenue'">{{convert_price(info.revenue)}}</span>
+                                <span *ngSwitchCase="'cost'">{{convert_price(info.cost)}}</span>
+                                <i class="stripicon iconhigh" *ngIf="info.exception_task > 0 "></i>
+                                <i class="fa fa-check" style="color: #0de40d !important;" *ngIf="info.day_changed_task > 0"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td *ngFor="let info of overall_total_time_array.date_wise_total" [ngSwitch]="filter_type">
+                                <span *ngSwitchCase="'time'">{{convert_time(info.time)}}</span>
+                                <span *ngSwitchCase="'revenue'">{{convert_price(info.charge_out)}}</span>
+                                <span *ngSwitchCase="'cost'">{{convert_price(info.cost)}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="right cols">
+                    <table>
+                        <tr>
+                            <th>
+                                <span>
+                                    Total
+                                </span>
+                            </th>
+                        </tr>
+                        <tr *ngFor="let cus of customers">
+                            <td class="timesheet_link" [ngSwitch]="filter_type">
+                                <span *ngSwitchCase="'time'">{{convert_time(cus.total_time)}}</span>
+                                <span *ngSwitchCase="'revenue'">{{convert_price(cus.total_charge_out)}}</span>
+                                <span *ngSwitchCase="'cost'">{{convert_price(cus.total_cost)}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="timesheet_link" [ngSwitch]="filter_type">
+                                <span *ngSwitchCase="'time'">{{convert_time(non_customer.time)}}</span>
+                                <span *ngSwitchCase="'revenue'">{{convert_price(non_customer.charge_out)}}</span>
+                                <span *ngSwitchCase="'cost'">{{convert_price(non_customer.cost)}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td [ngSwitch]="filter_type">
+                                <span *ngSwitchCase="'time'">{{convert_time(overall_total_time_array.overall_total_time,'total')}}</span>
+                                <span *ngSwitchCase="'revenue'">{{convert_price(overall_total_time_array.overall_charge_out,'total')}}</span>
+                                <span *ngSwitchCase="'cost'">{{convert_price(overall_total_time_array.overall_cost,'total')}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-top-10">
+            <div class="col-md-4" style="margin-left: 30px;">
+                <label class="control-label timesheet_label">
+                    <b>Timesheet Comments</b>
+                </label>
+                <form #commentsdata>
+                <div class="form-group">
+                    <textarea cols="40" rows="5" [disabled]="timesheet_info.timesheet_status == 'Submitted' || timesheet_info.timesheet_status == 'Exported' || timesheet_info.timesheet_status == 'Approved' || timesheet_info.timesheet_user_id != login_user_id" name="timesheet_comment" >{{comments.timesheet_comments}}</textarea>
+                </div>
+                </form>
+            </div>
+
+            <div class="col-md-4">
+                <label class="control-label timesheet_label">
+                    <b>Approver Comments</b>
+                </label>
+                <div class="form-group">
+                    <textarea cols="40" rows="5" [disabled]="timesheet_info.timesheet_status == 'Exported' || timesheet_info.timesheet_status == 'Approved' || timesheet_info.timesheet_user_id == login_user_id || approver_details.timesheet_approver_id != login_user_id" (blur)="timesheet_approver_comment($event.target.value)" >{{approver_comment.timesheet_comments}}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 margin-top-10">
+
+                <div class="col-md-10">
+                    <div class="form-group floating" style="margin-left: 5px;" *ngIf="timesheet_info.timesheet_status == 'Draft'" >
+                        <button  name="draft" class="btn blue btn-new unsorttd hide_button" type="button" (click)="save_as_draft(commentsdata);" >Save as Draft</button>
+                    </div>
+                    
+                    <div class="form-group floating" *ngIf="approver_id !=0 && timesheet_info.timesheet_user_id == login_user_id && timesheet_info.timesheet_status != 'Submitted' && timesheet_info.timesheet_status !='Exported' && timesheet_info.timesheet_status !='Approved'" >
+                        <button  name="approval" class="btn green btn-new unsorttd hide_button" type="button" mwlConfirmationPopover
+                        placement="top"
+                        (confirm)="confirmClicked = submit_for_approval(commentsdata);"
+                        (cancel)="cancelClicked = true">Submit for Approval</button>
+                    </div>
+                    
+                    <div class="form-group floating " *ngIf="timesheet_info.timesheet_status == 'Submitted' && ( timesheet_info.timesheet_user_id == login_user_id || (approver_details.timesheet_approver_id != login_user_id && is_admin == 1 ))" >
+                        <button  name="recall" style="padding-bottom: 6px !important;" class="btn green btn-new unsorttd hide_button" type="button" mwlConfirmationPopover
+                        placement="top"
+                        (confirm)="confirmClicked = recall();"
+                        (cancel)="cancelClicked = true" >Recall</button>
+                    </div>
+                    <div class="form-group floating" [ngStyle]="{'display':(timesheet_info.timesheet_status == 'Approved' || timesheet_info.timesheet_status == 'Exported' || approver_id != 0 && timesheet_info.timesheet_user_id == login_user_id)?'none':''}">
+                        <button  name="approve"  class="btn green btn-new unsorttd hide_button" type="button" mwlConfirmationPopover
+                        placement="top"
+                        (confirm)="confirmClicked = timesheet_approve();"
+                        (cancel)="cancelClicked = true" >Approve</button>
+                    </div>
+                    
+                </div>
+                
+                <div class="col-md-2">
+                    <div class="form-group floating" *ngIf="(timesheet_info.timesheet_status !='Approved' && timesheet_info.timesheet_status !='Exported') && (is_manager!=1 || timesheet_info.timesheet_user_id == login_user_id)" >
+                        <button  name="delete" class="btn red btn-new unsorttd hide_button" type="button" mwlConfirmationPopover
+                        placement="top"
+                        (confirm)="confirmClicked = delete_timesheet();"
+                        (cancel)="cancelClicked = true">Delete</button>
+                    </div>
+                    <div class="form-group floating" *ngIf="timesheet_info.timesheet_status == 'Exported' && is_admin ==1" >
+                        <button  name="export_cancel" class="btn red btn-new unsorttd hide_button" type="button" mwlConfirmationPopover
+                        placement="top"
+                        (confirm)="confirmClicked = export_cancel();"
+                        (cancel)="cancelClicked = true"  >Cancel Export</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12 margin-top-5">
+                <div class="col-md-10">
+                    <div class="form-group floating" style="margin-left: 5px;" *ngIf="timesheet_info.timesheet_status == 'Approved'" >
+                        <button  name="return_to_draft" class="btn green btn-new unsorttd hide_button" type="button" mwlConfirmationPopover
+                        placement="top"
+                        (confirm)="confirmClicked = return_as_draft();"
+                        (cancel)="cancelClicked = true"  >Return to draft</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer here -->
+<footer-layout></footer-layout>
+
+ <!-- edit time when timesheet status is draft -->
+<bs-modal #edittime>
+    <div class="modal-header">
+        <button type="button" class="close save_close_cross_modify" style="margin-top: 6px;" (click)="close_edit_time_modal();"></button>
+        <h3 style="margin-top: 9px !important;margin-left: 11px; "> Day : {{Edit_date | date: 'EEEE, d MMMM y' }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="portlet">
+            <div>
+                <div class="row form-horizontal">
+                    <form name="update_task_timesheet">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-hover table-condensed flip-content remove_border">
+                                    <thead class="flip-content">
+                                        <th style="text-align:left">Task Name</th>
+                                        <th style="text-align:left">Project</th>
+                                        <th>Estimated Time</th>
+                                        <th>Actual Time</th>
+                                        <th>Billed Time</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let task of edit_task_list">
+                                            <td style="text-align:left">{{task.task_title}}</td>
+                                            <td style="text-align:left" *ngIf="task.project_title !=null;else td2">{{task.project_title}}</td>
+                                            <ng-template #td2><td>-</td></ng-template>
+                                            <td>{{task.task_time_estimate}}</td>
+                                            <td>{{task.task_time_spent}}</td>
+                                            <td><input type="text" name="time" value="{{task.billed_time}}" (blur)="change_time($event.target.value,task.billed_time,task.task_id);"/></td>
+                                        </tr>
+                                        <tr *ngIf="edit_task_list == ''">
+                                            <td colspan="5">No record found.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group pull-right col-md-12">
+                            <button class="btn blue btn-new unsorttd txtbold" [disabled]="edit_task_list == ''" type="button" (click)="save_task_time();" style="float:left">Save</button>
+                            <button class="btn green btn-new unsorttd txtbold" type="button" (click)="close_edit_time_modal();">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</bs-modal>

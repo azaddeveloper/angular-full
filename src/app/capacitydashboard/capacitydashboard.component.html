@@ -1,0 +1,357 @@
+<header></header>
+<sidebar></sidebar>
+
+<div class="user-block page-content1">
+  <!--main content start here-->
+  <span *ngIf="loader" class="dvLoading"></span>  
+  <input type="hidden" name="from" id="from" value=""/>
+  <div id="capacity_board">
+      <div class="mycaledar-table row board-css">
+          <div class="cal-currentdate col-md-12 btn_show">
+              <div class="col-md-3" >
+                  <label  class="control-label padding-top-8" style="float: left;margin-right: 14px;margin-top: 0px !important;color:#fff"><b>View :</b></label>
+                  <div style="margin-top: 4px;" class="team_button">
+                    <switch
+                        [status]="filter"
+                        [onText]="onText1"
+                        [offText]="offText1"
+                        [onColor]="onColor1"
+                        [offColor]="offColor1"
+                        (statusChange)="onFlagChange($event);"
+                        ></switch>
+                </div>
+              </div>
+              <div class="col-md-4">
+                  <div [hidden]="filter" style="padding-top: 4px;color: initial;">
+                      <select class="large m-wrap radius-b select_user_menu" name="select_user" (change)="apply_team();" [(ngModel)]="select_user" >
+                          <option *ngIf="is_admin == 1" value="reported_user">My Team - Direct Reports only</option>
+                          <option *ngIf="is_admin == 1" value="all">My Team - All</option>
+                          <option *ngIf="is_admin == 0 && is_manager == 1" value="reported_user" >My Team - Direct Reports only</option>
+                          <option *ngFor="let u of user_list" value="{{u.user_id}}">{{u.first_name}} {{u.last_name}}</option> 
+                          <option value="{{login_user_id}}">Me</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-5"  style="text-align: right;">
+                  <div>
+                        <input type="text" style="visibility: hidden;width: 0px" (bsValueChange)="date_change($event)" [bsConfig]="{containerClass:'theme-dark-blue', dateInputFormat: 'YYYY-MM-DD',showWeekNumbers:false }" #drp="bsDaterangepicker" bsDaterangepicker>
+                        <span (click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen">{{start_date | date : "MMMM dd, y" }} - {{end_date | date:"MMMM dd, y"}}
+                            <i class="fa fa-calendar-o" style="padding-top: 10px;padding-right: 5px;"></i><i class="fa fa-sort-desc"></i>
+                        </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- WIDGETS CODE -->
+      <div class="row row_box">
+        <div class="col-md-3">
+                  <div class="common_widget dashboard-stat2">
+                      <div class="display" style="margin-bottom: 10px !important;" >
+                          <div class="number">
+                              <h3 class="font-blue-sharp">
+                                  <span data-counter="counterup" data-value="567"></span>
+                              </h3>
+                              <small>Completed Tasks</small>
+                          </div>
+                      </div>
+                      <div class="first_widget">
+                        <canvas #barCanvas1></canvas>
+                      </div>    
+                  </div>
+          </div>
+
+              <div class="col-md-3 ">
+                  <div class="common_widget dashboard-stat2">
+                      <div class="display" style="margin-bottom: 0px !important " >
+                          <div class="number">
+                              <h3 class="font-blue-sharp">
+                                  <span data-counter="counterup" data-value="567"></span>
+                              </h3>
+                              <small>Utilization</small>
+                          </div>
+                      </div>
+                      <div id="chartdiv">
+                            <ngx-gauge [type]="gaugeType" 
+                            [size]="170"
+                            [value]="gaugeValue" 
+                            [append]="gaugeAppendText">
+                            </ngx-gauge>
+                      </div>
+                  </div>   
+              </div>
+              <div class="col-md-3">
+                  <div class="dashboard-stat2 common_widget">
+                      <div class="display">
+                          <div class="number">
+                              <small>Active Users</small>
+                              <h3 class="font-blue-sharp" style="padding-top: 10px;">
+                                  <span data-counter="counterup">{{capacity_info.active_user}}/{{filter_user.length}}</span>
+                              </h3>
+                          </div>
+                          <div class="icon">
+                              <i class="icon-user"></i>
+                          </div>
+                      </div>
+                      <div class="progress-info" style="margin-top: 35px;">
+                          <div class="progress">
+                              <span [ngStyle]="{width:active_user_widget+'%'}" class="progress-bar progress-bar-success blue-sharp">
+                                  
+                              </span>
+                          </div>
+                          <div class="status">
+                              <div class="status-title"> PERCENTAGE </div>
+                              <div class="status-number"> {{active_user_widget}}% </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="dashboard-stat2 common_widget">
+                      <div class="display">
+                          <div class="number">
+                              <small>Planned Hours / Actual Hours</small>
+                              <h3 class="font-purple-soft" style="padding-top: 10px;">
+                                  <span data-counter="counterup" >{{capacity_info.planned_time}}/{{capacity_info.actual_time}}</span>
+                              </h3>
+                          </div>
+                          <div class="icon">
+                              <i class="icon-basket"></i>
+                          </div>
+                      </div>
+                      <div class="progress-info" style="margin-top: 35px;">
+                          <div class="progress">
+                            <span [ngStyle]="{width:planned_width+'%'}" class="progress-bar progress-bar-success purple-soft">
+                                  
+                            </span>
+                          </div>
+                          <div class="status">
+                              <div class="status-title">  </div>
+                              <div class="status-number"> {{planned_width}}% </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+        </div>
+      <!-- PLANNED CAPACITY BOARD -->
+      <div class="row marginzero">
+              <div class="col-md-12">
+                  <div class="portlet light ">
+                      <div class="portlet-title">
+                          <div class="caption">
+                              <span class="caption-subject bold uppercase font-dark">PLANNED CAPACITY</span>
+                          </div>
+                          <div class="actions capacity_switch" style="padding: 0px !important;">
+                            <switch
+                            [status]="graph_type"
+                            [onText]="onText"
+                            [offText]="offText"
+                            [onColor]="onColor"
+                            [offColor]="offColor"
+                            (statusChange)="ongraphChange($event);"
+                            ></switch>
+                          </div>
+                      </div>
+                      <div class="portlet-body">
+                           <div class="customtable table-scrollable form-horizontal" style="overflow: hidden;border: none !important;">
+                              <table class="table table-striped  table-condensed table-bordered capacity_align" style="table-layout: fixed; border:2px solid #e7ecf1 !important;"  >
+                                          <thead class="flip-content">
+                                            <tr>
+                                                <th style="width:150px !important;border-right: 2px solid #E7E7E7;"><span>Name</span><span style="float: right;"> <a href="javascript:void(0)" (click)="change_view('prev',start_date)" > <i class="glyphicon glyphicon-chevron-left"> </i> </a></span></th>
+                                                <th *ngFor="let d of date_range" style="border-right: 2px solid #E7E7E7;width:70px !important" [ngStyle]="{'background-color':d.style}" >{{d.date |  date: 'E dd'}}
+                                                    <span style="display: block"  >{{d.date |  date: 'MMM'}}</span>
+                                                    <span *ngIf="d.date == end_date" style="float: right;margin-top: -38px;"><a href="javascript:void(0)" (click)="change_view('next',end_date)" > <i class="glyphicon glyphicon-chevron-right" style="margin-top: 10px;"> </i> </a></span>
+                                                </th>
+                                            </tr>
+                                          </thead>
+                                          <tbody *ngIf="graph_type == true">
+                                            <tr *ngFor="let u of filter_user">
+                                              <td style="border-right: 2px solid #E7E7E7;text-align: left;line-height: 30px;">
+                                                  <img  *ngIf="u.profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{u.profile_image}}"
+                                                  />
+                                                  <ng-template #otherIcon>
+                                                    <span class="login_logo" >{{u.first_name | Initialletters | capitalizeFirst}}{{u.last_name |Initialletters
+                                                      |capitalizeFirst}}</span>
+                                                  </ng-template>
+                                                {{u.first_name}} {{u.last_name}}
+                                              </td>
+                                              <td *ngFor="let d of date_range" style="border-right: 2px solid #E7E7E7;" [ngStyle]="{'background-color':d.style}" >
+                                                    <ngx-charts-bar-vertical-stacked 
+                                                        [view]="view"
+                                                        [results]="graph_data(d.date,u.user_id)"
+                                                        [scheme]="colorScheme"
+                                                        >
+                                                    </ngx-charts-bar-vertical-stacked>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                          <tbody *ngIf="graph_type == false">
+                                                <tr *ngFor="let u of filter_user">
+                                                  <td style="width: 150px !important;border-right: 2px solid #E7E7E7;text-align: left;line-height: 30px;">
+                                                      <img  *ngIf="u.profile_image !='' else otherIcon" class="tooltips capacity_images" src="{{Image_url}}upload/user/{{u.profile_image}}"
+                                                      />
+                                                      <ng-template #otherIcon>
+                                                        <span class="login_logo" >{{u.first_name | Initialletters | capitalizeFirst}}{{u.last_name |Initialletters
+                                                          |capitalizeFirst}}</span>
+                                                      </ng-template>
+                                                    {{u.first_name}} {{u.last_name}}
+                                                  </td>
+                                                  <td *ngFor="let d of date_range" style="border-right: 2px solid #E7E7E7;" [ngStyle]="{'background-color':d.style}" >
+                                                        {{time_convert(d,u.user_id)}}
+                                                  </td>
+                                                </tr>
+                                            </tbody>
+                              </table>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      </div>
+      
+      <div class="row marginzero">
+          <!-- BILLABLE &NON_BILLABLE TIME CHART -->
+              <div class="col-md-6">
+                  <div class="portlet light ">
+                      <div class="portlet-title">
+                          <div class="caption">
+                              <span class="caption-subject bold uppercase font-dark">Billable vs Non-billable Time</span>
+                              <span class="caption-helper">based on actual time</span>
+                          </div>
+                          <div class="actions billable_button"  style="padding:0px !important;">
+                            <switch
+                                [status]="billable_graph_type"
+                                [onText]="onText2"
+                                [offText]="offText2"
+                                [onColor]="onColor1"
+                                [offColor]="offColor1"
+                                (statusChange)="on_change_billable_type($event);"
+                                ></switch>
+                          </div>
+                      </div>
+                      <div class="portlet-body">
+                            <div id="chartdiv1">
+                                <canvas #barCanvas3></canvas>
+                            </div>
+                      </div>
+                  </div>
+              </div>
+          <!-- CATEGORY ANALYSIS CHART -->
+              <div class="col-md-6">
+                  <div class="portlet light ">
+                      <div class="portlet-title">
+                          <div class="caption">
+                              <span class="caption-subject bold uppercase font-dark">Category Analysis</span>
+                              <span class="caption-helper">based on actual time</span>
+                          </div>
+                          <div class="actions" style="padding:0px !important;">
+                              <select name="category_graph_type" class="small m-wrap radius-b" (change)="change_graph_data();"  [(ngModel)]="category_graph_type" >
+                                <option value="day">Day</option>
+                                <option value="week">Week</option>
+                                <option value="month">Month</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="portlet-body">
+                          <div id="chartdiv2" *ngFor="let data of category_analysis_graph">
+                            <ngx-charts-bar-vertical-stacked
+                                [view]="view1"
+                                [legendTitle]="legendTitle"
+                                [results]="data"
+                                [xAxis]="showXAxis"
+                                [yAxis]="showYAxis"
+                                [legend]="showLegend"
+                                [showGridLines]="showGridLines">
+                            </ngx-charts-bar-vertical-stacked>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      </div>
+      
+    <!-- TOP 10 CUSTOMERS & PROJECTS LISTS -->
+    
+    <div class="row marginzero">
+              <div class="col-md-6">
+                  <div class="portlet light ">
+                      <div class="portlet-title">
+                          <div class="caption">
+                              <span class="caption-subject bold uppercase font-dark">Top 10 Customers</span>
+                              <span class="caption-helper"> by time and revenue...</span>
+                          </div>
+                      </div>
+                      <div class="portlet-body" >
+                          <div class="customtable form-horizontal">
+                              <table class="table table-striped table-hover table-condensed flip-content ">
+                                  <thead class="flip-content">
+                                      <tr>
+                                          <th>Customer Name</th>
+                                          <th>Revenue</th>
+                                          <th>Non-billable</th>
+                                          <th>Actual Hours</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr *ngFor="let cus of customer_list">
+                                          <td style="cursor: pointer;" >
+                                             {{cus.customer_name}}
+                                          </td>
+                                          <td>{{currency}}{{convert_price(cus.revenue)}}</td>
+                                          <td>{{currency}}{{convert_price(cus.non_billable)}}</td>
+                                          <td style="text-align: center !important;">{{time_convert(cus.total_hours)}}</td>
+                                      </tr>
+                                      <tr *ngIf="customer_list == ''">
+                                          <td colspan="4">No record found.</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                              
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="portlet light ">
+                      <div class="portlet-title">
+                          <div class="caption">
+                              <span class="caption-subject bold uppercase font-dark">Top 10 Projects</span>
+                              <span class="caption-helper"> by time and revenue...</span>
+                          </div>
+                      </div>
+                      <div class="portlet-body">
+                          <div class="customtable form-horizontal">
+                              <table class="table table-striped table-hover table-condensed flip-content ">
+                                  <thead class="flip-content">
+                                      <tr>
+                                          <th>Project Name</th>
+                                          <th>Revenue</th>
+                                          <th>Non-billable</th>
+                                          <th>Actual Hours</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                        <tr *ngFor="let pro of project_list">
+                                            <td style="cursor: pointer;">
+                                                  {{pro.project_title}}
+                                            </td>
+                                            <td>{{currency}}{{convert_price(pro.revenue)}}</td>
+                                            <td>{{currency}}{{convert_price(pro.non_billable)}}</td>
+                                            <td style="text-align: center !important;">{{time_convert(pro.total_hours)}}</td>
+                                        </tr>
+                                        <tr *ngIf="project_list == ''">
+                                            <td colspan="4">No record found.</td>
+                                        </tr>
+                                      
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+    </div>
+  </div>
+   <!-- end here-->
+</div>
+
+
+<!-- Footer here -->
+<footer-layout></footer-layout>

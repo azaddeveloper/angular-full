@@ -1,0 +1,149 @@
+
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 31, 2017, 10:59:43 AM
+    Author     : xosscode
+*/
+
+#chartdiv1 canvas{
+    height	: 400px !important;
+}
+#chartdiv2 {
+    width: 100%;
+}
+.tooltip-class {
+    width: 105px; 
+    height: auto;
+    background-color: transparent; 
+    margin-bottom: 10px;
+    font-size: 12px;
+    display: block
+}
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.table tbody tr td:not(:first-child):not(:last-child) {
+      text-align: center !important;
+}
+.table thead tr th:not(:first-child) {
+      text-align: center !important;
+}
+
+.cal-currentdate{
+ height:41px;   
+}
+.padding-top-8{
+    padding-top: 8px !important;
+}
+
+#chartdiv {
+  width: 280px;
+  height: 160px;
+  margin-left: 50px;
+}
+.myProgress {
+  width: 90%;
+  background-color: #ddd;
+  margin-left:2%;
+  margin-top: 8%;
+}
+.myBar {
+  width: 5%;
+  height: 10px;
+  background-color: #4CAF50;
+}
+.common_widget{
+    width:100%;
+    height:175px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+.amcharts-chart-div a {
+    display:none !important;
+}
+.widget_heading{
+    font-size: 15px;
+    margin-left: 13px;
+    margin-top: 5px;
+}
+.progress-value{
+    margin-top: 24%;
+    margin-left: 8%;
+    font-size: 22px;
+}
+.cal-currentdate{
+    text-align: left !important
+}
+.chosen-container {
+    width: 250px !important;
+}
+.input-mini {
+    width: 220px!important;
+}
+.page-content1{
+    background-color: #eef1f5;
+    padding-bottom: 30px;
+    padding-top: 20px;
+}
+.actions .btn{
+    border-radius: 0px !important;
+}
+.btn_show .btn{
+    border-radius: 0px !important;
+}
+.btn_show{
+    line-height: 24px;
+}
+
+.board-css{
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 25px;
+}
+
+.select_user_menu{
+    font-weight: normal;width:240px !important;
+}
+
+.row_box{
+    margin-left: 0px;margin-right: 0px;margin-bottom: 10px
+}
+
+.first_widget{
+    width: 245px;
+    height: 120px;
+}
+#doughnutData{
+    margin-left: 3%;
+    width: 245px;
+    height: 120px;
+    display: block;
+    align-items: center;
+    float: left;
+    margin-top: -16px!important;
+}
+.marginzero{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+#capacity_board{
+    margin-top: 3%;
+    margin-left: 3%;
+}
+.bar-chart, .line-chart {
+    display: block !important;
+}
+
+.capacity_align >thead>tr>th{
+    text-align: center;
+    padding: 5px;
+}

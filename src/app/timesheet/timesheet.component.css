@@ -1,0 +1,55 @@
+
+textarea {
+    resize: none;
+    border-radius: 5px;
+    }
+table th,table td{padding:10px; text-align:center; overflow: hidden; border-bottom: 1px solid #e7ecf1;}
+table{width:100%;}
+.main{width:100%;clear: both;}
+.left , .middle{float:left;}
+.left , .right{ float:left; text-align:center; }
+.right{width:100px;}
+.left table, .right table{margin:0 auto; }
+.middle{ overflow-x:scroll;}
+.middle table{table-layout:fixed; }
+.middle th, .middle td{width:100px;text-align: center;}
+.cols td, .cols th{text-align:center;}
+/*th ,td{display:inline-block;}*/
+.left table tr th,.left table tr td{ text-align:left}
+.cols table tr:last-child { color:#000; font-weight:bold;background-color:#a9a9a9}
+.cols table tr:not(:last-child):nth-child(even){background:#e7ecf1;}
+.right table tr { color:#000; font-weight:bold }
+.cols table tr{height:47px;}  
+.cols table tr:first-child{height:61px;}
+.left table,.right table {border: 1px solid #e1e6eb;}
+.middle table{border-top: 1px solid #e1e6eb;}
+.middle table td{border-right: 1px solid #e1e6eb;}
+.middle table th{border-right: 1px solid #e1e6eb;}
+.timesheet_div{
+    background-color: #fff;
+    opacity: 1.0;
+    margin-top: 4% !important;
+    margin-left: 3% !important;
+}
+.timesheet_label{
+    font-weight: 500 !important;
+}
+
+.timesheet_pills{
+    background-color: #fff !important;
+    color: #000 !important;
+    font-weight: 500 !important;
+}
+.change_customer_timesheet{
+    padding: 5px !important;
+}
+table tr th, table tr td{
+    font-size: 13px !important;
+}
+.btn-new{
+    font-size: 13px !important;
+    padding: 4px 16px !important;
+}
+.remove_border thead th{
+    border-top: none !important
+}

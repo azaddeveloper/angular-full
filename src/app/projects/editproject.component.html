@@ -1,0 +1,1110 @@
+<header></header>
+<sidebar></sidebar>
+<div class="container-fluid rmBg page-background" >
+    <div class="mainpage-container1">
+        <!--Project module header-->
+        <div class="user-block edit_user_block">
+                <input type="hidden" name="from" id="from" value=""/>
+            <!-- Page Title Row -->
+            <div class="row" style="margin-left: 11px !important; margin-right: -6px">
+                <div class="col-md-12" style="padding-left: 0px !important">
+                    <a href="javascript:void(0);" [routerLink]="['/projects']" class="pull-left margin5" style="font-size: 13px;"> Return to Project List</a>
+                </div>
+                <!-- Project name-->
+                <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
+                    <div class="blue-title project_title_header" style="padding-bottom: 8px !important;">
+                        <div class="row" style="height: 30px;line-height: 29px;">
+                            <div class="form-group">
+                                <div class=" col-md-12 controls relative-position" style="padding-left: 0px !important">
+                                    <inline-editor class="txt-style default_color" type="text" [(ngModel)]="project_info.project_title" (onSave)="save_project_title($event);" name="editor" size="40" ></inline-editor>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Filter Task status -->
+                <div class="col-md-3" style="padding-left: 0px;padding-right: 0px;">
+                    <div class="blue-title project_header_option">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label default_color" style="padding-left:75px; padding-top: 5px; ">
+                                    <b>Status</b>
+                                </label>
+                                <div class="col-md-7 ">
+                                    <select name="select_task_status" class="project_select_width radius-b" [(ngModel)]="filter_status" >
+                                        <option value="opt">Open Tasks</option>
+                                        <option value="ut">Upcoming Tasks</option>
+                                        <option value="tt">Today's Tasks</option>
+                                        <option value="ot">Overdue Tasks</option>
+                                        <option value="ct">Completed Tasks</option>
+                                        <option value="all">All Tasks</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filter Assigned To -->
+                <div class="col-md-3" style="padding-left: 0px; ">
+                    <div class="blue-title project_header_option">
+                        <div class="row">
+                            <label class="col-md-5 control-label default_color" style="padding-right: 0px; padding-top: 5px; ">
+                                <b>Assigned To</b>
+                            </label>
+                            <div class="col-md-7" style="padding-left: 0px;margin-left: 0px;">
+                                <select name="select_task" class="project_select_width radius-b" [(ngModel)]="filter_user" >
+                                    <option value="all">Any User</option>
+                                    <option *ngFor="let team of project_team" value="{{team.user_id}}">{{team.first_name}} {{team.last_name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-right: 0px;">
+                <!-- 70% column  -->
+                <div class="col-md-8" style="padding-top: 10px;">
+                    <div class="tab-pane  active">
+                        <!--Section & subsection-->
+                        <div class="">
+                            <div class="portlet-body form ">
+                                <div class="form-horizontal">
+                                    <div class="">
+                                        <div class="usertabs">
+                                            <div class="tabbable tabbable-custom">
+                                                <div class="clearfix"></div>
+                                                <div class=" accrodian" style="padding-left: 16px;">
+                                                    <div class="tab-pane srtab active">
+                                                        <!-- section code here -->
+                                                        <div class="border margin-bottom-15 full-width tasks_tab" *ngFor="let sec of sections;">
+                                                            <div class="panel-heading pointer">
+                                                                <span class="edit_expand" style="float:left" (click)="section_hide(sec.section_id)" id="icon_{{sec.section_id}}" >
+                                                                    <i class="icon-chevron-down default_color"></i>
+                                                                </span>
+                                                                <div class="col-md-10">
+                                                                    <inline-editor class="txt-style default_color editor_update" type="text" placeholder="enter section name" [(ngModel)]="sec.section_name" (onSave)="update_section_name($event,sec.section_id)" name="editor" size="25" ></inline-editor>
+                                                                </div>
+                                                                <a href="javascript:void(0)" >
+                                                                    <i class="icon-trash prjicn" mwlConfirmationPopover
+                                                                    placement="left"
+                                                                    (confirm)="confirmClicked = delete_section(sec.section_id);"
+                                                                    (cancel)="cancelClicked = true"></i>
+                                                                </a>
+                                                            </div >
+                                                            <div id="section_{{sec.section_id}}" style="display:block;">
+                                                                <!-- sub-section code here -->
+                                                                <div *ngIf="subsections[sec.section_id]!='0'">
+                                                                    <div *ngFor="let sub_sec of subsections[sec.section_id];">
+                                                                        <div class="panel-body" style="padding: 11px 13px !important;">
+
+                                                                            <div class="border ">
+                                                                                <div class="panel-heading gray pointer">
+                                                                                    <span class="edit_expand" style="float:left" (click)="subsection_hide(sub_sec.section_id);" id="icon_{{sub_sec.section_id}}" >
+                                                                                        <i class="icon-chevron-down default_color"></i>
+                                                                                    </span>
+                                                                                    <div class="col-md-10">
+                                                                                            <inline-editor class="txt-style default_color editor_update" type="text" placeholder="enter sub-section name" [(ngModel)]="sub_sec.section_name" (onSave)="update_section_name($event,sub_sec.section_id)" name="editor" size="25" ></inline-editor>
+                                                                                    </div>
+                                                                                    <a href="javascript:void(0)"  >
+                                                                                        <i class="icon-trash prjicn" mwlConfirmationPopover
+                                                                                        placement="left"
+                                                                                        (confirm)="confirmClicked = delete_subsection(sub_sec.main_section,sub_sec.section_id);"
+                                                                                        (cancel)="cancelClicked = true"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                                <div id="subsection_{{sub_sec.section_id}}" style="display: block;">
+                                                                                <div *ngFor="let sub_task of sub_sec.task_list">
+                                                                                    
+                                                                                    <ul class="clearfix cst_ul"  style="padding: 0 0 0 10px;" *ngIf="check_filter_condition(sub_task.task_status_id,sub_task.task_due_date,sub_task.task_allocated_user_id)" >
+                                                                                        <li style="margin-top:7px;">
+                                                                                            <i class="icon-align-justify prjicn"></i>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <input type="checkbox" class="projectTask" name="is_completed" id="is_completed_{{sub_task.task_id}}" *ngIf="actual_time_status == '0' || sub_task.task_time_spent != 0 || sub_task.task_status_name == 'Completed'; else timepoup"
+                                                                                                (click)="is_completed(sub_task);" [checked]="sub_task.task_status_name =='Completed'" [disabled]="sub_task.completed_depencencies !='0' || (is_customer_user == 1 && sub_task.task_allocated_user_id != login_user_id)">
+                                                                                            <ng-template #timepoup>
+                                                                                                <input type="checkbox" class="projectTask" name="is_completed" id="is_completed_{{sub_task.task_id}}" (click)="open_actual_time_popup(sub_task);" [disabled]="sub_task.completed_depencencies !='0' || (is_customer_user == 1 && sub_task.task_allocated_user_id != login_user_id)">
+                                                                                            </ng-template>
+                                                                                            <!-- <input class="projectTask" name="task_status" value="" type="checkbox"> -->
+                                                                                        </li>
+                                                                                        <li style="margin-top:5px;" [contextMenu]="contextmenu" [contextMenuSubject]="sub_task" >
+                                                                                            <div *ngIf="sub_task.frequency_type=='one_off'">
+                                                                                                <em class="linethrought" *ngIf="sub_task.task_status_name == 'Completed'; else titleElse">
+                                                                                                    <a href="javascript:void(0)" *ngIf="is_customer_user == 1 && sub_task.task_allocated_user_id != login_user_id; else seconda;">{{string_length(sub_task.task_title) |capitalizeFirst}}</a>
+                                                                                                    <ng-template #seconda>
+                                                                                                        <a href="javascript:void(0)" (click)="open(sub_task);">{{string_length(sub_task.task_title) |capitalizeFirst}}</a>
+                                                                                                    </ng-template>
+                                                                                                </em>
+                                                                                                <ng-template #titleElse>
+                                                                                                    <a href="javascript:void(0)" *ngIf="is_customer_user == 1 && sub_task.task_allocated_user_id != login_user_id; else seconda">{{string_length(sub_task.task_title) |capitalizeFirst}}</a>
+                                                                                                    <ng-template #seconda><a href="javascript:void(0)" (click)="open(sub_task);">{{string_length(sub_task.task_title) |capitalizeFirst}}</a></ng-template>
+                                                                                                </ng-template>
+                                                                                            </div>
+                                                                                            <div *ngIf="sub_task.frequency_type=='recurrence'">
+                                                                                                <em class="linethrought" *ngIf="sub_task.task_status_name == 'Completed'; else titleElse">
+                                                                                                    <a href="javascript:void(0)"*ngIf="is_customer_user == 1 && sub_task.task_allocated_user_id != login_user_id; else seconda;" >{{string_length(sub_task.task_title) |capitalizeFirst}}</a>
+                                                                                                    <ng-template #seconda>
+                                                                                                        <a href="javascript:void(0)" (click)="recurrence_open(sub_task);">{{string_length(sub_task.task_title) |capitalizeFirst}}</a>
+                                                                                                    </ng-template>
+                                                                                                </em>
+                                                                                                <ng-template #titleElse>
+                                                                                                    <a href="javascript:void(0)"*ngIf="is_customer_user == 1 && sub_task.task_allocated_user_id != login_user_id; else seconda;" >{{string_length(sub_task.task_title) |capitalizeFirst}}</a>
+                                                                                                    <ng-template #seconda>
+                                                                                                        <a href="javascript:void(0)" (click)="recurrence_open(sub_task);">{{string_length(sub_task.task_title) |capitalizeFirst}}</a>
+                                                                                                    </ng-template>
+                                                                                                </ng-template>
+                                                                                            </div>
+                                                                                        </li>
+                                                                                        <li class="edit_projecttask">
+                                                                                            <span class="updttskstatus">( Status :&nbsp;  
+                                                                                                <inline-editor type="select" style="float: right" [(ngModel)]="sub_task.task_status_id" [options]="edit_status_id" [saveOnChange]="true" (onSave)="change_task_status($event,sub_task);" [hideButtons]="true"></inline-editor>
+                                                                                            </span>
+                                                                                        </li>
+                                                                                        <li class="edit_projecttask">
+                                                                                            <span class="updtallcuserl">
+                                                                                                - Allocated to &nbsp;
+                                                                                                <inline-editor type="select" style="float: right" [(ngModel)]="sub_task.task_allocated_user_id" [options]="edit_allocated_user_id" [saveOnChange]="true" (onSave)="change_allocated_user($event,sub_task);" [hideButtons]="true"></inline-editor>
+                                                                                            </span>
+                                                                                        </li>
+                                                                                        <li class="edit_projecttask"  style="width: 16%;">
+                                                                                            <span class="updttskstatus" [ngClass]="{red_date:(sub_task.task_due_date < today && sub_task.task_status_name !='Completed' && sub_task.task_due_date !='0000-00-00')}" >- Due :
+                                                                                                    <!-- <mat-form-field style="width: 78px !important;">
+                                                                                                    <input matInput [matDatepicker]="picker1"  [value]="sub_task.task_due_date" (dateChange)="change_due_date($event)">
+                                                                                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                                                                    <mat-datepicker #picker1></mat-datepicker>
+                                                                                                    </mat-form-field> -->
+                                                                                                    <input type="text"
+                                                                                                    placeholder="No Due date"
+                                                                                                    class="edit_task_date"
+                                                                                                    #dpYMD="bsDatepicker"
+                                                                                                    bsDatepicker
+                                                                                                    [value]="sub_task.task_due_date"
+                                                                                                    placement="right"
+                                                                                                    (bsValueChange)="change_due_date($event,sub_task)"
+                                                                                                    [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                                                                                                    >
+                                                                                            </span>
+                                                                                        </li>
+                                                                                        <li *ngIf="sub_task.locked_due_date !='0'">
+                                                                                            <a class="tooltips" tooltipPlacement="right" tooltip="Due date is locked" href="javascript:void(0);">
+                                                                                                <i class="icon-lock  prjicn prtoppos"> </i>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <li *ngIf="sub_task.task_priority !='None'">
+                                                                                            <a class='tooltips' *ngIf="sub_task.task_priority == 'Medium'" tooltipPlacement='right' tooltip='Medium Priority' href='javascript:void(0);'><i class='icon-warning-sign prjicn iconmedium'></i></a>
+                                                                                            <a class='tooltips' *ngIf="sub_task.task_priority == 'Low'" tooltipPlacement='right' tooltip='Low Priority' href='javascript:void(0);'><i class=' icon-warning-sign prjicn iconlow'></i></a>
+                                                                                            <a class='tooltips' *ngIf="sub_task.task_priority == 'High'" tooltipPlacement='right' tooltip='High Priority' href='javascript:void(0);'>
+                                                                                                <i class='icon-warning-sign  prjicn iconhigh'></i>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <li *ngIf="sub_task.comments !='0'">
+                                                                                            <a class="tooltips" tooltipPlacement="right" tooltip="Comments" href="javascript:void(0);">
+                                                                                                <i class="icon-comment-alt prjicn"></i>
+                                                                                                <sup>{{sub_task.comments}}</sup>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <li *ngIf="sub_task.files !='0'">
+                                                                                            <a class="tooltips" tooltipPlacement="right" tooltip="Task Files" href="javascript:void(0);">
+                                                                                                <i class=" icon-paperclip prjicn"> </i>
+                                                                                                <sup>{{sub_task.files}}</sup>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <li *ngIf="sub_task.steps !='0'">
+                                                                                            <a class="tooltips" tooltipPlacement="right" tooltip="Task Steps" href="javascript:void(0);">
+                                                                                                <i class="icon-list-ul prjicn"> </i>
+                                                                                                <sup>{{sub_task.steps}}</sup>
+                                                                                            </a>
+                                                                                        </li>
+
+                                                                                    </ul>
+                                                                                </div>
+                                                                                <div class="project-add_task">
+                                                                                    <input type="text" name="title" placeholder="Enter a Task Name" (keydown.tab)="add_task($event.target.value,sub_sec.main_section,sub_sec.section_id,'tab');$event.target.value=''" (keydown.enter)="add_task($event.target.value,sub_sec.main_section,sub_sec.section_id,'enter');$event.target.value=''" id="add_task_{{sub_sec.section_id}}" class="col-md-4 m-wrap txt-section-task" style="margin-left: 15px;display: none;" />
+                                                                                    <button href="javascript:void(0)" type="button" name="task" class="btn-new green" (click)="hide_add_button(sub_sec.section_id)" id="button_{{sub_sec.section_id}}" style="min-width: 0px !important;margin-top: 4px;">Add Task</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- subsection code end here -->
+                                                                <!-- section task list here -->
+                                                                <div class="panel-body" style="padding: 11px 13px !important;" >
+                                                                    <div class="row" style="margin-left: 0px !important;">
+                                                                        <form #addsubsection>
+                                                                            <div class="col-md-6" style="padding-top: 3px;">
+                                                                                <div class="form-group">
+                                                                                    <div class="controls">
+                                                                                        <input type="text" name="project_subsection" class="col-md-12 m-wrap" placeholder="Enter sub-section name" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6 pull-left" style="padding-top:5px">
+                                                                                <button type="button" (click)="create_sub_section(sec.section_id,addsubsection.project_subsection.value);addsubsection.project_subsection.value=''" class="subsection_btn btn-new unsorttd">Add Sub Section</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div [hidden]="section">
+                                                                    <div *ngFor="let sec_task of sec.task_list" >
+                                                                        <ul class="clearfix cst_ul" style="padding: 0 0 0 10px;" *ngIf="check_filter_condition(sec_task.task_status_id,sec_task.task_due_date,sec_task.task_allocated_user_id)" >
+                                                                            <li style="margin-top:7px;">
+                                                                                <i class="icon-align-justify prjicn"></i>
+                                                                            </li>
+                                                                            <li>
+                                                                                <input type="checkbox" class="projectTask" name="is_completed" id="is_completed_{{sec_task.task_id}}" *ngIf="actual_time_status == '0' || sec_task.task_time_spent != 0 || sec_task.task_status_name == 'Completed'; else timepoup"
+                                                                                (click)="is_completed(sec_task);" [checked]="sec_task.task_status_name =='Completed'" [disabled]="sec_task.completed_depencencies !='0' || (is_customer_user == 1 && sec_task.task_allocated_user_id != login_user_id)">
+                                                                                <ng-template #timepoup>
+                                                                                    <input type="checkbox" class="projectTask"  name="is_completed" id="is_completed_{{sec_task.task_id}}" (click)="open_actual_time_popup(sec_task);" [disabled]="sec_task.completed_depencencies !='0' || (is_customer_user == 1 && sec_task.task_allocated_user_id != login_user_id)">
+                                                                                </ng-template>
+                                                                            </li>
+                                                                            <li style="margin-top:5px;"  [contextMenu]="contextmenu" [contextMenuSubject]="sec_task">
+                                                                                <div *ngIf="sec_task.frequency_type == 'one_off'">
+                                                                                    <em class="linethrought" *ngIf="sec_task.task_status_name == 'Completed'; else sectitleElse">
+                                                                                        <a href="javascript:void(0)" *ngIf="is_customer_user == 1 && sec_task.task_allocated_user_id != login_user_id; else sectiontask">{{string_length(sec_task.task_title) |capitalizeFirst}}</a>
+                                                                                        <ng-template #sectiontask>
+                                                                                            <a href="javascript:void(0)" (click)="open(sec_task);">{{string_length(sec_task.task_title) |capitalizeFirst}}</a>
+                                                                                        </ng-template>
+                                                                                    </em>
+                                                                                    <ng-template #sectitleElse>
+                                                                                        <a href="javascript:void(0)" *ngIf="is_customer_user == 1 && sec_task.task_allocated_user_id != login_user_id; else sectiontask">{{string_length(sec_task.task_title) | capitalizeFirst}}</a>
+                                                                                        <ng-template #sectiontask>
+                                                                                            <a href="javascript:void(0)" (click)="open(sec_task);">{{string_length(sec_task.task_title) |capitalizeFirst}}</a>
+                                                                                        </ng-template>
+                                                                                    </ng-template>
+                                                                                </div>
+                                                                                <div *ngIf="sec_task.frequency_type == 'recurrence'">
+                                                                                    <em class="linethrought" *ngIf="sec_task.task_status_name == 'Completed'; else sectitleElse">
+                                                                                        <a href="javascript:void(0)" *ngIf="is_customer_user == 1 && sec_task.task_allocated_user_id != login_user_id; else sectiontask">{{string_length(sec_task.task_title) |capitalizeFirst}}</a>
+                                                                                        <ng-template #sectiontask>
+                                                                                            <a href="javascript:void(0)" (click)="recurrence_open(sec_task)">{{string_length(sec_task.task_title) |capitalizeFirst}}</a>
+                                                                                        </ng-template>
+                                                                                    </em>
+                                                                                    <ng-template #sectitleElse>
+                                                                                        <a href="javascript:void(0)" *ngIf="is_customer_user == 1 && sec_task.task_allocated_user_id != login_user_id; else sectiontask">{{string_length(sec_task.task_title) |capitalizeFirst}}</a>
+                                                                                        <ng-template #sectiontask>
+                                                                                            <a href="javascript:void(0)" (click)="recurrence_open(sec_task)">{{string_length(sec_task.task_title) | capitalizeFirst}}</a>
+                                                                                        </ng-template>
+                                                                                    </ng-template>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="edit_projecttask">
+                                                                                <span class="updttskstatus">( Status :&nbsp;  
+                                                                                    <inline-editor type="select" style="float: right" [(ngModel)]="sec_task.task_status_id" [options]="edit_status_id" [saveOnChange]="true" (onSave)="change_task_status($event,sec_task);" [hideButtons]="true"></inline-editor>
+                                                                                </span>
+                                                                            </li>
+                                                                            <li class="edit_projecttask">
+                                                                                <span class="updtallcuserl">
+                                                                                    - Allocated to &nbsp;
+                                                                                    <inline-editor type="select" style="float: right" [(ngModel)]="sec_task.task_allocated_user_id" [options]="edit_allocated_user_id" [saveOnChange]="true" (onSave)="change_allocated_user($event,sec_task);" [hideButtons]="true"></inline-editor>
+                                                                                </span>
+                                                                            </li>
+                                                                            <li class="edit_projecttask" style="width:16%">
+                                                                                <span class="updttskstatus" [ngClass]="{red_date:sec_task.task_due_date < today && sec_task.task_status_name !='Completed' && sec_task.task_due_date !='0000-00-00'}" >- Due :
+                                                                                    <input type="text"
+                                                                                        placeholder="No Due date"
+                                                                                        class="edit_task_date"
+                                                                                        #dpYMD="bsDatepicker"
+                                                                                        bsDatepicker
+                                                                                        [value]="sec_task.task_due_date"
+                                                                                        placement="right"
+                                                                                        (bsValueChange)="change_due_date($event,sec_task)"
+                                                                                        [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                                                                                        >
+                                                                                </span>
+                                                                            </li>
+                                                                            <li *ngIf="sec_task.locked_due_date !='0'">
+                                                                                <a class="tooltips" tooltipPlacement="right" tooltip="Due date is locked" href="javascript:void(0);">
+                                                                                    <i class="icon-lock  prjicn prtoppos"> </i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li *ngIf="sec_task.task_priority !='None'">
+                                                                                <a class='tooltips' *ngIf="sec_task.task_priority == 'Medium'" tooltipPlacement='right' tooltip='Medium Priority' href='javascript:void(0);'><i class='icon-warning-sign prjicn iconmedium'></i></a>
+                                                                                <a class='tooltips' *ngIf="sec_task.task_priority == 'Low'" tooltipPlacement='right' tooltip='Low Priority' href='javascript:void(0);'><i class=' icon-warning-sign prjicn iconlow'></i></a>
+                                                                                <a class='tooltips' *ngIf="sec_task.task_priority == 'High'" tooltipPlacement="right" tooltip='High Priority' href='javascript:void(0);'>
+                                                                                    <i class='icon-warning-sign  prjicn iconhigh'></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li *ngIf="sec_task.comments !='0'">
+                                                                                <a class="tooltips" tooltipPlacement="right" tooltip="Comments" href="javascript:void(0);">
+                                                                                    <i class="icon-comment-alt prjicn"></i>
+                                                                                    <sup>{{sec_task.comments}}</sup>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li *ngIf="sec_task.files !='0'">
+                                                                                <a class="tooltips" tooltipPlacement="right" tooltip="Task Files" href="javascript:void(0);">
+                                                                                    <i class=" icon-paperclip prjicn"> </i>
+                                                                                    <sup>{{sec_task.files}}</sup>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li *ngIf="sec_task.steps !='0'">
+                                                                                <a class="tooltips" tooltipPlacement="right" tooltip="Task Steps" href="javascript:void(0);">
+                                                                                    <i class="icon-list-ul prjicn"> </i>
+                                                                                    <sup>{{sec_task.steps}}</sup>
+                                                                                </a>
+                                                                            </li>
+
+                                                                        </ul>
+
+                                                                    </div>
+                                                                    <div class="project-add_task">
+                                                                        <input type="text" name="title" placeholder="Enter a Task Name" (keydown.enter)="add_task($event.target.value,sec.main_section,sec.section_id,'enter');$event.target.value=''" (keydown.tab)="add_task($event.target.value,sec.main_section,sec.section_id,'tab');$event.target.value=''" id="add_task_{{sec.section_id}}" class="col-md-4 m-wrap txt-section-task" style="margin-left: 15px;display: none;" />
+                                                                        <button href="javascript:void(0)" type="button" name="task" class="btn-new green" (click)="hide_add_button(sec.section_id)" id="button_{{sec.section_id}}" style="min-width: 0px !important;margin-top: 4px;">Add Task</button>
+                                                                    </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <!-- Add section code here  -->
+                                                <div class="row" style="margin-left: 0px;">
+                                                    <div class="col-md-12">
+                                                        <form #addsection>
+                                                        <div class="col-md-6" style="padding-top: 3px;">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <input type="text" name="project_section" class="col-md-12 m-wrap" placeholder="Enter section name"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 pull-left" style="padding-top:5px">
+                                                            <button type="button" class="blue btn-new unsorttd" (click)="create_section(addsection.project_section.value);addsection.project_section.value = ''" name="name_section">Add Section</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!-- Section & sub-section end here-->
+                </div>
+                <!-- 30% column -->
+                <div class="col-md-4 prj_info" style="background: #F0F0F0">
+                    <!-- Project info collapse -->
+                    <div class="row " style="margin-top: 10px; ">
+                        <div class="col-md-12 panel-heading_pro " (click)="generalinfo = !generalinfo" >
+                            <a href="javascript:void(0);" >
+                                <span>
+                                    <i class="icon-chevron-right default_color" *ngIf="!generalinfo"></i>
+                                    <i class="icon-chevron-down default_color" *ngIf="generalinfo"></i>
+                                </span>
+                                <label class="control-label default_color project_label" >General Info</label>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div [hidden]="!generalinfo">
+                        <form [formGroup]="form_general" (submit)="update_project_info(form_general.value)">
+
+                            <!-- Project description -->
+                            <div class="form-group relative-position cstgeninfo">
+                                <div class="row">
+                                    <label class="col-md-10 control-label">
+                                        <b>Description </b>
+                                        <span class="req">*</span>
+                                    </label>
+                                    <div class="col-md-12 relative-position">
+                                        <textarea formControlName="project_description" class="m-wrap col-md-12" name="project_desc" rows="4" ></textarea>
+                                        <p *ngIf="form_general.get('project_description').hasError('required')" class="help-inline">
+                                            This field is required.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project Start and End Date -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">
+                                        <b>Start Date</b>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="input-append date date-picker prj-start-date relative-position">
+                                            <mat-form-field>
+                                                    <input formControlName="project_start_date" matInput [matDatepicker]="project_start_date" >
+                                                    <mat-datepicker-toggle matSuffix [for]="project_start_date"></mat-datepicker-toggle>
+                                                    <mat-datepicker #project_start_date></mat-datepicker>
+                                                </mat-form-field>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <label class="control-label">
+                                        <b>End Date </b>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="input-append date date-picker prj-end-date ">
+                                            <mat-form-field>
+                                                    <input formControlName="project_end_date" matInput [matDatepicker]="project_end_date" >
+                                                    <mat-datepicker-toggle matSuffix [for]="project_end_date"></mat-datepicker-toggle>
+                                                    <mat-datepicker #project_end_date></mat-datepicker>
+                                                </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status field -->
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <label class="control-label">
+                                        <b>Status</b>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <br>
+                                    <select formControlName="project_status" class="project_select_width m-wrap radius-b" name="project_status" >
+                                        <option value="Open">Open</option>
+                                        <option value="Complete">Completed</option>
+                                        <option value="On_hold">On Hold</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Division field -->
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <label class="control-label">
+                                        <b>Division</b>
+                                    </label>
+                                    <br>
+                                    <select formControlName="project_division_id" class="project_select_width radius-b m-wrap" name="division_id" (change)="getdepartment($event.target.value)" >
+                                        <option value="0">Select Division</option>
+                                        <option *ngFor="let div of division" value="{{div.division_id}}">{{div.devision_title}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Department field -->
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <label class="control-label first">
+                                        <b>Department </b>
+                                    </label>
+                                    <br>
+                                    <select formControlName="project_department_id" class="project_select_width m-wrap radius-b" name="department_id" >
+                                        <option *ngFor="let deprt of departments" value="{{deprt.department_id}}" >{{deprt.department_title}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Customer field -->
+                            <div class="row" *ngIf="customer_module_activation ==1">
+                                <div class="col-md-11">
+
+                                    <label class="control-label first">
+                                        <b>Customer</b>
+                                    </label>
+                                    <div class="controls first ">
+                                       <select formControlName="project_customer_id" class="m-wrap radius-b project_select_width" name="project_customer_id">
+                                            <option value="0">Please select</option>
+                                            <option value="{{c.customer_id}}" *ngFor="let c of customers">{{c.customer_name}}</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- Button-->
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-12">
+                                    <div class="controls first">
+                                        <button type="submit"  *ngIf="is_customer_user == 0 else anotherbutton" [disabled]="!form_general.valid" class="btn blue btn-new unsorttd pull-right" name="save_general">Save</button>
+                                        <ng-template #anotherbutton><button type="submit" [disabled]="is_customer_user ==1" class="btn blue btn-new unsorttd pull-right" name="save_general">Save</button></ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- project info end-->
+
+                    <!-- Project Finances info -->
+
+                    <div class="row " style="margin-top: 10px;" *ngIf="pricing_module_status ==1 && project_owner ==1 && is_customer_user ==0" >
+                        <div class="col-md-12 panel-heading_pro " (click)="financeinfo = !financeinfo" >
+                            <a href="javascript:void(0);" >
+                                <span>
+                                    <i class="icon-chevron-right default_color" *ngIf="!financeinfo"></i>
+                                    <i class="icon-chevron-down default_color" *ngIf="financeinfo"></i>
+                                </span>
+                                <label class="control-label default_color project_label">Finance </label>
+                            </a>
+                        </div>
+                    
+                    <div [hidden]="!financeinfo" >
+                        <div class="row">
+                            <div class="col-md-12" style="padding-top:5px">
+                                <button type="button" class="btn blue btn-new unsorttd pull-right" (click)="refresh_finance_info();" name="finance_refresh" style="margin-right: 8px !important;">Refresh</button>
+                            </div>
+                            <div class="col-md-12" style="padding-top: 5px;">
+                                <label class="control-label col-md-6">
+                                    <b>Estimated Revenue</b>
+                                </label>
+                                <label class="control-label col-md-3"></label>
+                                <label class="control-label col-md-3 project_label">{{currency}}{{finance_info.estimated_revenue}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label col-md-6">
+                                    <b>Estimated Cost</b>
+                                </label>
+                                <label class="control-label col-md-3"></label>
+                                <label class="control-label col-md-3 project_label">{{currency}}{{finance_info.estimated_cost}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label col-md-6">
+                                    <b>Estimated Profit</b>
+                                </label>
+                                <label class="control-label col-md-3 project_label">{{finance_info.estimated_margin}}%</label>
+                                <label class="control-label col-md-3 project_label">{{currency}}{{finance_info.estimated_profit}}</label>
+                            </div>
+                            <div class="col-md-12" style="padding-top:15px;">
+                                <label class="control-label col-md-6">
+                                    <b>Committed Revenue</b>
+                                </label>
+                                <label class="control-label col-md-3"></label>
+                                <label class="control-label col-md-3 project_label">{{currency}}{{finance_info.committed_revenue}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label col-md-6">
+                                    <b>Non Billable Time / Cost</b>
+                                </label>
+                                <label class="control-label col-md-1 project_label">{{finance_info.non_billable_time}}/</label>
+                                <label class="control-label col-md-5 project_label">{{currency}}{{finance_info.non_billable_cost}}</label>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label col-md-6">
+                                    <b>Committed Cost</b>
+                                </label>
+                                <label class="control-label col-md-3"></label>
+                                <label class="control-label col-md-3 project_label">{{currency}}{{finance_info.committed_cost}} </label>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label col-md-6">
+                                    <b>Committed Profit</b>
+                                </label>
+                                <label class="control-label col-md-3 project_label">{{finance_info.committed_margin}}%</label>
+                                <label class="control-label col-md-3 project_label" [ngStyle]="{color:finance_info.committed_profit < 0?'red':''}" >{{currency}}{{finance_info.committed_profit}}</label>
+                            </div>
+                            <div class="col-md-12" style="padding-top:10px;">
+                                <label class="control-label col-md-6">
+                                    <b>Project base hourly rate</b>
+                                </label>
+                                <label class="control-label col-md-3"></label>
+                                <span class="control-label col-md-3 ">
+                                    <a herf="#" class="font-family_customer">{{currency}}{{project_info.project_base_rate}}</a>
+                                </span>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label col-md-6">
+                                    <b>Project Fixed price</b>
+                                </label>
+                                <label class="control-label col-md-3"></label>
+                                <span class="control-label col-md-3">
+                                    <a herf="#" class="font-family_customer">{{currency}}{{project_info.project_fixed_price}}</a>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                    <!-- project finance info end-->
+                    <!-- People info collapse-->
+
+                    <div class="row " style="margin-top: 10px;">
+                        <div class="col-md-12 panel-heading_pro" (click)="projectteam = !projectteam" >
+                            <a href="javascript:void(0);" >
+                                <span>
+                                    <i class="icon-chevron-right default_color" *ngIf="!projectteam"></i>
+                                    <i class="icon-chevron-down default_color" *ngIf="projectteam"></i>
+                                </span>
+                                <label class="control-label default_color project_label">Project Team</label>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <!-- People info end -->
+
+                    <div [hidden]="!projectteam" >
+                        <div class="row">
+                            <div class="col-md-12" style="padding-top: 30px;">
+                                <div class="people-list">
+                                    <ul class="list-unstyled">
+                                        <li class="customer-user_li" *ngFor="let member of project_team" style="height:160px; ">
+                                            <div class="people-block">
+                                                <div class="people-img">
+                                                    <img src="{{Image_url}}upload/user/{{member.profile_image}}" *ngIf="member.profile_image !='';else image1;" alt="photo1" class="img-polaroid img-circle">
+                                                    <ng-template #image1>
+                                                        <img src="{{Image_url}}upload/user/no_image.jpg" alt="photo1" class="img-polaroid img-circle">
+                                                    </ng-template>
+                                                    <a href="javascript:void(0)" (click)="remove_user(member.project_users_id)" *ngIf="project_owner == '1' && member.task_allocated_status <=0 &&  member.user_id != project_info.project_added_by">
+                                                        <i class="stripicon iconredcolse" style="right: 57px !important"></i>
+                                                    </a>
+                                                </div>
+                                                <p>{{member.first_name}} {{member.last_name}} </p><p *ngIf="member.is_customer_user == '1'">(External)</p>
+                                                <div *ngIf="project_owner == '1';else posbox">
+                                                    <input type="checkbox" name="new_project_owner" [checked]="member.is_project_owner == 1" />
+                                                    <span style="display: inline;position: relative;top: -2px;">Admin</span>
+                                                </div>
+                                                <ng-template #posbox>
+                                                    <span *ngIf="member.is_project_owner == 1">  Admin </span>
+                                                    <span *ngIf="member.is_project_owner == '0'">  &nbsp; </span>
+                                                </ng-template>
+                                                <p *ngIf="project_owner == 1 && pricing_module_status == 1">
+                                                    <span>Project rate</span>
+                                                </p>
+                                                <span *ngIf="project_owner == 1 && pricing_module_status == 1" style="display: inline-block;"><span style="position: absolute;">{{currency}}</span><inline-editor type="text" style="display: flex;margin-left: 8px;" [(ngModel)]="member.project_rate" size="4" [hideButtons]="true" [saveOnBlur]="true" (onSave)="change_user_rate($event,member.user_id);" ></inline-editor>
+                                                </span>
+
+                                            </div>
+                                        </li>
+
+                                        <li class="customer-user_li" *ngIf="project_owner == 1">
+                                            <div class="people-block">
+                                                <a class="btn" href="javascript:void(0)" (click)="open_add_team_modal();" style="height: 88px; vertical-align: text-bottom; color: darkgray">
+                                                    <br/>Click to
+                                                    <br/>Add Users</a>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--  Comment section start  -->
+                    <div class="row " style="margin-top: 10px;">
+                        <div class="col-md-12 panel-heading_pro" (click)="projectcomment = !projectcomment" >
+                            <a href="javascript:void(0);">
+                                <span>
+                                    <i class="icon-chevron-right default_color" *ngIf="!projectcomment"></i>
+                                    <i class="icon-chevron-down default_color" *ngIf="projectcomment"></i>
+                                </span>
+                                <label class="control-label default_color project_label">Comment</label>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div [hidden]="!projectcomment">
+
+                        <div class="row" style="margin-top: 10px; margin-left: 10px; margin-right: 0px;">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <form #commentform>
+                                        <div class="col-md-10" style="padding-left: 15px;">
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <textarea rows="3" name="project_comment" (keyup)="comment_error = false;" class="col-md-12 m-wrap" placeholder="Add a comment."></textarea>
+                                                    <p [hidden]="!comment_error" class="help-inline">
+                                                        This field is required.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pull-right" style="margin-top:21px;padding-left: 0px;">
+                                            <button type="buttom" (click)="add_project_comment(commentform);" class="btn blue txtbold">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top: 10px;padding-right: 10px;">
+
+                            <div class="row" *ngFor="let comment of project_comments" >
+                                <div class="col-md-2">
+                                    <img class="img-responsive comment-img-new" *ngIf="comment.profile_image !=''else imgelse" src="{{Image_url}}upload/user/{{comment.profile_image}}" alt="" />
+                                    <ng-template #imgelse><span class="login_logo">{{comment.first_name | Initialletters}}{{comment.last_name |Initialletters}}</span></ng-template>
+                                </div>
+                                <div class="col-md-10 well well-sm">
+                                    <label class="comment-label project_label">
+                                        <b>{{comment.first_name}} {{comment.last_name}}</b> added </label>
+                                    <div class="position-relative">
+                                        <div class="comment-msgblock">
+                                            <p class="comment-label">{{comment.task_comment}}</p>
+                                        </div>
+                                        <a href="javascript:void(0)" *ngIf="login_user_id == comment.comment_addeby" mwlConfirmationPopover
+                                        placement="right"
+                                        (confirm)="confirmClicked = delete_comment(comment.task_comment_id)"
+                                        (cancel)="cancelClicked = true" >
+                                            <i class="icon-trash prjcmt"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- comment section end here -->
+
+                    <!-- file section start -->
+                    <div class="row " style="margin-top: 10px;">
+                        <div class="col-md-12 panel-heading_pro" (click)="projectfile = !projectfile" >
+                            <a href="javascript:void(0);" >
+                                <span>
+                                    <i class="icon-chevron-right default_color" *ngIf="!projectfile"></i>
+                                    <i class="icon-chevron-down default_color"  *ngIf="projectfile"></i>
+                                </span>
+                                <label class="control-label default_color project_label">Files</label>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div [hidden]="!projectfile">
+                        <div class="row project_file">
+
+                            <div class="portlet-body  form">
+                                <div class="table-toolbar"> </div>
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-md-12 ">
+                                        <label class="control-label bld col-md-4" style="padding-top: 5px;">Add File :
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class=" col-md-8" style="padding-left: 0px;">
+                                            <div class="fileupload fileupload-new task-file-dv" data-provides="fileupload">
+                                                <div class="input-append">
+                                                    <span class="btn blue btn-file browse-btn">
+                                                        <span class="fileupload-new" [dropzone]="add_file_config" (success)="Addfile($event);">Browse</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span style="color:#333;">OR</span>
+                                            <div class="btn blue link-btn"  (click)="project_file = !project_file" >Link</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" [hidden]="!project_file" style="margin-top: 10px;">
+                                        <form class="frm_upload_link col-md-12" name="prj_frm_upload_link" #prjfrmuploadlink style="margin-top:5px">
+                                            <input type="text" name="prj_file_name" class="m-wrap col-md-4" value="" placeholder="File Name" style="margin-right: 2px;"/>
+                                            <input type="text" name="prj_file_link" class="m-wrap col-md-4" value="" placeholder="File Link" style="margin-right: 2px;"/>
+                                            <button type="button" (click)="add_link(prjfrmuploadlink)" class="btn blue btn-new col-md-3" style="margin-top: 2px;">Add Link</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    
+                        <div class="customtable table-scrollable form-horizontal " style="padding-top:5px">
+                            <table class="table table-striped  table-hover table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th>Doc Type</th>
+                                        <th>File Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let file of project_files">
+                                        <td width="8%" class="text-center">
+                                            <a href="{{file.file_link}}" target="_blank" *ngIf="file.file_link !=''">
+                                                <img src="./assets/images/link.png" />
+                                            </a>
+                                            <a href="{{Image_url}}upload/task_project_files/{{file.task_file_name}}" target="_blank" *ngIf="file.file_link == ''" [ngSwitch]="get_extension(file.task_file_name)">
+                                                <img src="./assets/images/csv.png" *ngSwitchCase="'csv'" />
+                                                <img src="./assets/images/pdf.png" *ngSwitchCase="'pdf'" />
+                                                <img src="./assets/images/excel.png" *ngSwitchCase="'xls'" />
+                                                <img src="./assets/images/excel.png" *ngSwitchCase="'xlsx'" />
+                                                <img src="./assets/images/excel.png" *ngSwitchCase="'xl'" />
+                                                <img src="./assets/images/icon2.png" *ngSwitchCase="'word'" />
+                                                <img src="./assets/images/icon2.png" *ngSwitchCase="'doc'" />
+                                                <img src="./assets/images/icon2.png" *ngSwitchCase="'docx'" />
+                                                <img src="./assets/images/images.png" *ngSwitchCase="'png'" />
+                                                <img src="./assets/images/images.png" *ngSwitchCase="'jpg'" />
+                                                <img src="./assets/images/images.png" *ngSwitchCase="'jpeg'" />
+                                                <img src="./assets/images/images.png" *ngSwitchCase="'gif'" /> 
+                                                <img src="./assets/images/images.png" *ngSwitchCase="'bmp'" />
+                                                <img src="./assets/images/document_icon.png" *ngSwitchDefault />
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <p class="txt-normal">
+                                                <strong>
+                                                    <a href="{{file.file_link}}" target="_blank" *ngIf="file.file_link !=''">{{file.task_file_name}}</a>
+                                                    <a href="{{Image_url}}upload/task_project_files/{{file.task_file_name}}" target="_blank" *ngIf="file.file_link ==''">{{file.file_title}}</a>
+                                                </strong>
+                                            </p>
+                                            <p> by {{file.first_name}} {{file.last_name}}. </p>
+                                        </td>
+                                        <td width="15%">
+                                                <a href="{{Image_url}}upload/task_project_files/{{file.task_file_name}}" target="_blank" *ngIf="file.file_link == ''">
+                                                    <i class="stripicon icondownlaod" style="transform: scale(0.75); "></i>
+                                                </a>
+                                                <a href="javascript:void(0)" *ngIf="file.file_added_by == login_user_id" (click)="open_replace_file_popup(file.task_file_id);" >
+                                                    <i class="stripicon iconrefresh" style="transform: scale(0.75); " ></i>
+                                                </a>
+                                                <a href="javascript:void(0);" *ngIf="file.file_added_by == login_user_id" mwlConfirmationPopover
+                                                placement="left"
+                                                (confirm)="confirmClicked = delete_file(file.task_file_id)"
+                                                (cancel)="cancelClicked = true">
+                                                    <i class="icon-trash tmsticn"></i>
+                                                </a>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="project_files == ''">
+                                        <td colspan="3">No File found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- file section end -->
+
+                    <!-- project history start here-->
+
+                    <div class="row " style="margin-top: 10px; margin-bottom: 5px;">
+                        <div class="col-md-12 panel-heading_pro" (click)="projecthistory = !projecthistory" >
+                            <a href="javascript:void(0);" >
+                                <span>
+                                    <i class="icon-chevron-right default_color" *ngIf="!projecthistory"></i>
+                                    <i class="icon-chevron-down default_color" *ngIf="projecthistory"></i>
+                                </span>
+                                <label class="control-label default_color project_label">History</label>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div [hidden]="!projecthistory">
+                        <div class="row" style="padding-top: 0px;">
+                            <div class="col-md-12" style="padding-left:10px;">
+                                <div class="portlet-body  form flip-scroll">
+                                    <div class="form-horizontal">
+                                            <div class="row" style="margin-left: 0px">
+                                                <table class="col-md-12 table table-hover project_histroy">
+                                                    <tbody *ngFor="let history of project_history" >
+                                                        <tr  class="flip-content">
+                                                            <th class="bigrow">{{history.date}}</th>
+                                                        </tr>
+                                                        <tr *ngFor="let his of history.data">
+                                                            <td style="padding-left: 0px; Padding-right: 0px;">
+                                                                <div class="row" style="margin-left: 0px">
+                                                                    <!-- History Type and Date column -->
+                                                                    <div class="col-md-3" style="padding-left: 0px;">
+                                                                        <div class="row ">
+                                                                            <div class="col-md-12" style="padding-bottom: 10px;">
+                                                                                <span class="tasklbl sml " [ngClass]="{blue:his.history_type == 'File',yellow:his.history_type == 'Comment',green:his.history_type == 'Project',red:his.history_type == 'User',purple:his.history_type == ''}" >{{his.history_type}} </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <b>{{his.time}}</b>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- History description column -->
+                                                                    <div class="col-md-7" style="padding-left: 23px;">
+                                                                        {{his.project_history_desc}}
+                                                                    </div>
+                                                                    <!-- Customer Picture column -->
+                                                                    <div class="col-md-2" style="padding-left: 0px;">
+                                                                            <img class="img-responsive comment-img-new" *ngIf="his.profile_image !=''else imgelse" src="{{Image_url}}upload/user/{{his.profile_image}}" alt="" />
+                                                                            <ng-template #imgelse><span class="login_logo">{{his.first_name | Initialletters}}{{his.last_name |Initialletters}}</span></ng-template>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- history end here-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer here -->
+<footer-layout></footer-layout>
+
+<bs-modal #recurrencewindow>
+        <div class="modal-header" >
+                <button type="button" class="close save_close_cross_modify" aria-hidden="true" (click)="recurrence_close();"></button>
+                <h3 class="header1"> Occurence  </h3>
+            </div>
+            <div class="modal-body">
+                    <div class="portlet" style="margin-bottom:0px !important;">
+                    <div class="portlet-body  form flip-scroll">
+                        <div class="form-group" style="padding: 10px;">
+                            <label class="control-label">Do you want to update Task series or Task occurrence?</label>
+                            <div class="controls paddTop10" >
+                                <label class="radio1 edit_recurr_button btn blue">
+                                    <a id="series_task" href="javascript:void(0);" (click)="recurrence('series',task_detail.master_task_id)" style="color: #fff !important;">Task Series</a>
+                                </label>
+                                <label class="radio1 edit_recurr_button btn blue">
+                                    <a id="ocuurence_task" href="javascript:void(0);" (click)="recurrence('single',task_detail.task_id)" style="color: #fff !important;">Task Occurrence</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  </bs-modal>
+
+  <bs-modal #project_file_replace>
+    <div class="modal-header">
+        <button type="button" class="close save_close_cross_modify" aria-hidden="true" (click)="close_replace_file_popup();"></button>
+        <h3 class="header1"> Replace File </h3>
+    </div>
+    <div class="modal-body">
+        <div class="replace_block">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="form-group">
+                        <label class="control-label control-label_custome">Add File :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="controls margin-left-10">
+                            <div class="fileupload fileupload-new task-file-dv">
+                                <div class="input-append">
+                                    <span class="btn blue btn-file browse-btn">
+                                        <span class="fileupload-new" [dropzone]="replace_file_config" (success)="replace_file($event);">Browse</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <span>OR</span>
+                            <div class="btn blue link-btn" (click)="replace_link = !replace_link">Link</div>
+                            <form [hidden]="!replace_link" class="frm_upload_link col-md-12" #replacelink style="margin-top: 10px;">
+                                <input type="text" name="replace_file_name" value="" class="m-wrap" placeholder="File Name">
+                                <input type="text" name="replace_file_link" value="" class="m-wrap" placeholder="File Link">
+                                <button type="button" (click)="replace_project_link(replacelink);" class="btn blue btn-new">Add Link</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </bs-modal>
+
+  <bs-modal #taskactualtime [backdrop]="'static'">
+        <div class="modal-header">
+            <button type="button" class="close close_actual_time_task" (click)="close_actual_time_popup()" style="margin-right: 0px;margin-top: 10px;"></button>
+            <h3 class="header1"> Actual time of task </h3>
+        </div>
+        <div class="modal-body">
+            <div class="portlet">
+                <div class="portlet-body  form flip-scroll" style="padding:10px;">
+                    <form #actualtime>
+                    <div class="form-group">
+                        <label class="control-label">Enter Actual Time : </label>
+                        <div class="controls">
+                            <input class="onsub m-wrap m-ctrl-small small_input" name="task_actual_time" (blur)="change_actual_time(actualtime)" placeholder="0h" value=""
+                                type="text" />
+                            <span class="word_set">time (ex. 130 for 1h30)</span>
+                        </div>
+                    </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" [disabled]="on_complete_actual_time == 0" (click)="save_actual_time(actualtime);" class="btn blue txtbold"> Save </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </bs-modal>
+    <bs-modal #addprojectteam>
+        <div class="modal-header">
+            <button type="button" class="close save_close_cross_modify" (click)="close_add_team_modal();"></button>
+            <h3 class="header1">Users</h3>
+        </div>
+        <div class="modal-body">
+            <form #addmember_in_team>
+                <div style="padding:15px !important">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label col-md-6" style="padding-left: 0px;">
+                                        <strong> Find Users : </strong>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <select class=" m-wrap radius-b" name="user_id" style="width: 35%;">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let te of popup_member_list" value="{{te.user_id}}">{{te.first_name}} {{te.last_name}}{{te.external}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 ">
+                                    <label class="control-label col-md-6" style="padding-left: 0px;">
+                                        <strong> Set as Project Administrator : </strong>
+                                    </label>
+                                    <input type="checkbox" name="another_project_owner" id="another_project_owner" value="" style="margin-top: 7px;" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 pull-left">
+                                <button type="button" (click)="add_new_member(addmember_in_team);" class="sm btn blue txtbold"> Add User </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </bs-modal>
+
+    <context-menu #contextmenu>
+        
+        <ng-template contextMenuItem class="menuList" [subMenu]="priority">
+          <span>
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Set Priority</span>
+        </ng-template>
+        <context-menu #priority>
+          <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'None',$event.item)">None</ng-template>
+          <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'Low',$event.item)">Low</ng-template>
+          <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'Medium',$event.item)">Medium</ng-template>
+          <ng-template contextMenuItem (execute)="change_priority($event.item.task_id,'High',$event.item)">High</ng-template>
+        </context-menu>
+        
+        <ng-template class="menuList" contextMenuItem [subMenu]='taskduedate'>
+          <span>
+            <i class="fa fa-calendar" aria-hidden="true"></i> Set due date</span>
+        </ng-template>
+        <context-menu #taskduedate>
+          <ng-template contextMenuItem let-item passive="true">
+            <div style="margin: -6px -14px !important;" class="due_date_picker">
+              <mat-calendar [selected]="item.task_due_date" (selectedChange)="right_click_update_due_date($event,item)"></mat-calendar>
+            </div>
+          </ng-template>
+        </context-menu>
+        <ng-template class="menuList" contextMenuItem [subMenu]="status1">
+          <span>
+            <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Change status</span>
+        </ng-template>
+        <context-menu #status1>
+          <ng-template *ngFor="let s of task_status_list" contextMenuItem let-item (execute)="right_click_change_status($event.item.task_id,s.task_status_id,$event.item)">{{s.task_status_name}}</ng-template>
+        </context-menu>
+        <ng-template class="menuList" contextMenuItem let-item>
+          <span (click)="copy_task(item.task_id,item);">
+            <i class="fa fa-files-o" aria-hidden="true"></i> Copy task</span>
+        </ng-template>
+        
+        <ng-template class="menuList" contextMenuItem let-item>
+          <span *ngIf="item.frequency_type == 'one_off' else anotherdelete" (click)="delete_task(item,'single');"
+            >
+            <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+          <ng-template #anotherdelete>
+            <span (click)="delete_task(item,'series');">
+              <i class="fa fa-trash" aria-hidden="true"></i> Delete task</span>
+          </ng-template>
+        </ng-template>
+      
+      </context-menu>
+      

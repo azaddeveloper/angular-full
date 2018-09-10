@@ -1,0 +1,245 @@
+<header></header>
+<sidebar></sidebar>
+
+<!-- BEGIN PAGE CONTAINER-->
+<div class="container-fluid page-background" style="padding:15px;margin-bottom: 30px" >
+  <div class="border" style="font-size: 13px;background-color: #FFF;margin-top: 4%;margin-left: 43px;">
+    <div class="user-block">
+        <input type="hidden" name="from" id="from" value=""/>
+      <div class="row">
+        <div class="col-md-12">
+          <!--Heading-->
+          <div class="col-md-12">
+            <span>
+              <b>
+                <h4 class="txtbold bold_black">Price Maintenance</h4>
+              </b>
+            </span>
+          </div>
+          <div class="col-md-12 ">
+            <div class="col-md-12 cus_heading" style="padding-left:10px">
+              <h5 class='txtbold'>
+                <b>Base Employee cost and rate</b>
+              </h5>
+            </div>
+            <div class="col-md-12" style="padding-top: 6px;">
+              <div class="col-md-8">
+                <p>This base charge out rates are used when no pricing has been set for the customer or for a project. </p>
+              </div>
+              <div class="col-md-4">
+                <input class="onsub m-wrap large cus_input " name="employee_search" (keyup)="get_user_by_serach($event.target.value);" placeholder="Search employee" value="" type="text" />
+              </div>
+
+            </div>
+            <div>
+              <div class="customtable table-scrollable " style="margin-bottom: 11px;">
+                <table class="table table-striped table-hover table-condensed flip-content ">
+                  <thead class="flip-content">
+                    <tr>
+                      <th>Name</th>
+                      <th>Status</th>
+                      <th>Level</th>
+                      <th>Cost / hr</th>
+                      <th>Base Charge Rate / hr</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let u of user_list | paginate: {id:'server', itemsPerPage: 10, currentPage: page_number, totalItems:total_users};" style="height: 53px;">
+                      <td>{{u.first_name}} {{u.last_name}}</td>
+                      <td>{{u.user_status}}</td>
+                      <td *ngIf="u.staff_level_title != null">{{u.staff_level_title}}</td>
+                      <td *ngIf="u.staff_level_title == null">-</td>
+                      <td>
+                          <span class="pull-left">{{currency}}</span><inline-editor type="text" empty="Not set" placeholder="Enter amount" [(ngModel)]="u.cost_per_hour == 0?'':u.cost_per_hour" pattern="^[0-9.]*$" (onSave)="update_user_price(u.user_id,'cost_per_hour',$event)"  size="10"></inline-editor> 
+                      </td>
+                      <td>
+                          <span class="pull-left">{{currency}}</span><inline-editor type="text" empty="Not set" placeholder="Enter amount" [(ngModel)]="u.base_charge_rate_per_hour==0?'':u.base_charge_rate_per_hour" (onSave)="update_user_price(u.user_id,'base_charge_rate_per_hour',$event)" pattern="^[0-9.]*$"  size="10"></inline-editor> 
+                      </td>
+                      <td>
+                        <div class="pull-left" *ngIf="u.rate_updated_date !='0000-00-00 00:00:00'">
+                          <span>Last changed on the {{u.rate_updated_date | date:'MMM d, y'}} By {{login_user_name}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="user_list == ''">
+                      <td colspan="6">No record found.</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="has-text-centered" style="text-align: center;margin-top: 10px;">
+                    <pagination-controls (pageChange)="pagination($event)" previousLabel="Pre" directionLinks="true" autoHide="true" id="server"></pagination-controls>
+                 </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-12 ">
+            <div class="col-md-12 cus_heading" style="padding-left:10px">
+              <h5 class='txtbold'>
+                <b>Customer pricing</b>
+              </h5>
+            </div>
+            <div class="col-md-12" style="margin-top: 10px;">
+              <div class="form-horizontal">
+                <div class="form-group" style="margin-left: 10px;">
+                  <label class="control-label padding-top-7 bold_black" style="padding-right:53px;">Select Customer</label>
+                  <select class="m-wrap no-margin radius-b" name="change_customer"  (change)="change_customer();" style="width: 200px;" [(ngModel)]="selected_customer_id" >
+                    <option value="0">Please select</option>
+                    <option *ngFor="let c of customer_list" value="{{c.customer_id}}">{{c.customer_name}}</option>
+                  </select>
+
+                </div>
+              </div>
+            </div>
+            <div *ngIf="selected_customer_id !='0'">
+              <div class="col-md-12" style="padding-top: 6px;">
+                <p>This base rates is used when no others rates are setup at the customer level. To charge the </p>
+                <P>customer the base employee rate, leave this field blank.</P>
+              </div>
+              <div class="col-md-12">
+                <div class="col-md-2">
+                  <span class="txtbold bold_black">Base rate</span>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-2">
+                      <span class="pull-left">{{currency}}</span><inline-editor type="text" empty="Not set" placeholder="Enter amount" [(ngModel)]="customer_base_rate == 0 ?'':customer_base_rate" pattern="^[0-9.]*$" (onSave)="update_customer_price($event)"  size="10"></inline-editor> 
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8" style="margin-top:5px;color: #333333;background-color: #d8d8d8 !important;">
+                <b>Customer task category pricing</b>
+              </div>
+              <div class="col-md-12" style="margin-top: 10px">
+                <p>You can vary the charge out rate for customer based on the type of work performed.</p>
+                <div class="col-md-12">
+                  <div class='col-md-12'>
+                    <div class="row " style="margin-top: 5px;">
+                      <div class="col-md-12" style="line-height: 28px;" *ngFor="let cate of customer_category">
+                        <div class="col-md-2" style="padding-left: 0px !important;">
+                          <a href="javascript:void(0);" id="display_{{cate.category_id}}" (click)="show(cate.category_id);">
+                            <span>
+                              <i class="icon-chevron-right" ></i>
+                            </span>
+                          </a>
+                          <span>
+                            <label class="control-label ">{{cate.category_name}}</label>
+                          </span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="pull-left">{{currency}}</span><inline-editor type="text" empty="Not set" placeholder="Enter amount" [(ngModel)]="cate.rate == 0 ?'':cate.rate" pattern="^[0-9.]*$" (onSave)="update_category_price(cate.category_id,$event,'main')"  size="10"></inline-editor> 
+                        </div>
+                        <div class="col-md-1">
+                          <a href="javascript:void(0);" (click)="remove_category(cate.category_id)">
+                            <span class="pull-right">
+                              <i class="icon-remove"></i>
+                            </span>
+                          </a>
+                        </div>
+                        <div class="pull-left" *ngIf="cate.updated_date !='0000-00-00 00:00:00'">
+                          <span>Last changed on the {{cate.updated_date | date:'MMM d, y'}} By {{login_user_name}} </span>
+                        </div>
+                        <div style="display: none" id="sub_{{cate.category_id}}" >
+                        <div class="col-md-12" *ngFor="let sub of sub_category[cate.category_id]">
+                          <div class="col-md-10" style="line-height: 40px;">
+                            <div class="col-md-3">
+                              {{sub.category_name}}
+                            </div>
+                            <div class="col-md-3">
+                              <span class="pull-left">{{currency}}</span><inline-editor type="text" empty="Not set" placeholder="Enter amount" [(ngModel)]="sub.rate == 0 ?'':sub.rate" pattern="^[0-9.]*$" (onSave)="update_category_price(sub.category_id,$event,'sub',sub.parent_category_id)"  size="10"></inline-editor> 
+                            </div>
+                            <div class="pull-left" *ngIf="sub.updated_date !='0000-00-00 00:00:00'">
+                              <span>Last changed on the {{sub.updated_date | date:'MMM d, y'}} By {{login_user_name}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-md-8" style="padding-top: 10px;">
+                  <form #add_new_category>
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div class="col-md-3">
+                        <select class="m-wrap no-margin radius-b " name="customer_category_name">
+                          <option value="0">select category to add</option>
+                          <option *ngFor="let c of category" value="{{c.category_id}}">{{c.category_name}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2">
+                        <input type="text" name="customer_category_rate" value="" placeholder="Rate" class="onsub m-wrap cus_input" style="margin-top:0px !important"/>
+                      </div>
+                      <div class="col-md-2">
+                        <input type="button" (click)="add_category(add_new_category);add_new_category.customer_category_name.value=0;add_new_category.customer_category_rate.value='';" name="add_rate" value="Add" class="btn blue btn-new txtbold sm" />
+                      </div>
+                    </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-8" style="margin-top:5px;color: #333333;background-color: #d8d8d8 !important;">
+                <b>Customer pricing by employee</b>
+              </div>
+              <div class="col-md-12" style="margin-top: 10px">
+                <div class="col-md-6">
+                  <p>You can set a charge out per employee for the selected customer. If you set charge out</p>
+                  <p>rate, it will overwrite all other charge out rate except the project specific rate.</p>
+                </div>
+                <div class="col-md-6">
+                  <input class="onsub m-wrap large " name="employee_search_under_customer" (keyup)="get_users_under_customer($event.target.value)" placeholder="Search employee" value="" type="text" />
+                </div>
+                <div>
+                  <div class="customtable table-scrollable " style="margin-bottom: 11px;">
+                    <table class="table table-striped table-hover table-condensed flip-content ">
+                      <thead class="flip-content">
+                        <tr>
+                          <th>Name</th>
+                          <th>Status</th>
+                          <th>Level</th>
+                          <th>Base Charge Rate / hr</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let u of users_under_customer | paginate: {id:'server1', itemsPerPage: 10, currentPage: page_number1, totalItems:total_customer_users};" style="height: 53px;">
+                          <td>{{u.first_name}} {{u.last_name}}</td>
+                          <td>{{u.user_status}}</td>
+                          <td *ngIf="u.staff_level_title != null">{{u.staff_level_title}}</td>
+                          <td *ngIf="u.staff_level_title == null">-</td>
+                          <td>
+                              <span class="pull-left">{{currency}}</span><inline-editor type="text" empty="Not set" placeholder="Enter amount" [(ngModel)]="u.base_rate == null?'':u.base_rate" pattern="^[0-9.]*$" (onSave)="update_user_under_customer_price(u.user_id,$event)"  size="10"></inline-editor> 
+                          </td>
+                          <td>
+                            <div class="pull-left" *ngIf="u.update_date !=null">
+                              <span>Last changed on the {{u.update_date | date:'MMM d, y'}} By {{login_user_name}}</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr *ngIf="users_under_customer == ''">
+                          <td colspan="6">No record found</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="has-text-centered" style="text-align: center;margin-top: 10px;">
+                        <pagination-controls (pageChange)="users_under_customer_pagination($event)" previousLabel="Pre" directionLinks="true" autoHide="true" id="server1"></pagination-controls>
+                     </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Footer here -->
+<footer-layout></footer-layout>
